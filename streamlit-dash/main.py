@@ -6,7 +6,8 @@ import requests
 
 st.title("MOST Dashboard")
 
-API_URL="http://fastapi-most:8000"
+# API_URL="http://fastapi-most:8000"
+API_URL="http://localhost:8000"
 
 if 'distance' not in st.session_state:
     st.session_state['distance'] = 150
