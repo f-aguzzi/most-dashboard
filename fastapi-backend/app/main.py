@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import polars as pl
+from app.service import get_all_flights
 
 app = FastAPI()
 data = pl.read_excel("data.xlsx")
@@ -27,7 +28,7 @@ def get_routes():
 
 @app.get("/routes_by")
 def get_routes_by(distance, seats):
-    routes = data.filter(pl.col("Flown_km") <= int(distance))
+    routes = data.filter(pl.col("GCD") <= int(distance))
     routes = routes.filter(pl.col("Seats") <= int(seats))
     routes = routes.group_by(pl.col("Dep_apt", "Arr_apt")).agg([
         pl.col("Dep_apt_lat").first(),
@@ -40,11 +41,20 @@ def get_routes_by(distance, seats):
         "Arr_apt_lat",
         "Arr_apt_lon"
     ))
-    return routes.to_dicts()
+
+    result = []
+    for row in routes.to_dicts():
+        route = [
+            [row["Dep_apt_lat"], row["Dep_apt_lon"]],
+            [row["Arr_apt_lat"], row["Arr_apt_lon"]]
+        ]
+        result.append(route)
+
+    return result
 
 @app.get("/routes_by/airports")
 def get_routes_by_apts(distance, seats):
-    routes = data.filter(pl.col("Flown_km") <= int(distance))
+    routes = data.filter(pl.col("GCD") <= int(distance))
     routes = routes.filter(pl.col("Seats") <= int(seats))
     routes = routes.select([
         pl.col("Dep_apt").alias("IATA"),
@@ -57,3 +67,22 @@ def get_routes_by_apts(distance, seats):
 def get_airport_info(iata):
     airport = "A"
     return airport
+
+@app.get("/kpi")
+def get_kpi(distance, seats):
+    filtered_data = data.filter(pl.col("GCD") <= int(distance))
+    filtered_data = filtered_data.filter(pl.col("Seats") <= int(seats))
+
+    kpi_tot = get_all_flights(data)
+    kpi_part = get_all_flights(filtered_data)
+
+    return {
+        "flight_number" : kpi_part["flight_number"],
+        "flight_percentage" : 100 * kpi_part["flight_number"]/kpi_tot["flight_number"],
+        "km" : kpi_part["total_km"],
+        "km_percentage" : 100 * kpi_part["total_km"] / kpi_tot["total_km"],
+        "saved_fuel" : kpi_part["total_fuel"],
+        "saved_fuel_percentage" : 100 * kpi_part["total_fuel"] / kpi_tot["total_fuel"],
+        "saved_co2" : kpi_part["total_emissions"] - kpi_part["electric_emissions"],
+        "saved_co2_percentage" : 100*(kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / kpi_tot["total_emissions"]
+    }

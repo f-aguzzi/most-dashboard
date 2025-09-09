@@ -7,6 +7,7 @@ requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.116.1",
     "fastexcel>=0.14.0",
+    "numpy>=2.2.6",
     "polars>=1.33.0",
     "uvicorn>=0.35.0",
 ]

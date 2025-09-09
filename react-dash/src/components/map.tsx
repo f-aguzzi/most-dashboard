@@ -19,34 +19,29 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const polyline = [
-  [
-    [51.505, -0.09],
-    [51.51, -0.1],
-  ],
-  [
-    [52.505, -0.11],
-    [52.51, -4.5],
-  ],
-];
+interface LeafletMapProps {
+  polylines?: [] | false;
+}
 
-export default function LeafletMap() {
+export default function LeafletMap(props: LeafletMapProps) {
   return (
     <div id="map">
-      <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+      <MapContainer center={[50.505, 15.0]} zoom={4} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {polyline &&
-          polyline.map((positions, index) => (
+        {props.polylines &&
+          props.polylines.map((positions, index) => (
             <Polyline key={index} positions={positions} />
           ))}
-        <Marker position={[51.505, -0.09]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
+        {/*
+          <Marker position={[51.505, -0.09]}>
+            <Popup>
+              A pretty CSS3 popup. <br /> Easily customizable.
+            </Popup>
+          </Marker>
+        */}
       </MapContainer>
     </div>
   );
