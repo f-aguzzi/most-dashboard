@@ -1,4 +1,5 @@
 import polars as pl
+from functools import lru_cache
 
 def get_all_flights(data: pl.DataFrame):
     number = data.select("Airline").count().to_dicts()[0]["Airline"]
@@ -13,3 +14,24 @@ def get_all_flights(data: pl.DataFrame):
         "total_emissions": emissions,
         "electric_emissions": electric
     }
+
+def filter_routes(data: pl.DataFrame, distance: int, seats: int):
+    routes = data.filter(pl.col("GCD") <= int(distance))
+    routes = routes.filter(pl.col("Seats") <= int(seats))
+    routes = routes.group_by(pl.col("Dep_apt", "Arr_apt")).agg([
+        pl.col("Dep_apt_lat").first(),
+        pl.col("Dep_apt_lon").first(),
+        pl.col("Arr_apt_lat").first(),
+        pl.col("Arr_apt_lon").first()
+    ]).select(pl.col(
+        "Dep_apt_lat",
+        "Dep_apt_lon",
+        "Arr_apt_lat",
+        "Arr_apt_lon",
+        "Dep_apt",
+        "Arr_apt"
+    ))
+    return routes
+
+def filter_airports(data: pl.DataFrame, distance: int, seats: int):
+    pass

@@ -14,18 +14,20 @@ import {
 } from "@/components/ui/table";
 
 function App() {
-  const [passengers, setPassengers] = useState([30]);
-  const [distance, setDistance] = useState([80]);
+  const [passengers, setPassengers] = useState([20]);
+  const [distance, setDistance] = useState([400]);
 
   const handlePassengerChange = (value: []) => {
     setPassengers(value);
     fetchData();
+    fetchAirports();
     fetchKpi();
   };
 
   const handleDistanceChange = (value: []) => {
     setDistance(value);
     fetchData();
+    fetchAirports();
     fetchKpi();
   };
 
@@ -46,6 +48,26 @@ function App() {
       setData(result);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const [airports, setAirports] = useState(null);
+  const [airportsLoading, setAirportsLoading] = useState(true);
+
+  const fetchAirports = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/routes_by/airports?seats=" +
+          passengers +
+          "&distance=" +
+          distance,
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      console.log(result);
+      setAirports(result);
+    } finally {
+      setAirportsLoading(false);
     }
   };
 
@@ -71,6 +93,7 @@ function App() {
 
   useEffect(() => {
     fetchData();
+    fetchAirports();
     fetchKpi();
   }, []);
 
@@ -80,19 +103,26 @@ function App() {
         MOST Dashboard
       </Typography>
       <div className="grid grid-cols-2 gap-8 mt-8 h-auto">
-        <div className="flex flex-col space-y-16 h-auto">
+        <div className="flex flex-col space-y-16 h-auto mx-16">
           {/* Autonomia */}
-          <div className="mx-16">
-            <Typography version="h4">Autonomia: </Typography>
+          <div>
+            <Typography version="h4">Range operativo (km): </Typography>
             <div className="flex flex-row">
               <Slider
                 className="m-8 w-lg mx-16 px-2"
                 value={distance}
                 onValueChange={handleDistanceChange}
-                defaultValue={[80]}
-                min={1}
-                max={300}
+                defaultValue={[400]}
+                min={100}
+                max={3000}
                 step={1}
+                referenceLines={[
+                  {
+                    value: 300,
+                    label: "FGEA/SGEA",
+                    color: "#ff6b35",
+                  },
+                ]}
               ></Slider>
               <Typography version="p" className="p-8 m-8">
                 {distance}
@@ -100,7 +130,7 @@ function App() {
             </div>
           </div>
           {/* Numero di passeggeri */}
-          <div className="mx-16">
+          <div>
             <Typography version="h4">Numero di passeggeri: </Typography>
             <div className="flex flex-row">
               <Slider
@@ -108,18 +138,38 @@ function App() {
                 value={passengers}
                 onValueChange={handlePassengerChange}
                 defaultValue={[20]}
-                min={1}
-                max={40}
+                min={10}
+                max={150}
                 step={1}
+                referenceLines={[
+                  {
+                    value: 20,
+                    label: "FGEA",
+                    color: "#ff6b35",
+                  },
+                  {
+                    value: 45,
+                    label: "SGEA",
+                    color: "#7cb342",
+                  },
+                ]}
               ></Slider>
               <Typography version="p" className="p-8 m-8">
                 {passengers}
               </Typography>
             </div>
           </div>
+          <Typography version="p">
+            <i>FGEA = First Generation Electric Aircraft</i>
+            <br />
+            <i>SGEA = Second Generation Electric Aircraft</i>
+          </Typography>
         </div>
         <div className="flex flex-col space-y-4">
-          <LeafletMap polylines={loading && data != null ? [] : data} />
+          <LeafletMap
+            polylines={loading && data != null ? [] : data}
+            airports={airportsLoading && airports != null ? [] : airports}
+          />
         </div>
       </div>
       <div className="p-8">

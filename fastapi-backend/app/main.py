@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import polars as pl
-from app.service import get_all_flights
+from app.service import get_all_flights, filter_routes
 
 app = FastAPI()
 data = pl.read_excel("data.xlsx")
@@ -28,19 +28,7 @@ def get_routes():
 
 @app.get("/routes_by")
 def get_routes_by(distance, seats):
-    routes = data.filter(pl.col("GCD") <= int(distance))
-    routes = routes.filter(pl.col("Seats") <= int(seats))
-    routes = routes.group_by(pl.col("Dep_apt", "Arr_apt")).agg([
-        pl.col("Dep_apt_lat").first(),
-        pl.col("Dep_apt_lon").first(),
-        pl.col("Arr_apt_lat").first(),
-        pl.col("Arr_apt_lon").first(),
-    ]).select(pl.col(
-        "Dep_apt_lat",
-        "Dep_apt_lon",
-        "Arr_apt_lat",
-        "Arr_apt_lon"
-    ))
+    routes = filter_routes(data, distance, seats)
 
     result = []
     for row in routes.to_dicts():
@@ -48,7 +36,10 @@ def get_routes_by(distance, seats):
             [row["Dep_apt_lat"], row["Dep_apt_lon"]],
             [row["Arr_apt_lat"], row["Arr_apt_lon"]]
         ]
-        result.append(route)
+        result.append({
+            "route" : route,
+            "label" : row["Dep_apt"] + "-" + row["Arr_apt"]
+        })
 
     return result
 
@@ -56,12 +47,29 @@ def get_routes_by(distance, seats):
 def get_routes_by_apts(distance, seats):
     routes = data.filter(pl.col("GCD") <= int(distance))
     routes = routes.filter(pl.col("Seats") <= int(seats))
-    routes = routes.select([
+    routes1 = routes.select([
         pl.col("Dep_apt").alias("IATA"),
         pl.col("Dep_apt_lat").alias("lat"),
         pl.col("Dep_apt_lon").alias("lon")
     ])
-    return routes.to_dicts()
+
+    routes2 = routes.select([
+        pl.col("Arr_apt").alias("IATA"),
+        pl.col("Arr_apt_lat").alias("lat"),
+        pl.col("Arr_apt_lon").alias("lon")
+    ])
+
+    routes = pl.concat([routes1, routes2]).unique()
+
+    results = []
+    for row in routes.to_dicts():
+        location = [row["lat"], row["lon"]]
+        results.append({
+            "location" : location,
+            "label" : row["IATA"]
+        })
+
+    return results
 
 @app.get("/airport_info/{iata}")
 def get_airport_info(iata):

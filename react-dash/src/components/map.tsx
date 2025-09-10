@@ -20,7 +20,8 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 interface LeafletMapProps {
-  polylines?: [] | false;
+  polylines?: [] | null;
+  airports?: [] | null;
 }
 
 export default function LeafletMap(props: LeafletMapProps) {
@@ -33,15 +34,16 @@ export default function LeafletMap(props: LeafletMapProps) {
         />
         {props.polylines &&
           props.polylines.map((positions, index) => (
-            <Polyline key={index} positions={positions} />
+            <Polyline key={index} positions={positions.route}>
+              <Popup>{positions.label}</Popup>
+            </Polyline>
           ))}
-        {/*
-          <Marker position={[51.505, -0.09]}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
-        */}
+        {props.airports &&
+          props.airports.map((positions, index) => (
+            <Marker key={index} position={positions.location}>
+              <Popup>{positions.label}</Popup>
+            </Marker>
+          ))}
       </MapContainer>
     </div>
   );
