@@ -12,6 +12,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Perimetro from "@/components/Perimetro";
+import { Armchair, FileKey2, Map, RulerDimensionLine } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
@@ -104,13 +106,16 @@ function ElectricDashboard() {
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-4">
-        MOST Dashboard
+        MOST Dashboard - Electric Aircraft
       </Typography>
       <div className="grid grid-cols-2 gap-8 mt-8 h-auto">
         <div className="flex flex-col space-y-12 h-auto mx-16">
           {/* Autonomia */}
           <div>
-            <Typography version="h4">Range operativo (km): </Typography>
+            <div className="flex items-center gap-2">
+              <RulerDimensionLine className="h-6 w-6 text-primary" />
+              <Typography version="h4">Range operativo (km):</Typography>
+            </div>
             <div className="flex flex-row">
               <Slider
                 className="m-8 w-lg mx-16 px-2"
@@ -135,7 +140,10 @@ function ElectricDashboard() {
           </div>
           {/* Numero di passeggeri */}
           <div>
-            <Typography version="h4">Numero di passeggeri: </Typography>
+            <div className="flex items-center gap-2">
+              <Armchair className="h-6 w-6 text-primary" />
+              <Typography version="h4">Numero di passeggeri: </Typography>
+            </div>
             <div className="flex flex-row">
               <Slider
                 className="m-8 w-lg mx-16 px-2"
@@ -171,7 +179,10 @@ function ElectricDashboard() {
           </Typography>
           {/* Perimetro */}
           <div>
-            <Typography version="h4">Perimetro</Typography>
+            <div className="flex items-center gap-2">
+              <Map className="h-6 w-6 text-primary" />
+              <Typography version="h4">Perimetro</Typography>
+            </div>
             <Perimetro handler={handlePerimetro} className="p-2 m-2" />
           </div>
         </div>
@@ -183,7 +194,12 @@ function ElectricDashboard() {
           />
         </div>
       </div>
+      <Separator />
       <div className="p-4">
+        <div className="flex items-center gap-2">
+          <FileKey2 className="h-6 w-6 text-primary" />
+          <Typography version="h3">Tabella dei KPI</Typography>
+        </div>
         <Table>
           <TableCaption>
             KPI relativi all&apos;impiego di aeromobili elettrici.

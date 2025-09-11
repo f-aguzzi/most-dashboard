@@ -133,3 +133,23 @@
         @apply bg-background text-foreground;
     }
 }
+
+* {
+    transition:
+        background-color 0.5s ease-in-out,
+        color 0.5s ease-in-out,
+        border-color 0.5s ease-in-out,
+        box-shadow 0.5s ease-in-out;
+}
+
+/* Smooth transition for the main app container */
+.app-container {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Optional: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.1s !important;
+    }
+}

@@ -8,14 +8,17 @@ function App() {
 
   return (
     <div
-      className={
-        nightMode
-          ? "h-screen w-screen bg-background text-foreground p-8 color-scheme: dark"
-          : "h-screen w-screen bg-background text-foreground p-8"
-      }
+      className={`
+        h-screen w-screen bg-background text-foreground p-8
+        transition-all duration-500 ease-in-out
+        ${nightMode ? "dark" : ""}
+      `}
+      style={{ colorScheme: nightMode ? "dark" : "light" }}
     >
-      <Navbar nightMode={nightMode} setNightMode={setNightMode} />
-      <ElectricDashboard />
+      <div className="transition-all duration-500 ease-in-out">
+        <Navbar nightMode={nightMode} setNightMode={setNightMode} />
+        <ElectricDashboard />
+      </div>
     </div>
   );
 }
