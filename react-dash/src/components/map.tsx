@@ -5,7 +5,7 @@ import {
   Popup,
   Polyline,
 } from "react-leaflet";
-import L from "leaflet";
+import L, { type LatLngTuple } from "leaflet";
 
 // Fix for default markers
 import icon from "@/assets/circle-dot.png";
@@ -16,9 +16,19 @@ L.Marker.prototype.options.icon = L.icon({
   iconAnchor: [12, 12],
 });
 
+interface PolyLine {
+  route: [];
+  label: string;
+}
+
+interface Airport {
+  location: LatLngTuple;
+  label: string;
+}
+
 interface LeafletMapProps {
-  polylines?: [] | null;
-  airports?: [] | null;
+  polylines?: [PolyLine] | null;
+  airports?: [Airport] | null;
 }
 
 export default function LeafletMap(props: LeafletMapProps) {
@@ -45,3 +55,5 @@ export default function LeafletMap(props: LeafletMapProps) {
     </div>
   );
 }
+
+export { type PolyLine, type Airport };

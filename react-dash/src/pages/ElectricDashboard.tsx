@@ -1,12 +1,12 @@
 import { Typography } from "@/components/ui/typography";
 import { Slider } from "@/components/ui/slider";
-import LeafletMap from "@/components/map";
+import LeafletMap, { type Airport, type PolyLine } from "@/components/map";
 import { useEffect, useState } from "react";
 
 import Perimetro from "@/components/Perimetro";
 import { Armchair, FileKey2, Map, RulerDimensionLine } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import KpiTable from "@/components/KpiTable";
+import KpiTable, { type Kpi } from "@/components/KpiTable";
 
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
@@ -20,8 +20,7 @@ function ElectricDashboard() {
     setDistance(value);
   };
 
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<[PolyLine] | null>(null);
 
   const fetchData = async () => {
     try {
@@ -36,13 +35,12 @@ function ElectricDashboard() {
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
       setData(result);
-    } finally {
-      setLoading(false);
+    } catch {
+      setData(null);
     }
   };
 
-  const [airports, setAirports] = useState(null);
-  const [airportsLoading, setAirportsLoading] = useState(true);
+  const [airports, setAirports] = useState<[Airport] | null>(null);
 
   const fetchAirports = async () => {
     try {
@@ -57,13 +55,12 @@ function ElectricDashboard() {
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
       setAirports(result);
-    } finally {
-      setAirportsLoading(false);
+    } catch {
+      setAirports(null);
     }
   };
 
-  const [kpi, setKpi] = useState([]);
-  const [kpiLoading, setKpiLoading] = useState(true);
+  const [kpi, setKpi] = useState<[Kpi] | null>(null);
 
   const fetchKpi = async () => {
     try {
@@ -78,8 +75,8 @@ function ElectricDashboard() {
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
       setKpi(result);
-    } finally {
-      setKpiLoading(false);
+    } catch {
+      setKpi(null);
     }
   };
 
@@ -186,17 +183,13 @@ function ElectricDashboard() {
             </div>
             <KpiTable
               caption="KPI relativi all'impiego di aeromobili elettrici."
-              loading={kpiLoading}
               kpis={kpi}
             />
           </div>
         </div>
         {/* Mappa */}
         <div className="flex flex-col space-y-4">
-          <LeafletMap
-            polylines={loading && data != null ? [] : data}
-            airports={airportsLoading && airports != null ? [] : airports}
-          />
+          <LeafletMap polylines={data} airports={airports} />
         </div>
       </div>
     </div>

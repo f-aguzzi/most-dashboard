@@ -16,8 +16,7 @@ interface Kpi {
 
 interface KpiTableProps {
   caption: string;
-  loading: boolean;
-  kpis: [Kpi];
+  kpis: [Kpi] | null;
 }
 
 const KpiTable = (props: KpiTableProps) => {
@@ -32,20 +31,16 @@ const KpiTable = (props: KpiTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {props.loading ? (
+        {props.kpis === null ? (
           <TableRow />
         ) : (
           props.kpis.map((value, index) => {
             return (
               <TableRow key={index}>
                 <TableCell key={index + "T1"}>{value.metric}</TableCell>
-                <TableCell>
-                  {props.loading ? " " : Math.round(value.value * 100) / 100}
-                </TableCell>
+                <TableCell>{Math.round(value.value * 100) / 100}</TableCell>
                 <TableCell key={index + "T2"}>
-                  {props.loading
-                    ? " "
-                    : Math.round(value.percentage * 100) / 100}
+                  {Math.round(value.percentage * 100) / 100}
                 </TableCell>
               </TableRow>
             );
