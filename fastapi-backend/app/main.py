@@ -1,8 +1,22 @@
 from fastapi import FastAPI
 import polars as pl
 from app.service import get_all_flights, filter_routes
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 data = pl.read_excel("data.xlsx")
 
 @app.get("/airports")
