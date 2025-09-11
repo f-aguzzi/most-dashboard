@@ -102,12 +102,12 @@ function ElectricDashboard() {
   }, [perimetro, distance, passengers]);
 
   return (
-    <>
-      <Typography version="h1" className="m-16 p-8">
+    <div className="h-max">
+      <Typography version="h1" className="m-8 p-4">
         MOST Dashboard
       </Typography>
       <div className="grid grid-cols-2 gap-8 mt-8 h-auto">
-        <div className="flex flex-col space-y-16 h-auto mx-16">
+        <div className="flex flex-col space-y-12 h-auto mx-16">
           {/* Autonomia */}
           <div>
             <Typography version="h4">Range operativo (km): </Typography>
@@ -164,7 +164,7 @@ function ElectricDashboard() {
             </div>
           </div>
           {/* Legenda */}
-          <Typography version="p">
+          <Typography version="p" className="m-2">
             <i>FGEA = First Generation Electric Aircraft</i>
             <br />
             <i>SGEA = Second Generation Electric Aircraft</i>
@@ -183,7 +183,7 @@ function ElectricDashboard() {
           />
         </div>
       </div>
-      <div className="p-8">
+      <div className="p-4">
         <Table>
           <TableCaption>
             KPI relativi all&apos;impiego di aeromobili elettrici.
@@ -243,7 +243,7 @@ function ElectricDashboard() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }
 
