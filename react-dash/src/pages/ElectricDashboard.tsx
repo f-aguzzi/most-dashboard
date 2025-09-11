@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Perimetro from "@/components/Perimetro";
 
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
@@ -18,16 +19,10 @@ function ElectricDashboard() {
 
   const handlePassengerChange = (value: []) => {
     setPassengers(value);
-    fetchData();
-    fetchAirports();
-    fetchKpi();
   };
 
   const handleDistanceChange = (value: []) => {
     setDistance(value);
-    fetchData();
-    fetchAirports();
-    fetchKpi();
   };
 
   const [data, setData] = useState(null);
@@ -39,11 +34,12 @@ function ElectricDashboard() {
         "http://localhost:8000/routes_by?seats=" +
           passengers +
           "&distance=" +
-          distance,
+          distance +
+          "&perimeter=" +
+          perimetro,
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
-      console.log(result);
       setData(result);
     } finally {
       setLoading(false);
@@ -59,11 +55,12 @@ function ElectricDashboard() {
         "http://localhost:8000/routes_by/airports?seats=" +
           passengers +
           "&distance=" +
-          distance,
+          distance +
+          "&perimeter=" +
+          perimetro,
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
-      console.log(result);
       setAirports(result);
     } finally {
       setAirportsLoading(false);
@@ -79,22 +76,30 @@ function ElectricDashboard() {
         "http://localhost:8000/kpi?seats=" +
           passengers +
           "&distance=" +
-          distance,
+          distance +
+          "&perimeter=" +
+          perimetro,
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
-      console.log(result);
       setKpi(result);
     } finally {
       setKpiLoading(false);
     }
   };
 
+  const [perimetro, setPerimetro] = useState(true);
+
+  const handlePerimetro = async (value: string) => {
+    const perimeter = value === "Italia" ? true : false;
+    setPerimetro(perimeter);
+  };
+
   useEffect(() => {
     fetchData();
     fetchAirports();
     fetchKpi();
-  }, []);
+  }, [perimetro, distance, passengers]);
 
   return (
     <>
@@ -158,12 +163,19 @@ function ElectricDashboard() {
               </Typography>
             </div>
           </div>
+          {/* Legenda */}
           <Typography version="p">
             <i>FGEA = First Generation Electric Aircraft</i>
             <br />
             <i>SGEA = Second Generation Electric Aircraft</i>
           </Typography>
+          {/* Perimetro */}
+          <div>
+            <Typography version="h4">Perimetro</Typography>
+            <Perimetro handler={handlePerimetro} className="p-2 m-2" />
+          </div>
         </div>
+        {/* Mappa */}
         <div className="flex flex-col space-y-4">
           <LeafletMap
             polylines={loading && data != null ? [] : data}

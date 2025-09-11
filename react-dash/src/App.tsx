@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import ElectricDashboard from "./pages/ElectricDashboard";
 
 function App() {
-  const [nightMode, setNightMode] = useState(false);
+  const [nightMode, setNightMode] = useState(true);
 
   return (
     <div

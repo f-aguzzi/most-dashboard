@@ -41,8 +41,12 @@ def get_routes():
     return routes.to_dicts()
 
 @app.get("/routes_by")
-def get_routes_by(distance, seats):
-    routes = filter_routes(data, distance, seats)
+def get_routes_by(distance, seats, perimeter):
+    if perimeter == "true":
+        route_data = data.filter(pl.col("Perimetro") == "Italia")
+    else:
+        route_data = data
+    routes = filter_routes(route_data, distance, seats)
 
     result = []
     for row in routes.to_dicts():
@@ -58,8 +62,13 @@ def get_routes_by(distance, seats):
     return result
 
 @app.get("/routes_by/airports")
-def get_routes_by_apts(distance, seats):
-    routes = data.filter(pl.col("GCD") <= int(distance))
+def get_routes_by_apts(distance, seats, perimeter):
+    if perimeter == "true":
+        route_data = data.filter(pl.col("Perimetro") == "Italia")
+    else:
+        route_data = data
+
+    routes = route_data.filter(pl.col("GCD") <= int(distance))
     routes = routes.filter(pl.col("Seats") <= int(seats))
     routes1 = routes.select([
         pl.col("Dep_apt").alias("IATA"),
@@ -91,11 +100,15 @@ def get_airport_info(iata):
     return airport
 
 @app.get("/kpi")
-def get_kpi(distance, seats):
-    filtered_data = data.filter(pl.col("GCD") <= int(distance))
+def get_kpi(distance, seats, perimeter):
+    if perimeter == "true":
+        route_data = data.filter(pl.col("Perimetro") == "Italia")
+    else:
+        route_data = data
+    filtered_data = route_data.filter(pl.col("GCD") <= int(distance))
     filtered_data = filtered_data.filter(pl.col("Seats") <= int(seats))
 
-    kpi_tot = get_all_flights(data)
+    kpi_tot = get_all_flights(route_data)
     kpi_part = get_all_flights(filtered_data)
 
     return {
