@@ -10,12 +10,11 @@ import L from "leaflet";
 // Fix for default markers
 import icon from "@/assets/circle-dot.png";
 
-let DefaultIcon = L.icon({
+L.Marker.prototype.options.icon = L.icon({
   iconUrl: icon,
   iconSize: [24, 24],
   iconAnchor: [12, 12],
 });
-L.Marker.prototype.options.icon = DefaultIcon;
 
 interface LeafletMapProps {
   polylines?: [] | null;
