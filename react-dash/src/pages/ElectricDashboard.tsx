@@ -2,18 +2,12 @@ import { Typography } from "@/components/ui/typography";
 import { Slider } from "@/components/ui/slider";
 import LeafletMap from "@/components/map";
 import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import Perimetro from "@/components/Perimetro";
 import { Armchair, FileKey2, Map, RulerDimensionLine } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import KpiTable from "@/components/KpiTable";
+import { Kpi } from "@/components/KpiTable";
 
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
@@ -69,7 +63,7 @@ function ElectricDashboard() {
     }
   };
 
-  const [kpi, setKpi] = useState(null);
+  const [kpi, setKpi] = useState([]);
   const [kpiLoading, setKpiLoading] = useState(true);
 
   const fetchKpi = async () => {
@@ -123,11 +117,11 @@ function ElectricDashboard() {
                 onValueChange={handleDistanceChange}
                 defaultValue={[400]}
                 min={100}
-                max={3000}
+                max={1500}
                 step={1}
                 referenceLines={[
                   {
-                    value: 300,
+                    value: 400,
                     label: "FGEA/SGEA",
                     color: "#ff6b35",
                   },
@@ -142,7 +136,7 @@ function ElectricDashboard() {
           <div>
             <div className="flex items-center gap-2">
               <Armchair className="h-6 w-6 text-primary" />
-              <Typography version="h4">Numero di passeggeri: </Typography>
+              <Typography version="h4">Capacità aeromobile: </Typography>
             </div>
             <div className="flex flex-row">
               <Slider
@@ -151,7 +145,7 @@ function ElectricDashboard() {
                 onValueChange={handlePassengerChange}
                 defaultValue={[20]}
                 min={10}
-                max={150}
+                max={100}
                 step={1}
                 referenceLines={[
                   {
@@ -200,64 +194,11 @@ function ElectricDashboard() {
           <FileKey2 className="h-6 w-6 text-primary" />
           <Typography version="h3">Tabella dei KPI</Typography>
         </div>
-        <Table>
-          <TableCaption>
-            KPI relativi all&apos;impiego di aeromobili elettrici.
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Metrica</TableHead>
-              <TableHead>Quantità</TableHead>
-              <TableHead>%</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {/* Numero dei voli */}
-            <TableRow>
-              <TableCell>Numero voli</TableCell>
-              <TableCell>{kpiLoading ? " " : kpi.flight_number}</TableCell>
-              <TableCell>
-                {kpiLoading
-                  ? " "
-                  : Math.round(kpi.flight_percentage * 100) / 100}
-              </TableCell>
-            </TableRow>
-            {/* Km percorsi */}
-            <TableRow>
-              <TableCell>Km volati (migliaia)</TableCell>
-              <TableCell>
-                {kpiLoading ? " " : Math.round(kpi.km / 1000)}
-              </TableCell>
-              <TableCell>
-                {kpiLoading ? " " : Math.round(kpi.km_percentage * 100) / 100}
-              </TableCell>
-            </TableRow>
-            {/* Carburante risparmiato */}
-            <TableRow>
-              <TableCell>Carburante risparmiato</TableCell>
-              <TableCell>
-                {kpiLoading ? " " : Math.round(kpi.saved_fuel)}
-              </TableCell>
-              <TableCell>
-                {kpiLoading
-                  ? " "
-                  : Math.round(kpi.saved_fuel_percentage * 100) / 100}
-              </TableCell>
-            </TableRow>
-            {/* CO2 risparmiata */}
-            <TableRow>
-              <TableCell>CO2 risparmiata</TableCell>
-              <TableCell>
-                {kpiLoading ? " " : Math.round(kpi.saved_co2)}
-              </TableCell>
-              <TableCell>
-                {kpiLoading
-                  ? " "
-                  : Math.round(kpi.saved_co2_percentage * 100) / 100}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <KpiTable
+          caption="KPI relativi all'impiego di aeromobili elettrici."
+          loading={kpiLoading}
+          kpis={kpi}
+        />
       </div>
     </div>
   );

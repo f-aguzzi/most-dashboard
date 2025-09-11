@@ -111,13 +111,25 @@ def get_kpi(distance, seats, perimeter):
     kpi_tot = get_all_flights(route_data)
     kpi_part = get_all_flights(filtered_data)
 
-    return {
-        "flight_number" : kpi_part["flight_number"],
-        "flight_percentage" : 100 * kpi_part["flight_number"]/kpi_tot["flight_number"],
-        "km" : kpi_part["total_km"],
-        "km_percentage" : 100 * kpi_part["total_km"] / kpi_tot["total_km"],
-        "saved_fuel" : kpi_part["total_fuel"],
-        "saved_fuel_percentage" : 100 * kpi_part["total_fuel"] / kpi_tot["total_fuel"],
-        "saved_co2" : kpi_part["total_emissions"] - kpi_part["electric_emissions"],
-        "saved_co2_percentage" : 100*(kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / kpi_tot["total_emissions"]
-    }
+    return [
+        {
+            "metric": "Numero voli",
+            "value": kpi_part["flight_number"],
+            "percentage": 100 * kpi_part["flight_number"]/kpi_tot["flight_number"]
+        },
+        {
+            "metric": "Km volati (migliaia)",
+            "value": kpi_part["total_km"] / 1000.0,
+            "percentage": 100 * kpi_part["total_km"] / kpi_tot["total_km"],
+        },
+        {
+            "metric": "Carburante risparmiato",
+            "value": kpi_part["total_fuel"],
+            "percentage": 100 * kpi_part["total_fuel"] / kpi_tot["total_fuel"]
+        },
+        {
+            "metric": "CO2 risparmiata (ton)",
+            "value": (kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / 1000,
+            "percentage": 100*(kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / kpi_tot["total_emissions"]
+        }
+    ]
