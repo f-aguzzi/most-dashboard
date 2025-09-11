@@ -7,7 +7,6 @@ import Perimetro from "@/components/Perimetro";
 import { Armchair, FileKey2, Map, RulerDimensionLine } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import KpiTable from "@/components/KpiTable";
-import { Kpi } from "@/components/KpiTable";
 
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
@@ -102,8 +101,8 @@ function ElectricDashboard() {
       <Typography version="h1" className="m-8 p-4">
         MOST Dashboard - Electric Aircraft
       </Typography>
-      <div className="grid grid-cols-2 gap-8 mt-8 h-auto">
-        <div className="flex flex-col space-y-12 h-auto mx-16">
+      <div className="grid grid-cols-[1fr_2fr] gap-6 mt-6 h-auto">
+        <div className="flex flex-col space-y-6 h-auto mx-8">
           {/* Autonomia */}
           <div>
             <div className="flex items-center gap-2">
@@ -112,7 +111,7 @@ function ElectricDashboard() {
             </div>
             <div className="flex flex-row">
               <Slider
-                className="m-8 w-lg mx-16 px-2"
+                className="m-8 w-lg mx-8 px-2"
                 value={distance}
                 onValueChange={handleDistanceChange}
                 defaultValue={[400]}
@@ -127,7 +126,7 @@ function ElectricDashboard() {
                   },
                 ]}
               ></Slider>
-              <Typography version="p" className="p-8 m-8">
+              <Typography version="p" className="p-8 m-4">
                 {distance}
               </Typography>
             </div>
@@ -140,7 +139,7 @@ function ElectricDashboard() {
             </div>
             <div className="flex flex-row">
               <Slider
-                className="m-8 w-lg mx-16 px-2"
+                className="m-8 w-lg mx-8 px-2"
                 value={passengers}
                 onValueChange={handlePassengerChange}
                 defaultValue={[20]}
@@ -160,7 +159,7 @@ function ElectricDashboard() {
                   },
                 ]}
               ></Slider>
-              <Typography version="p" className="p-8 m-8">
+              <Typography version="p" className="p-8 m-4">
                 {passengers}
               </Typography>
             </div>
@@ -179,6 +178,18 @@ function ElectricDashboard() {
             </div>
             <Perimetro handler={handlePerimetro} className="p-2 m-2" />
           </div>
+          <Separator />
+          <div className="p-4">
+            <div className="flex items-center gap-2">
+              <FileKey2 className="h-6 w-6 text-primary" />
+              <Typography version="h3">Tabella dei KPI</Typography>
+            </div>
+            <KpiTable
+              caption="KPI relativi all'impiego di aeromobili elettrici."
+              loading={kpiLoading}
+              kpis={kpi}
+            />
+          </div>
         </div>
         {/* Mappa */}
         <div className="flex flex-col space-y-4">
@@ -187,18 +198,6 @@ function ElectricDashboard() {
             airports={airportsLoading && airports != null ? [] : airports}
           />
         </div>
-      </div>
-      <Separator />
-      <div className="p-4">
-        <div className="flex items-center gap-2">
-          <FileKey2 className="h-6 w-6 text-primary" />
-          <Typography version="h3">Tabella dei KPI</Typography>
-        </div>
-        <KpiTable
-          caption="KPI relativi all'impiego di aeromobili elettrici."
-          loading={kpiLoading}
-          kpis={kpi}
-        />
       </div>
     </div>
   );

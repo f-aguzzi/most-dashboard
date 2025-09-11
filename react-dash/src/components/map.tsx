@@ -8,14 +8,12 @@ import {
 import L from "leaflet";
 
 // Fix for default markers
-import icon from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import icon from "@/assets/circle-dot.png";
 
 let DefaultIcon = L.icon({
   iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
@@ -27,7 +25,7 @@ interface LeafletMapProps {
 export default function LeafletMap(props: LeafletMapProps) {
   return (
     <div id="map">
-      <MapContainer center={[50.505, 15.0]} zoom={4} scrollWheelZoom={true}>
+      <MapContainer center={[55.505, 13.0]} zoom={4} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
