@@ -57,7 +57,8 @@ def get_routes_by(distance, seats, perimeter):
         ]
         result.append({
             "route" : route,
-            "label" : row["Dep_apt"] + "-" + row["Arr_apt"]
+            "label" : row["Dep_apt"] + "-" + row["Arr_apt"],
+            "count" : row["Number"]
         })
 
     return result

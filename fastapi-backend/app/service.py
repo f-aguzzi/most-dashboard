@@ -22,14 +22,16 @@ def filter_routes(data: pl.DataFrame, distance: int, seats: int):
         pl.col("Dep_apt_lat").first(),
         pl.col("Dep_apt_lon").first(),
         pl.col("Arr_apt_lat").first(),
-        pl.col("Arr_apt_lon").first()
+        pl.col("Arr_apt_lon").first(),
+        pl.col("Dep_apt_lat").count().alias("Number")
     ]).select(pl.col(
         "Dep_apt_lat",
         "Dep_apt_lon",
         "Arr_apt_lat",
         "Arr_apt_lon",
         "Dep_apt",
-        "Arr_apt"
+        "Arr_apt",
+        "Number"
     ))
     return routes
 

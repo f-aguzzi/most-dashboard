@@ -19,6 +19,7 @@ L.Marker.prototype.options.icon = L.icon({
 interface PolyLine {
   route: [];
   label: string;
+  count: number;
 }
 
 interface Airport {
@@ -41,14 +42,27 @@ export default function LeafletMap(props: LeafletMapProps) {
         />
         {props.polylines &&
           props.polylines.map((positions, index) => (
-            <Polyline key={index} positions={positions.route}>
-              <Popup>{positions.label}</Popup>
+            <Polyline
+              key={index}
+              positions={positions.route}
+              weight={Math.round(
+                Math.max(1, Math.min(positions.count * 1.0, 20)),
+              )}
+            >
+              <Popup>
+                <b>Rotta:</b> {positions.label}
+                <br />
+                <b>Numero di voli sostituiti: </b> {positions.count}
+              </Popup>
             </Polyline>
           ))}
         {props.airports &&
           props.airports.map((positions, index) => (
             <Marker key={index} position={positions.location}>
-              <Popup>{positions.label}</Popup>
+              <Popup>
+                <b>Aeroporto: </b>
+                {positions.label}
+              </Popup>
             </Marker>
           ))}
       </MapContainer>
