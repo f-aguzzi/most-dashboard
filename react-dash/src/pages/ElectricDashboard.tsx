@@ -7,6 +7,7 @@ import Perimetro from "@/components/Perimetro";
 import { Armchair, FileKey2, Map, RulerDimensionLine } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import KpiTable, { type Kpi } from "@/components/KpiTable";
+import { Button } from "@/components/ui/button";
 
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
@@ -93,6 +94,49 @@ function ElectricDashboard() {
     fetchKpi();
   }, [perimetro, distance, passengers]);
 
+  const fetchTable = async () => {
+    try {
+      // Build the query parameters
+      const params = new URLSearchParams({
+        distance: distance.toString(),
+        seats: passengers.toString(),
+        perimeter: perimetro.toString(),
+      });
+
+      // Make the request to your FastAPI endpoint
+      const response = await fetch(`http://localhost:8000/datasheet?${params}`);
+
+      if (!response.ok) {
+        throw new Error(
+          `Download failed: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      // Get the filename from the Content-Disposition header
+      const contentDisposition = response.headers.get("Content-Disposition");
+      const filename = contentDisposition
+        ? contentDisposition.split("filename=")[1]?.replace(/"/g, "")
+        : `dataset-${distance}km-${passengers}seats-italy=${perimetro}.xlsx`;
+
+      // Convert response to blob
+      const blob = await response.blob();
+
+      // Create download link and trigger download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error("Download error:", err);
+    }
+  };
+
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
@@ -168,12 +212,16 @@ function ElectricDashboard() {
             <i>SGEA = Second Generation Electric Aircraft</i>
           </Typography>
           {/* Perimetro */}
-          <div>
+          <div className="flex flex-row items-center">
             <div className="flex items-center gap-2">
               <Map className="h-6 w-6 text-primary" />
               <Typography version="h4">Perimetro</Typography>
             </div>
             <Perimetro handler={handlePerimetro} className="p-2 m-2" />
+            <Button className="mx-4" onClick={fetchTable}>
+              {" "}
+              Scarica i dati{" "}
+            </Button>
           </div>
           <Separator />
           <div className="p-4">

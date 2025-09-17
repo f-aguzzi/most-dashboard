@@ -2,6 +2,8 @@ from fastapi import FastAPI
 import polars as pl
 from app.service import get_all_flights, filter_routes
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+import io
 
 app = FastAPI()
 
@@ -37,7 +39,6 @@ def get_routes():
         pl.col("Dep_apt_lon").first(),
         pl.col("Arr_apt_lat").first(),
         pl.col("Arr_apt_lon").first(),
-        pl.col("Flown_km").mean()
     ]).sort(by=pl.col("Dep_apt", "Arr_apt"))
     return routes.to_dicts()
 
@@ -58,7 +59,12 @@ def get_routes_by(distance, seats, perimeter):
         result.append({
             "route" : route,
             "label" : row["Dep_apt"] + "-" + row["Arr_apt"],
-            "count" : row["Number"]
+            "count" : row["Number"],
+            "distance" : row["GCD"],
+            "seats": int(row["Seats"]),
+            "flown": int(row["Total_flown"]),
+            "co2": int(row["co2_tot"]),
+            "deltaco2": int(row["delta_co2_tot"])
         })
 
     return result
@@ -75,13 +81,13 @@ def get_routes_by_apts(distance, seats, perimeter):
     routes1 = routes.select([
         pl.col("Dep_apt").alias("IATA"),
         pl.col("Dep_apt_lat").alias("lat"),
-        pl.col("Dep_apt_lon").alias("lon")
+        pl.col("Dep_apt_lon").alias("lon"),
     ])
 
     routes2 = routes.select([
         pl.col("Arr_apt").alias("IATA"),
         pl.col("Arr_apt_lat").alias("lat"),
-        pl.col("Arr_apt_lon").alias("lon")
+        pl.col("Arr_apt_lon").alias("lon"),
     ])
 
     routes = pl.concat([routes1, routes2]).unique()
@@ -91,7 +97,7 @@ def get_routes_by_apts(distance, seats, perimeter):
         location = [row["lat"], row["lon"]]
         results.append({
             "location" : location,
-            "label" : row["IATA"]
+            "label" : row["IATA"],
         })
 
     return results
@@ -113,7 +119,7 @@ def get_kpi(distance, seats, perimeter):
     kpi_tot = get_all_flights(route_data)
     kpi_part = get_all_flights(filtered_data)
 
-    return [
+    result = [
         {
             "metric": "Numero voli",
             "value": kpi_part["flight_number"],
@@ -135,3 +141,50 @@ def get_kpi(distance, seats, perimeter):
             "percentage": 100*(kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / kpi_tot["total_emissions"]
         }
     ]
+
+    if (int(seats) <= 50 and int(distance) <= 500):
+        result.append({
+            "metric": "Delta costi operativi",
+            "value": (kpi_part["cost_conventional"] - kpi_part["cost_electric"]) / kpi_tot["cost_conventional"],
+            "percentage": 100 * ((kpi_part["cost_conventional"] - kpi_part["cost_electric"]) / kpi_tot["cost_conventional"])
+        })
+
+    return result
+
+@app.get("/datasheet")
+def get_datasheet(distance, seats, perimeter):
+    if perimeter == "true":
+        route_data = data.filter(pl.col("Perimetro") == "Italia")
+    else:
+        route_data = data
+    filtered_data = route_data.filter(pl.col("GCD") <= int(distance))
+    filtered_data = filtered_data.filter(pl.col("Seats") <= int(seats))
+
+    result = filtered_data.group_by(pl.col("Dep_apt", "Arr_apt")).agg([
+        pl.col("Dep_apt_region").first(),
+        pl.col("Arr_apt_region").first(),
+        pl.col("GCD").first(),
+        pl.col("Frequency").sum().alias("Flights_number"),
+        pl.col("Flown_km").sum(),
+        pl.col("co2_tot").sum(),
+        pl.col("delta_co2_tot").sum() / pl.col("co2_tot").sum()
+    ])
+
+    # Convert to Excel format in memory
+    excel_buffer = io.BytesIO()
+
+    # Write DataFrame to Excel buffer using xlsxwriter engine
+    result.write_excel(excel_buffer)
+
+    # Reset buffer position to the beginning
+    excel_buffer.seek(0)
+
+    # Create filename with timestamp
+    filename = f"dataset-{distance}km-{seats}seats-italy={perimeter}.xlsx"
+
+    # Return as streaming response
+    return StreamingResponse(
+        io.BytesIO(excel_buffer.read()),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )

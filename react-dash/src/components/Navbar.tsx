@@ -6,11 +6,11 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Typography } from "./ui/typography";
 import { Button } from "./ui/button";
-import { Moon, Sun, Plane } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { Separator } from "./ui/separator";
+import MOSTLogo from "@/assets/MOST.png";
 
 interface NavbarProps {
   nightMode: boolean;
@@ -24,10 +24,7 @@ const Navbar = (props: NavbarProps) => {
       <NavigationMenuList>
         {/* Logo */}
         <NavigationMenuItem>
-          <div className="flex items-center gap-2 mx-2">
-            <Plane className="h-6 w-6 text-primary" />
-            <Typography version="h2">MOST</Typography>
-          </div>
+          <img src={MOSTLogo} alt="MOST" className="h-16 w-auto" />
         </NavigationMenuItem>
         {/* Electric Aircraft */}
         <NavigationMenuItem>

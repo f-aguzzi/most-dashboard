@@ -20,6 +20,11 @@ interface PolyLine {
   route: [];
   label: string;
   count: number;
+  distance: number;
+  seats: number;
+  flown: number;
+  co2: number;
+  deltaco2: number;
 }
 
 interface Airport {
@@ -43,16 +48,26 @@ export default function LeafletMap(props: LeafletMapProps) {
         {props.polylines &&
           props.polylines.map((positions, index) => (
             <Polyline
-              key={index}
+              key={index + positions.label}
               positions={positions.route}
               weight={Math.round(
-                Math.max(1, Math.min(positions.count * 1.0, 20)),
+                Math.max(1, Math.min(positions.count * 0.02, 20)),
               )}
             >
-              <Popup>
+              <Popup key={index + positions.label + "label"}>
                 <b>Rotta:</b> {positions.label}
                 <br />
                 <b>Numero di voli sostituiti: </b> {positions.count}
+                <br />
+                <b>Lunghezza della tratta: </b> {positions.distance} km
+                <br />
+                <b>Numero medio di passeggeri: </b> {positions.seats}
+                <br />
+                <b>Distanza totale volata: </b> {positions.flown} km
+                <br />
+                <b>Emissioni totali (convenzionale): </b> {positions.co2} ton
+                <br />
+                <b>Emissioni risparmiate: </b> {positions.deltaco2} ton
               </Popup>
             </Polyline>
           ))}

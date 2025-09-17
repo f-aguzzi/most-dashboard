@@ -10,4 +10,5 @@ dependencies = [
     "numpy>=2.2.6",
     "polars>=1.33.0",
     "uvicorn>=0.35.0",
+    "xlsxwriter>=3.2.9",
 ]
