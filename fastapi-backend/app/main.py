@@ -1,9 +1,9 @@
+import io
 from fastapi import FastAPI
 import polars as pl
 from app.service import get_all_flights, filter_routes
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-import io
 
 app = FastAPI()
 
@@ -20,15 +20,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-data = pl.read_excel("data.xlsx")
+data = pl.LazyFrame(pl.read_excel("data.xlsx"))
 
 @app.get("/routes_by")
 def get_routes_by(distance, seats, perimeter):
+    """
+    Restituisce una lista di dati sulle rotte.
+    """
     if perimeter == "true":
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
         route_data = data
-    routes = filter_routes(route_data, distance, seats)
+    routes = filter_routes(route_data, int(distance), int(seats)).collect()
 
     result = []
     for row in routes.to_dicts():
@@ -51,6 +54,9 @@ def get_routes_by(distance, seats, perimeter):
 
 @app.get("/routes_by/airports")
 def get_routes_by_apts(distance, seats, perimeter):
+    """
+    Restituisce una lista di dati sugli aeroporti.
+    """
     if perimeter == "true":
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
@@ -70,7 +76,7 @@ def get_routes_by_apts(distance, seats, perimeter):
         pl.col("Arr_apt_lon").alias("lon"),
     ])
 
-    routes = pl.concat([routes1, routes2]).unique()
+    routes = pl.concat([routes1, routes2]).unique().collect()
 
     results = []
     for row in routes.to_dicts():
@@ -82,10 +88,11 @@ def get_routes_by_apts(distance, seats, perimeter):
 
     return results
 
-
-
 @app.get("/kpi")
 def get_kpi(distance, seats, perimeter):
+    """
+    Restituisce un dizionario di KPI sui voli.
+    """
     if perimeter == "true":
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
@@ -93,8 +100,8 @@ def get_kpi(distance, seats, perimeter):
     filtered_data = route_data.filter(pl.col("GCD") <= int(distance))
     filtered_data = filtered_data.filter(pl.col("Seats") <= int(seats))
 
-    kpi_tot = get_all_flights(route_data)
-    kpi_part = get_all_flights(filtered_data)
+    kpi_tot = get_all_flights(route_data).collect().to_dicts()[0]
+    kpi_part = get_all_flights(filtered_data).collect().to_dicts()[0]
 
     result = [
         {
@@ -130,6 +137,9 @@ def get_kpi(distance, seats, perimeter):
 
 @app.get("/datasheet")
 def get_datasheet(distance, seats, perimeter):
+    """
+    Restituisce i dati sotto forma di file Excel scaricabile.
+    """
     if perimeter == "true":
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
@@ -151,7 +161,7 @@ def get_datasheet(distance, seats, perimeter):
     excel_buffer = io.BytesIO()
 
     # Write DataFrame to Excel buffer using xlsxwriter engine
-    result.write_excel(excel_buffer)
+    result.collect().write_excel(excel_buffer)
 
     # Reset buffer position to the beginning
     excel_buffer.seek(0)
