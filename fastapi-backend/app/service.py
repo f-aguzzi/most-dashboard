@@ -1,3 +1,6 @@
+"""
+Modulo di servizio per il backend della Most-Dashboard.
+"""
 import polars as pl
 
 def get_all_flights(data: pl.LazyFrame) -> pl.LazyFrame:
@@ -33,7 +36,9 @@ def filter_routes(data: pl.LazyFrame, distance: int, seats: int) -> pl.LazyFrame
             pl.col("Arr_apt_lon").first(),
             pl.col("Frequency").sum().alias("Number"),
             pl.col("GCD").first(),
-            ((pl.col("Seats") * pl.col("Frequency")).sum() / pl.col("Frequency").sum()).alias("Seats"),
+            (
+                (pl.col("Seats") * pl.col("Frequency")
+            ).sum() / pl.col("Frequency").sum()).alias("Seats"),
             pl.col("Flown_km").sum().alias("Total_flown"),
             pl.col("co2_tot").sum(),
             pl.col("delta_co2_tot").sum()

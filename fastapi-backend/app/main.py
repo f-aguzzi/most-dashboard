@@ -1,9 +1,12 @@
+"""
+Modulo principale del backend della Most-Dashboard.
+"""
 import io
-from fastapi import FastAPI
 import polars as pl
-from app.service import get_all_flights, filter_routes
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from app.service import get_all_flights, filter_routes
 
 app = FastAPI()
 
@@ -121,16 +124,28 @@ def get_kpi(distance, seats, perimeter):
         },
         {
             "metric": "CO2 risparmiata (ton)",
-            "value": (kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / 1000,
-            "percentage": 100*(kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / kpi_tot["total_emissions"]
+            "value": (
+                (kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / 1000
+            ),
+            "percentage": (
+                100*(kpi_part["total_emissions"] -
+                kpi_part["electric_emissions"]) / kpi_tot["total_emissions"]
+            )
         }
     ]
 
     if (int(seats) <= 50 and int(distance) <= 500):
         result.append({
             "metric": "Delta costi operativi",
-            "value": (kpi_part["cost_conventional"] - kpi_part["cost_electric"]) / kpi_tot["cost_conventional"],
-            "percentage": 100 * ((kpi_part["cost_conventional"] - kpi_part["cost_electric"]) / kpi_tot["cost_conventional"])
+            "value": (
+                (kpi_part["cost_conventional"] - kpi_part["cost_electric"]) /
+                kpi_tot["cost_conventional"]
+            ),
+            "percentage": (
+                100 * ((kpi_part["cost_conventional"] -
+                kpi_part["cost_electric"]) /
+                kpi_tot["cost_conventional"])
+            )
         })
 
     return result
