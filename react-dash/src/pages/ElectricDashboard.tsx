@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
   const [distance, setDistance] = useState([400]);
+  const [committedPassengers, setCommittedPassengers] = useState([20]);
+  const [committedDistance, setCommittedDistance] = useState([400]);
 
   const handlePassengerChange = (value: []) => {
     setPassengers(value);
@@ -21,15 +23,23 @@ function ElectricDashboard() {
     setDistance(value);
   };
 
+  const commitPassengers = (value: []) => {
+    setCommittedPassengers(value);
+  };
+
+  const commitDistance = (value: []) => {
+    setCommittedDistance(value);
+  };
+
   const [data, setData] = useState<[PolyLine] | null>(null);
 
   const fetchData = async () => {
     try {
       const response = await fetch(
         "http://localhost:8000/routes_by?seats=" +
-          passengers +
+          committedPassengers +
           "&distance=" +
-          distance +
+          committedDistance +
           "&perimeter=" +
           perimetro,
       );
@@ -47,9 +57,9 @@ function ElectricDashboard() {
     try {
       const response = await fetch(
         "http://localhost:8000/routes_by/airports?seats=" +
-          passengers +
+          committedPassengers +
           "&distance=" +
-          distance +
+          committedDistance +
           "&perimeter=" +
           perimetro,
       );
@@ -67,9 +77,9 @@ function ElectricDashboard() {
     try {
       const response = await fetch(
         "http://localhost:8000/kpi?seats=" +
-          passengers +
+          committedPassengers +
           "&distance=" +
-          distance +
+          committedDistance +
           "&perimeter=" +
           perimetro,
       );
@@ -92,14 +102,14 @@ function ElectricDashboard() {
     fetchData();
     fetchAirports();
     fetchKpi();
-  }, [perimetro, distance, passengers]);
+  }, [perimetro, committedDistance, committedPassengers]);
 
   const fetchTable = async () => {
     try {
       // Build the query parameters
       const params = new URLSearchParams({
-        distance: distance.toString(),
-        seats: passengers.toString(),
+        distance: committedDistance.toString(),
+        seats: committedPassengers.toString(),
         perimeter: perimetro.toString(),
       });
 
@@ -155,6 +165,7 @@ function ElectricDashboard() {
                 className="m-8 w-lg mx-8 px-2"
                 value={distance}
                 onValueChange={handleDistanceChange}
+                onValueCommit={commitDistance}
                 defaultValue={[400]}
                 min={100}
                 max={1500}
@@ -167,7 +178,7 @@ function ElectricDashboard() {
                   },
                 ]}
               ></Slider>
-              <Typography version="p" className="p-8 m-4">
+              <Typography version="p" className="p-8 m-4 w-4 text-center">
                 {distance}
               </Typography>
             </div>
@@ -183,6 +194,7 @@ function ElectricDashboard() {
                 className="m-8 w-lg mx-8 px-2"
                 value={passengers}
                 onValueChange={handlePassengerChange}
+                onValueCommit={commitPassengers}
                 defaultValue={[20]}
                 min={10}
                 max={100}
@@ -200,7 +212,7 @@ function ElectricDashboard() {
                   },
                 ]}
               ></Slider>
-              <Typography version="p" className="p-8 m-4">
+              <Typography version="p" className="p-8 m-4 w-4 text-center">
                 {passengers}
               </Typography>
             </div>
