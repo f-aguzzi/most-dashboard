@@ -2,15 +2,8 @@ services:
   fastapi:
     build: fastapi-backend
     container_name: fastapi-most
-    restart: unless-stopped
-    networks:
-      - most-network
-
-  streamlit:
-    build: streamlit-dash
-    container_name: streamlit-most
     ports:
-      - "8501:8501" # Maps port 8051 on the host to port 8000 in the container
+      - 8000:8000
     restart: unless-stopped
     networks:
       - most-network
