@@ -41,7 +41,8 @@ def filter_routes(data: pl.LazyFrame, distance: int, seats: int) -> pl.LazyFrame
             ).sum() / pl.col("Frequency").sum()).alias("Seats"),
             pl.col("Flown_km").sum().alias("Total_flown"),
             pl.col("co2_tot").sum(),
-            pl.col("delta_co2_tot").sum()
+            pl.col("delta_co2_tot").sum(),
+            pl.col("fuel_conv_tot").sum().alias("Fuel")
         ])
         .select([
             pl.col("Dep_apt_lat"),
@@ -55,6 +56,7 @@ def filter_routes(data: pl.LazyFrame, distance: int, seats: int) -> pl.LazyFrame
             pl.col("Seats"),
             pl.col("Total_flown"),
             pl.col("co2_tot"),
-            pl.col("delta_co2_tot")
+            pl.col("delta_co2_tot"),
+            pl.col("Fuel")
         ])
     )

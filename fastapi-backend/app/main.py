@@ -51,6 +51,7 @@ def get_routes_by(distance, seats, perimeter):
             "seats": int(row["Seats"]),
             "flown": int(row["Total_flown"]),
             "co2": int(row["co2_tot"]),
+            "fuel": row["Fuel"],
             "deltaco2": int(row["delta_co2_tot"])
         })
 

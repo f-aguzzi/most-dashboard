@@ -12,8 +12,8 @@ import icon from "@/assets/circle-dot.png";
 
 L.Marker.prototype.options.icon = L.icon({
   iconUrl: icon,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
 });
 
 interface PolyLine {
@@ -24,6 +24,7 @@ interface PolyLine {
   seats: number;
   flown: number;
   co2: number;
+  fuel: number;
   deltaco2: number;
 }
 
@@ -35,9 +36,18 @@ interface Airport {
 interface LeafletMapProps {
   polylines?: [PolyLine] | null;
   airports?: [Airport] | null;
+  display?: string | null;
 }
 
 export default function LeafletMap(props: LeafletMapProps) {
+  const computeWeight = (positions: PolyLine) => {
+    if (props.display === "Consumo")
+      return Math.round(Math.max(1, Math.min(positions.fuel * 0.007, 20)));
+    else if (props.display === "Emissioni")
+      return Math.round(Math.max(1, Math.min(positions.co2 * 0.002, 20)));
+    else return Math.round(Math.max(1, Math.min(positions.count * 0.02, 20)));
+  };
+
   return (
     <div id="map">
       <MapContainer center={[55.505, 13.0]} zoom={4} scrollWheelZoom={true}>
@@ -50,9 +60,7 @@ export default function LeafletMap(props: LeafletMapProps) {
             <Polyline
               key={index + positions.label}
               positions={positions.route}
-              weight={Math.round(
-                Math.max(1, Math.min(positions.count * 0.02, 20)),
-              )}
+              weight={computeWeight(positions)}
             >
               <Popup key={index + positions.label + "label"}>
                 <b>Rotta:</b> {positions.label}

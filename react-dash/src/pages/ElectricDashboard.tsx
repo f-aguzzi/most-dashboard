@@ -4,10 +4,11 @@ import LeafletMap, { type Airport, type PolyLine } from "@/components/map";
 import { useEffect, useState } from "react";
 
 import Perimetro from "@/components/Perimetro";
-import { Armchair, FileKey2, Map, RulerDimensionLine } from "lucide-react";
+import { Armchair, Eye, FileKey2, Map, RulerDimensionLine } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import KpiTable, { type Kpi } from "@/components/KpiTable";
 import { Button } from "@/components/ui/button";
+import DisplaySelector from "@/components/DisplaySelector";
 
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
@@ -98,11 +99,17 @@ function ElectricDashboard() {
     setPerimetro(perimeter);
   };
 
+  const [display, setDisplay] = useState("Frequenza");
+
+  const handleDisplay = async (value: string) => {
+    setDisplay(value);
+  };
+
   useEffect(() => {
     fetchData();
     fetchAirports();
     fetchKpi();
-  }, [perimetro, committedDistance, committedPassengers]);
+  }, [perimetro, committedDistance, committedPassengers, display]);
 
   const fetchTable = async () => {
     try {
@@ -223,17 +230,29 @@ function ElectricDashboard() {
             <br />
             <i>SGEA = Second Generation Electric Aircraft</i>
           </Typography>
-          {/* Perimetro */}
-          <div className="flex flex-row items-center">
-            <div className="flex items-center gap-2">
-              <Map className="h-6 w-6 text-primary" />
-              <Typography version="h4">Perimetro</Typography>
+          {/* Riga di controllo */}
+          <div className="flex flex-row items-center gap-2">
+            {/* Perimetro */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-row gap-2">
+                <Map className="h-6 w-6 text-primary" />
+                <Typography version="h4">Perimetro</Typography>
+              </div>
+              <Perimetro handler={handlePerimetro} className="p-2 m-2" />
             </div>
-            <Perimetro handler={handlePerimetro} className="p-2 m-2" />
+            {/* Scarica i dati */}
             <Button className="mx-4" onClick={fetchTable}>
               {" "}
               Scarica i dati{" "}
             </Button>
+            {/* Display */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-row gap-2">
+                <Eye className="h-6 w-6 text-primary" />
+                <Typography version="h4">Visualizzazione</Typography>
+              </div>
+              <DisplaySelector handler={handleDisplay} className="p-2 m-2" />
+            </div>
           </div>
           <Separator />
           <div className="p-4">
@@ -249,7 +268,7 @@ function ElectricDashboard() {
         </div>
         {/* Mappa */}
         <div className="flex flex-col space-y-4">
-          <LeafletMap polylines={data} airports={airports} />
+          <LeafletMap polylines={data} airports={airports} display={display} />
         </div>
       </div>
     </div>
