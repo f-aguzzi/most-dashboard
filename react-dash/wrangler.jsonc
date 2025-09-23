@@ -4,4 +4,11 @@
   "assets": {
     "directory": "./dist",
   },
+  "env": {
+    "production": {
+      "vars": {
+        "VITE_API_URL": "https://most-dashboard.onrender.com",
+      },
+    },
+  },
 }
