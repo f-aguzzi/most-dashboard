@@ -10,6 +10,8 @@ import KpiTable, { type Kpi } from "@/components/KpiTable";
 import { Button } from "@/components/ui/button";
 import DisplaySelector from "@/components/DisplaySelector";
 
+const apiUrl = import.meta.env.VITE_URL;
+
 function ElectricDashboard() {
   const [passengers, setPassengers] = useState([20]);
   const [distance, setDistance] = useState([400]);
@@ -37,7 +39,8 @@ function ElectricDashboard() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/routes_by?seats=" +
+        apiUrl +
+          "/routes_by?seats=" +
           committedPassengers +
           "&distance=" +
           committedDistance +
@@ -57,7 +60,8 @@ function ElectricDashboard() {
   const fetchAirports = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/routes_by/airports?seats=" +
+        apiUrl +
+          "/routes_by/airports?seats=" +
           committedPassengers +
           "&distance=" +
           committedDistance +
@@ -77,7 +81,8 @@ function ElectricDashboard() {
   const fetchKpi = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/kpi?seats=" +
+        apiUrl +
+          "/kpi?seats=" +
           committedPassengers +
           "&distance=" +
           committedDistance +
@@ -121,7 +126,7 @@ function ElectricDashboard() {
       });
 
       // Make the request to your FastAPI endpoint
-      const response = await fetch(`http://localhost:8000/datasheet?${params}`);
+      const response = await fetch(process.env.URL + `/datasheet?${params}`);
 
       if (!response.ok) {
         throw new Error(
