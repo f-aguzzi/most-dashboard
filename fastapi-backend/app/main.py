@@ -26,6 +26,10 @@ app.add_middleware(
 
 data = pl.LazyFrame(pl.read_excel("data.xlsx"))
 
+@app.get("/")
+def health_check():
+    return {"status": "healthy"}
+
 @app.get("/routes_by")
 def get_routes_by(distance, seats, perimeter):
     """
