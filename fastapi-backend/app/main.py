@@ -27,6 +27,12 @@ app.add_middleware(
 
 data = pl.LazyFrame(pl.read_excel("data.xlsx"))
 
+def fmt(s):
+    return format(round(s, 2), ',').replace(',', '˙').replace('.', ',')
+
+def pfmt(s):
+    return f"{round(100*s, 2)}".replace('.', ',')
+
 @app.get("/")
 def health_check():
     return {"status": "healthy"}
@@ -51,13 +57,13 @@ def get_routes_by(distance, seats, perimeter):
         result.append({
             "route" : route,
             "label" : row["Dep_apt"] + "-" + row["Arr_apt"],
-            "count" : row["Number"],
-            "distance" : row["GCD"],
+            "count" : fmt(row["Number"]),
+            "distance" : fmt(row["GCD"]),
             "seats": int(row["Seats"]),
-            "flown": int(row["Total_flown"]),
-            "co2": int(row["co2_tot"]),
-            "fuel": row["Fuel"],
-            "deltaco2": int(row["delta_co2_tot"])
+            "flown": fmt(row["Total_flown"]),
+            "co2": fmt(row["co2_tot"]),
+            "fuel": fmt(row["Fuel"]),
+            "deltaco2": fmt(row["delta_co2_tot"])
         })
 
     return result
@@ -116,27 +122,29 @@ def get_kpi(distance, seats, perimeter):
     result = [
         {
             "metric": "Numero voli",
-            "value": kpi_part["flight_number"],
-            "percentage": 100 * kpi_part["flight_number"]/kpi_tot["flight_number"]
+            "value": fmt(kpi_part["flight_number"]),
+            "percentage": pfmt(
+                kpi_part["flight_number"]/kpi_tot["flight_number"]
+            )
         },
         {
             "metric": "Km volati (migliaia)",
-            "value": kpi_part["total_km"] / 1000.0,
-            "percentage": 100 * kpi_part["total_km"] / kpi_tot["total_km"],
+            "value": fmt(kpi_part["total_km"] / 1000.0),
+            "percentage": pfmt(kpi_part["total_km"] / kpi_tot["total_km"])
         },
         {
-            "metric": "Carburante risparmiato",
-            "value": kpi_part["total_fuel"],
-            "percentage": 100 * kpi_part["total_fuel"] / kpi_tot["total_fuel"]
+            "metric": "Carburante risparmiato (ton)",
+            "value": fmt(kpi_part["total_fuel"]),
+            "percentage": pfmt(kpi_part["total_fuel"] / kpi_tot["total_fuel"])
         },
         {
             "metric": "CO2 risparmiata (ton)",
-            "value": (
-                (kpi_part["total_emissions"] - kpi_part["electric_emissions"]) / 1000
-            ),
-            "percentage": (
-                100*(kpi_part["total_emissions"] -
-                kpi_part["electric_emissions"]) / kpi_tot["total_emissions"]
+            "value": fmt(
+                (kpi_part["total_emissions"] - kpi_part["electric_emissions"])),
+            "percentage": pfmt(
+                (kpi_part["total_emissions"] -
+                kpi_part["electric_emissions"]) /
+                kpi_tot["total_emissions"]
             )
         }
     ]
@@ -144,14 +152,14 @@ def get_kpi(distance, seats, perimeter):
     if (int(seats) <= 50 and int(distance) <= 500):
         result.append({
             "metric": "Delta costi operativi",
-            "value": (
+            "value": fmt(
                 (kpi_part["cost_conventional"] - kpi_part["cost_electric"]) /
                 kpi_tot["cost_conventional"]
             ),
-            "percentage": (
-                100 * ((kpi_part["cost_conventional"] -
+            "percentage": pfmt(
+                (kpi_part["cost_conventional"] -
                 kpi_part["cost_electric"]) /
-                kpi_tot["cost_conventional"])
+                kpi_tot["cost_conventional"]
             )
         })
 

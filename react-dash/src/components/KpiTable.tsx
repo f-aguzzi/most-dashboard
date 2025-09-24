@@ -10,8 +10,8 @@ import {
 
 interface Kpi {
   metric: string;
-  value: number;
-  percentage: number;
+  value: string;
+  percentage: string;
 }
 
 interface KpiTableProps {
@@ -38,10 +38,8 @@ const KpiTable = (props: KpiTableProps) => {
             return (
               <TableRow key={index}>
                 <TableCell key={index + "T1"}>{value.metric}</TableCell>
-                <TableCell>{Math.round(value.value * 100) / 100}</TableCell>
-                <TableCell key={index + "T2"}>
-                  {Math.round(value.percentage * 100) / 100}
-                </TableCell>
+                <TableCell>{value.value}</TableCell>
+                <TableCell key={index + "T2"}>{value.percentage}</TableCell>
               </TableRow>
             );
           })
