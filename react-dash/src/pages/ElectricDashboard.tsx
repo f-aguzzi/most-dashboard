@@ -162,7 +162,7 @@ function ElectricDashboard() {
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
-        Electric Aircraft - Rotte Sostituibili
+        Electric Aircraft - Rotte Sostituibili {display}
       </Typography>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
         <div className="flex flex-col space-y-6 h-auto mx-8">

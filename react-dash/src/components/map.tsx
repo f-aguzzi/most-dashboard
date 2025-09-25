@@ -58,11 +58,11 @@ export default function LeafletMap(props: LeafletMapProps) {
         {props.polylines &&
           props.polylines.map((positions, index) => (
             <Polyline
-              key={index + positions.label}
+              key={index + positions.label + props.display}
               positions={positions.route}
               weight={computeWeight(positions)}
             >
-              <Popup key={index + positions.label + "label"}>
+              <Popup key={index + positions.label + "label" + props.display}>
                 <b>Rotta:</b> {positions.label}
                 <br />
                 <b>Numero di voli sostituiti: </b> {positions.count}
@@ -71,11 +71,23 @@ export default function LeafletMap(props: LeafletMapProps) {
                 <br />
                 <b>Numero medio di passeggeri: </b> {positions.seats}
                 <br />
-                <b>Distanza totale volata: </b> {positions.flown} km
+                <b>Distanza totale volata: </b>{" "}
+                {(Math.round(positions.flown * 100) / 100).toLocaleString(
+                  "it-IT",
+                )}{" "}
+                km
                 <br />
-                <b>Emissioni totali (convenzionale): </b> {positions.co2} ton
+                <b>Emissioni totali (convenzionale): </b>{" "}
+                {(Math.round(positions.co2 * 100) / 100).toLocaleString(
+                  "it-IT",
+                )}{" "}
+                ton
                 <br />
-                <b>Emissioni risparmiate: </b> {positions.deltaco2} ton
+                <b>Emissioni risparmiate: </b>{" "}
+                {(Math.round(positions.deltaco2 * 100) / 100).toLocaleString(
+                  "it-IT",
+                )}{" "}
+                ton
               </Popup>
             </Polyline>
           ))}

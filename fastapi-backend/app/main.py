@@ -57,13 +57,13 @@ def get_routes_by(distance, seats, perimeter):
         result.append({
             "route" : route,
             "label" : row["Dep_apt"] + "-" + row["Arr_apt"],
-            "count" : fmt(row["Number"]),
-            "distance" : fmt(row["GCD"]),
+            "count" : int(row["Number"]),
+            "distance" : int(row["GCD"]),
             "seats": int(row["Seats"]),
-            "flown": fmt(row["Total_flown"]),
-            "co2": fmt(row["co2_tot"]),
-            "fuel": fmt(row["Fuel"]),
-            "deltaco2": fmt(row["delta_co2_tot"])
+            "flown": row["Total_flown"],
+            "co2": row["co2_tot"],
+            "fuel": row["Fuel"],
+            "deltaco2": row["delta_co2_tot"]
         })
 
     return result
