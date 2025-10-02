@@ -5,7 +5,7 @@ import {
   Popup,
   Polyline,
 } from "react-leaflet";
-import L, { type LatLngTuple } from "leaflet";
+import L, { type LatLngExpression, type LatLngTuple } from "leaflet";
 
 // Fix for default markers
 import icon from "@/assets/circle-dot.png";
@@ -37,9 +37,11 @@ interface LeafletMapProps {
   polylines?: [PolyLine] | null;
   airports?: [Airport] | null;
   display?: string | null;
+  center?: LatLngExpression | [55.505, 13.0];
+  zoom?: number | 4;
 }
 
-export default function LeafletMap(props: LeafletMapProps) {
+export default function ElectricMap(props: LeafletMapProps) {
   const computeWeight = (positions: PolyLine) => {
     if (props.display === "Consumo")
       return Math.round(Math.max(1, Math.min(positions.fuel * 0.007, 20)));
@@ -50,7 +52,11 @@ export default function LeafletMap(props: LeafletMapProps) {
 
   return (
     <div id="map">
-      <MapContainer center={[55.505, 13.0]} zoom={4} scrollWheelZoom={true}>
+      <MapContainer
+        center={props.center}
+        zoom={props.zoom}
+        scrollWheelZoom={true}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

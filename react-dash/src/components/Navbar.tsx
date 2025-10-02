@@ -37,6 +37,12 @@ const Navbar = (props: NavbarProps) => {
             </NavigationMenuLink>
             <Separator />
             <NavigationMenuLink
+              onClick={() => props.setPage("emissions-dashboard")}
+            >
+              Emissioni per scenario
+            </NavigationMenuLink>
+            <Separator />
+            <NavigationMenuLink
               onClick={() => props.setPage("electric-impact")}
             >
               Impatto Economico - Sociale
