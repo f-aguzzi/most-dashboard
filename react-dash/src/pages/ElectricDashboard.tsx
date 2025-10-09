@@ -101,7 +101,7 @@ function ElectricDashboard() {
     }
   };
 
-  const [perimetro, setPerimetro] = useState(true);
+  const [perimetro, setPerimetro] = useState(false);
 
   const handlePerimetro = async (value: string) => {
     const perimeter = value === "Italia" ? true : false;

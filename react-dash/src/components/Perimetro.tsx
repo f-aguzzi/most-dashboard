@@ -9,7 +9,7 @@ interface PerimetroProps {
 const Perimetro = (props: PerimetroProps) => {
   return (
     <RadioGroup
-      defaultValue="Italia"
+      defaultValue="EU"
       onValueChange={props.handler}
       className={props.className}
     >

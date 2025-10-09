@@ -47,7 +47,7 @@ export default function ElectricMap(props: LeafletMapProps) {
       return Math.round(Math.max(1, Math.min(positions.fuel * 0.007, 20)));
     else if (props.display === "Emissioni")
       return Math.round(Math.max(1, Math.min(positions.co2 * 0.002, 20)));
-    else return Math.round(Math.max(1, Math.min(positions.count * 0.02, 20)));
+    else return Math.round(Math.max(1, Math.min(positions.count * 0.01, 20)));
   };
 
   return (
@@ -67,6 +67,7 @@ export default function ElectricMap(props: LeafletMapProps) {
               key={index + positions.label + props.display}
               positions={positions.route}
               weight={computeWeight(positions)}
+              opacity={0.3}
             >
               <Popup key={index + positions.label + "label" + props.display}>
                 <b>Rotta:</b> {positions.label}
@@ -75,7 +76,7 @@ export default function ElectricMap(props: LeafletMapProps) {
                 <br />
                 <b>Lunghezza della tratta: </b> {positions.distance} km
                 <br />
-                <b>Numero medio di passeggeri: </b> {positions.seats}
+                <b>Numero medio di posti offerti: </b> {positions.seats}
                 <br />
                 <b>Distanza totale volata: </b>{" "}
                 {(Math.round(positions.flown * 100) / 100).toLocaleString(
@@ -83,17 +84,11 @@ export default function ElectricMap(props: LeafletMapProps) {
                 )}{" "}
                 km
                 <br />
-                <b>Emissioni totali (convenzionale): </b>{" "}
-                {(Math.round(positions.co2 * 100) / 100).toLocaleString(
-                  "it-IT",
-                )}{" "}
-                ton
+                <b>Emissioni totali (aereo convenzionale): </b>{" "}
+                {Math.round(positions.co2).toLocaleString("it-IT")} ton
                 <br />
                 <b>Emissioni risparmiate: </b>{" "}
-                {(Math.round(positions.deltaco2 * 100) / 100).toLocaleString(
-                  "it-IT",
-                )}{" "}
-                ton
+                {Math.round(positions.deltaco2).toLocaleString("it-IT")} ton
               </Popup>
             </Polyline>
           ))}
