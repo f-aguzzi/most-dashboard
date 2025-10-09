@@ -1,18 +1,13 @@
 import { Typography } from "@/components/ui/typography";
-import EmissionsMap, { type PolyLine } from "@/components/EmissionsMap";
-import ScenarioPicker from "@/components/ScenarioPicker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BiometricDisplaySelector from "@/components/BiometricDisplaySelector";
 import { Eye } from "lucide-react";
 import LabeledSlider from "@/components/LabeledSlider";
 import BiometricIdentitySelector from "@/components/BiometricIdentitySelector";
 import BiometricGraph from "@/components/BiometricGraph";
 
-const url = import.meta.env.VITE_URL;
-const apiUrl = url + "/emissions";
-
 function BiometricDashboard() {
-  const [display, setDisplay] = useState("Tempi");
+  const [display, setDisplay] = useState("Prezzi");
 
   const displayHandler = (value: string) => {
     setDisplay(value);
@@ -91,7 +86,7 @@ function BiometricDashboard() {
             />
           </div>
           <Typography version="h3">
-            Processo aeroportuale tradizionale:
+            Processo aeroportuale con riconoscimento facciale:
           </Typography>
           <div className="flex flex-col space-y-4">
             <BiometricIdentitySelector handler={handleIdentity} />
@@ -106,7 +101,14 @@ function BiometricDashboard() {
           </div>
         </div>
         {/* Mappa */}
-        <BiometricGraph />
+        <BiometricGraph
+          display={display}
+          price={price}
+          security={security}
+          gate={gate}
+          bioPrice={bioPrice}
+          identity={identity}
+        />
       </div>
     </div>
   );

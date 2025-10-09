@@ -9,17 +9,17 @@ interface DisplaySelectorProps {
 const BiometricDisplaySelector = (props: DisplaySelectorProps) => {
   return (
     <RadioGroup
-      defaultValue="Tempi"
+      defaultValue="Prezzi"
       onValueChange={props.handler}
       className={props.className}
     >
       <div className="flex items-center gap-3">
-        <RadioGroupItem value="Tempi" />
-        <Label className="font-normal">Tempi di processamento</Label>
+        <RadioGroupItem value="Prezzi" />
+        <Label className="font-normal">Prezzo del biglietto</Label>
       </div>
       <div className="flex items-center gap-3">
-        <RadioGroupItem value="Prezzo" />
-        <Label className="font-normal">Prezzo del biglietto</Label>
+        <RadioGroupItem value="Tempi" />
+        <Label className="font-normal">Tempi di processamento</Label>
       </div>
     </RadioGroup>
   );
