@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import ElectricDashboard from "./pages/ElectricDashboard";
 import { Typography } from "./components/ui/typography";
 import EmissionsDashboard from "./pages/EmissionsDashboard";
+import BiometricDashboard from "./pages/BiometricDashboard";
 
 function App() {
   const [nightMode, setNightMode] = useState(true);
@@ -12,6 +13,7 @@ function App() {
   const PageMaker = () => {
     if (page === "electric-dashboard") return <ElectricDashboard />;
     else if (page === "emissions-dashboard") return <EmissionsDashboard />;
+    else if (page === "biometric") return <BiometricDashboard />;
     else
       return (
         <>

@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 
 interface DisplaySelectorProps {
   handler: (perimeter: string) => void;
-  className: string;
+  className?: string;
 }
 
 const DisplaySelector = (props: DisplaySelectorProps) => {
