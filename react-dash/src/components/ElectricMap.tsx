@@ -47,7 +47,7 @@ export default function ElectricMap(props: LeafletMapProps) {
       return Math.round(Math.max(1, Math.min(positions.fuel * 0.007, 20)));
     else if (props.display === "Emissioni")
       return Math.round(Math.max(1, Math.min(positions.co2 * 0.002, 20)));
-    else return Math.round(Math.max(1, Math.min(positions.count * 0.01, 20)));
+    else return Math.round(Math.max(1, Math.min(positions.count * 0.008, 20)));
   };
 
   return (
@@ -67,7 +67,7 @@ export default function ElectricMap(props: LeafletMapProps) {
               key={index + positions.label + props.display}
               positions={positions.route}
               weight={computeWeight(positions)}
-              opacity={0.3}
+              opacity={0.5}
             >
               <Popup key={index + positions.label + "label" + props.display}>
                 <b>Rotta:</b> {positions.label}
