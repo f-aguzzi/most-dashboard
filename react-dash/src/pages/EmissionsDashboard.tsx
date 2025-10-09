@@ -1,5 +1,8 @@
 import { Typography } from "@/components/ui/typography";
-import EmissionsMap, { type PolyLine } from "@/components/EmissionsMap";
+import EmissionsMap, {
+  type PolyLine,
+  type Airport,
+} from "@/components/EmissionsMap";
 import ScenarioPicker from "@/components/ScenarioPicker";
 import { useEffect, useState } from "react";
 
@@ -18,7 +21,7 @@ function EmissionsDashboard() {
   const fetchFlights = async () => {
     try {
       const response = await fetch(apiUrl + "/routes?scenario=" + scenario);
-      if (!response.ok) throw new Error("Network response was not ok");
+      if (!response.ok) throw new Error("Route response was not ok");
       const result = await response.json();
       setFlights(result);
     } catch {
@@ -26,8 +29,22 @@ function EmissionsDashboard() {
     }
   };
 
+  const [airports, setAirports] = useState<[Airport] | null | undefined>(null);
+
+  const fetchAirports = async () => {
+    try {
+      const response = await fetch(apiUrl + "/airports?scenario=" + scenario);
+      if (!response.ok) throw new Error("Airport response was not ok");
+      const result = await response.json();
+      setAirports(result);
+    } catch {
+      setAirports(null);
+    }
+  };
+
   useEffect(() => {
     fetchFlights();
+    fetchAirports();
   }, [scenario]);
 
   return (
@@ -42,7 +59,12 @@ function EmissionsDashboard() {
         </div>
         {/* Mappa */}
         <div className="flex flex-col space-y-4">
-          <EmissionsMap center={[42.0, 14.0]} zoom={6} polylines={flights} />
+          <EmissionsMap
+            center={[42.0, 14.0]}
+            zoom={6}
+            polylines={flights}
+            airports={airports}
+          />
         </div>
       </div>
     </div>

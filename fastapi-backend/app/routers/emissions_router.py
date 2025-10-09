@@ -64,3 +64,32 @@ def get_routes(scenario: str):
             }
         )
     return result
+
+
+@emissions_router.get("/airports")
+def get_airports(scenario: str):
+    if scenario == "s1":
+        data = scenario1
+    elif scenario == "s2":
+        data = scenario2
+    elif scenario == "s3":
+        data = scenario3
+    else:
+        return None
+
+    airports_left = data.group_by(pl.col("Dep_Airport_Code").alias("label")).agg(
+        [
+            pl.col("lat_Dep").first().alias("lat"),
+            pl.col("lon_Dep").first().alias("lon"),
+        ]
+    )
+
+    airports_right = data.group_by(pl.col("Arr_Airport_Code").alias("label")).agg(
+        [pl.col("lon_Arr").first().alias("lat"), pl.col("lon_Arr").first().alias("lon")]
+    )
+
+    results = []
+
+    for x in pl.concat([airports_left, airports_right]).unique().collect().to_dicts():
+        results.append({"label": x["label"], "location": [x["lat"], x["lon"]]})
+    return results

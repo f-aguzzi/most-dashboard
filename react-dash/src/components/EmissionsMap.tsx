@@ -61,6 +61,7 @@ export default function EmissionsMap(props: LeafletMapProps) {
               key={index + positions.label}
               positions={positions.route}
               weight={computeWeight(positions)}
+              opacity={0.5}
             >
               <Popup key={index + positions.label + "label"}>
                 <b>Rotta:</b> {positions.label}
