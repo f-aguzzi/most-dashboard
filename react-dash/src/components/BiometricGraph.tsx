@@ -9,6 +9,14 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
 
 // Type definitions
 interface Coefficients {
@@ -466,41 +474,33 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-background text-foreground rounded-lg border border-gray-200 overflow-hidden">
-        <h3 className="text-lg font-semibold p-3 border-b border-gray-200">
+      <div className="bg-background text-foreground rounded-lg border overflow-hidden">
+        <h3 className="text-lg font-semibold p-3 border-b">
           Utilizzo stimato (%) alle soglie selezionate di Δ
           {display === "Prezzi" ? "Prezzo" : "Tempo"}
         </h3>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 text-left text-sm font-semibold">
-                  Δ{display === "Prezzi" ? "Prezzo" : "Tempo"}
-                </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">
-                  Complessivo
-                </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">
-                  Business
-                </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">
-                  Leisure
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {thresholdData.map((row, idx) => (
-                <tr key={idx} className="hover:bg-gray-600">
-                  <td className="px-3 py-3 text-sm">{row.threshold}</td>
-                  <td className="px-3 py-3 text-sm">{row.overall}%</td>
-                  <td className="px-3 py-3 text-sm">{row.business}%</td>
-                  <td className="px-3 py-3 text-sm">{row.leisure}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                Δ{display === "Prezzi" ? "Prezzo" : "Tempo"}
+              </TableHead>
+              <TableHead>Complessivo</TableHead>
+              <TableHead>Business</TableHead>
+              <TableHead>Leisure</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {thresholdData.map((row, idx) => (
+              <TableRow key={idx}>
+                <TableCell>{row.threshold}</TableCell>
+                <TableCell>{row.overall}%</TableCell>
+                <TableCell>{row.business}%</TableCell>
+                <TableCell>{row.leisure}%</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
