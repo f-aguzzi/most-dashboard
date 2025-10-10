@@ -44,6 +44,13 @@ export default function EmissionsMap(props: LeafletMapProps) {
     return Math.round(Math.max(1, Math.min(positions.co2 * 0.002, 20)));
   };
 
+  const computeColor = (positions: PolyLine) => {
+    if (positions.distance <= 307 && positions.seats <= 21) return "#ff6b35";
+    else if (positions.distance <= 787 && positions.seats <= 86)
+      return "#7cb342";
+    else return "#1f88e0";
+  };
+
   return (
     <div id="map">
       <MapContainer
@@ -62,6 +69,7 @@ export default function EmissionsMap(props: LeafletMapProps) {
               positions={positions.route}
               weight={computeWeight(positions)}
               opacity={0.5}
+              color={computeColor(positions)}
             >
               <Popup key={index + positions.label + "label"}>
                 <b>Rotta:</b> {positions.label}
