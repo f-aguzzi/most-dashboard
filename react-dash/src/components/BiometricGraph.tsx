@@ -405,6 +405,8 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
+              type="number"
+              allowDataOverflow={true}
               dataKey="deltaPerc"
               label={{
                 value:
@@ -415,6 +417,11 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
                 offset: -5,
               }}
               domain={display === "Prezzi" ? [-50, 100] : [-80, 20]}
+              ticks={
+                display === "Prezzi"
+                  ? [-50, -25, 0, 25, 50, 75, 100]
+                  : [-80, -60, -40, -20, 0, 20]
+              }
             />
             <YAxis
               label={{
