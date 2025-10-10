@@ -1,5 +1,6 @@
 import polars as pl
 from fastapi import APIRouter
+from xlsxwriter.workbook import Dict
 
 emissions_router = APIRouter()
 
@@ -11,18 +12,12 @@ scenario3 = pl.LazyFrame(pl.read_excel("scenario3.xlsx"))
 
 
 @emissions_router.get("/routes")
-def get_routes(scenario: str):
-    if scenario == "s1":
-        data = scenario1
-    elif scenario == "s2":
-        data = scenario2
-    elif scenario == "s3":
-        data = scenario3
-    else:
-        return None
+def get_routes(distance: int, passengers: int):
+    data = scenario3
 
     routes = (
-        data.group_by(
+        data.filter([pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers])
+        .group_by(
             [
                 pl.col("Dep_Airport_Code").alias("Dep_apt"),
                 pl.col("Arr_Airport_Code").alias("Arr_apt"),
@@ -67,15 +62,10 @@ def get_routes(scenario: str):
 
 
 @emissions_router.get("/airports")
-def get_airports(scenario: str):
-    if scenario == "s1":
-        data = scenario1
-    elif scenario == "s2":
-        data = scenario2
-    elif scenario == "s3":
-        data = scenario3
-    else:
-        return None
+def get_airports(distance: int, passengers: int):
+    data = scenario3.filter(
+        [pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers]
+    )
 
     airports_left = data.group_by(pl.col("Dep_Airport_Code").alias("label")).agg(
         [
