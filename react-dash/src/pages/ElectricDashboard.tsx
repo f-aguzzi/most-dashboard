@@ -130,7 +130,7 @@ function ElectricDashboard() {
       });
 
       // Make the request to your FastAPI endpoint
-      const response = await fetch(process.env.URL + `/datasheet?${params}`);
+      const response = await fetch(apiUrl + `/datasheet?${params}`);
 
       if (!response.ok) {
         throw new Error(
