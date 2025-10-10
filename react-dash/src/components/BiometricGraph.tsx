@@ -9,7 +9,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Separator } from "./ui/separator";
 
 // Type definitions
 interface Coefficients {
@@ -30,8 +29,10 @@ interface BiometricGraphProps {
   price: number[];
   security: number[];
   gate: number[];
-  bioPrice: number[];
   identity: string; // "Casa" or "Aeroporto"
+  bioPrice: number[];
+  bioSecurity: number[];
+  bioGate: number[];
 }
 
 // Logit probability function
@@ -124,8 +125,10 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
   price,
   security,
   gate,
-  bioPrice,
   identity,
+  bioPrice,
+  bioSecurity,
+  bioGate,
 }) => {
   // Fixed parameters
   const B = 0; // traditional
@@ -258,8 +261,8 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
 
       for (let i = 0; i <= numPoints; i++) {
         const deltaPerc = -0.8 + (1.0 * i) / numPoints;
-        const gVal = gate[0] * (1 + deltaPerc);
-        const sVal = security[0] * (1 + deltaPerc);
+        const gVal = bioGate[0] * (1 + deltaPerc);
+        const sVal = bioSecurity[0] * (1 + deltaPerc);
 
         const overall =
           0.31 *
@@ -360,7 +363,17 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
       }
       return data;
     }
-  }, [display, price, security, gate, bioPrice, identity, h]);
+  }, [
+    display,
+    price,
+    security,
+    gate,
+    bioPrice,
+    identity,
+    h,
+    bioGate,
+    bioSecurity,
+  ]);
 
   const thresholdData = useMemo(() => {
     const thresholds =
@@ -405,7 +418,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
             />
             <YAxis
               label={{
-                value: "% Passeggeri che utilizzano tecnologie biometriche",
+                value: "% Accettazione",
                 angle: -90,
                 position: "insideLeft",
               }}

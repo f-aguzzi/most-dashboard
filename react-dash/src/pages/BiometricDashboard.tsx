@@ -38,6 +38,16 @@ function BiometricDashboard() {
     setIdentity(value);
   };
 
+  const [bioSecurity, setBioSecurity] = useState([15]);
+  const handleBioSecurity = (value: number[]) => {
+    setBioSecurity(value);
+  };
+
+  const [bioGate, setBioGate] = useState([10]);
+  const handleBioGate = (value: number[]) => {
+    setBioGate(value);
+  };
+
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
@@ -90,14 +100,35 @@ function BiometricDashboard() {
           </Typography>
           <div className="flex flex-col space-y-4">
             <BiometricIdentitySelector handler={handleIdentity} />
-            <LabeledSlider
-              title={"Prezzo del biglietto aereo (€):"}
-              value={bioPrice}
-              onValueChange={handleBioPrice}
-              defaultValue={[50]}
-              min={25}
-              max={150}
-            />
+            {display === "Prezzi" ? (
+              <LabeledSlider
+                title={"Prezzo del biglietto aereo (€):"}
+                value={bioPrice}
+                onValueChange={handleBioPrice}
+                defaultValue={[50]}
+                min={25}
+                max={150}
+              />
+            ) : (
+              <>
+                <LabeledSlider
+                  title={"Tempo di attesa ai controlli di sicurezza (min):"}
+                  value={bioSecurity}
+                  onValueChange={handleBioSecurity}
+                  defaultValue={[15]}
+                  min={1}
+                  max={30}
+                />
+                <LabeledSlider
+                  title={"Tempo di attesa al gate (min):"}
+                  value={bioGate}
+                  onValueChange={handleBioGate}
+                  defaultValue={[10]}
+                  min={1}
+                  max={20}
+                />
+              </>
+            )}
           </div>
         </div>
         {/* Mappa */}
@@ -106,8 +137,10 @@ function BiometricDashboard() {
           price={price}
           security={security}
           gate={gate}
-          bioPrice={bioPrice}
           identity={identity}
+          bioPrice={bioPrice}
+          bioSecurity={bioSecurity}
+          bioGate={bioGate}
         />
       </div>
     </div>
