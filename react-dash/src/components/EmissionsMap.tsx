@@ -41,7 +41,7 @@ interface LeafletMapProps {
 
 export default function EmissionsMap(props: LeafletMapProps) {
   const computeWeight = (positions: PolyLine) => {
-    return Math.round(Math.max(1, Math.min(positions.co2 * 0.002, 20)));
+    return Math.round(Math.max(3, Math.min(positions.co2 * 0.002, 25)));
   };
 
   const computeColor = (positions: PolyLine) => {
