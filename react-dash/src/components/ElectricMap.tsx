@@ -61,58 +61,92 @@ export default function ElectricMap(props: LeafletMapProps) {
   };
 
   return (
-    <div id="map">
-      <MapContainer
-        center={props.center}
-        zoom={props.zoom}
-        scrollWheelZoom={true}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {props.polylines &&
-          props.polylines.map((positions, index) => (
-            <Polyline
-              key={index + positions.label + props.display}
-              positions={positions.route}
-              weight={computeWeight(positions)}
-              opacity={0.5}
-              color={computeColor(positions)}
-            >
-              <Popup key={index + positions.label + "label" + props.display}>
-                <b>Rotta:</b> {positions.label}
-                <br />
-                <b>Numero di voli sostituiti: </b> {positions.count}
-                <br />
-                <b>Lunghezza della tratta: </b> {positions.distance} km
-                <br />
-                <b>Numero medio di posti offerti: </b> {positions.seats}
-                <br />
-                <b>Distanza totale volata: </b>{" "}
-                {(Math.round(positions.flown * 100) / 100).toLocaleString(
-                  "it-IT",
-                )}{" "}
-                km
-                <br />
-                <b>Emissioni totali (aereo convenzionale): </b>{" "}
-                {Math.round(positions.co2).toLocaleString("it-IT")} ton
-                <br />
-                <b>Emissioni risparmiate: </b>{" "}
-                {Math.round(positions.deltaco2).toLocaleString("it-IT")} ton
-              </Popup>
-            </Polyline>
-          ))}
-        {props.airports &&
-          props.airports.map((positions, index) => (
-            <Marker key={index} position={positions.location}>
-              <Popup>
-                <b>Aeroporto: </b>
-                {positions.label}
-              </Popup>
-            </Marker>
-          ))}
-      </MapContainer>
+    <div className="relative">
+      <div id="map">
+        <MapContainer
+          center={props.center}
+          zoom={props.zoom}
+          scrollWheelZoom={true}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {props.polylines &&
+            props.polylines.map((positions, index) => (
+              <Polyline
+                key={index + positions.label + props.display}
+                positions={positions.route}
+                weight={computeWeight(positions)}
+                opacity={0.5}
+                color={computeColor(positions)}
+              >
+                <Popup key={index + positions.label + "label" + props.display}>
+                  <b>Rotta:</b> {positions.label}
+                  <br />
+                  <b>Numero di voli sostituiti: </b> {positions.count}
+                  <br />
+                  <b>Lunghezza della tratta: </b> {positions.distance} km
+                  <br />
+                  <b>Numero medio di posti offerti: </b> {positions.seats}
+                  <br />
+                  <b>Distanza totale volata: </b>{" "}
+                  {(Math.round(positions.flown * 100) / 100).toLocaleString(
+                    "it-IT",
+                  )}{" "}
+                  km
+                  <br />
+                  <b>Emissioni totali (aereo convenzionale): </b>{" "}
+                  {Math.round(positions.co2).toLocaleString("it-IT")} ton
+                  <br />
+                  <b>Emissioni risparmiate: </b>{" "}
+                  {Math.round(positions.deltaco2).toLocaleString("it-IT")} ton
+                </Popup>
+              </Polyline>
+            ))}
+          {props.airports &&
+            props.airports.map((positions, index) => (
+              <Marker key={index} position={positions.location}>
+                <Popup>
+                  <b>Aeroporto: </b>
+                  {positions.label}
+                </Popup>
+              </Marker>
+            ))}
+        </MapContainer>
+      </div>
+      {/* Legend */}
+      <div className="absolute bottom-6 right-6 bg-white p-4 rounded-lg shadow-lg z-[1000] border border-gray-200">
+        <h3 className="font-bold text-xs mb-3 text-gray-800">Legenda</h3>
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-8 h-1 rounded"
+              style={{ backgroundColor: "#ff6b35" }}
+            ></div>
+            <span className="text-xs text-gray-700">FGEA</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-8 h-1 rounded"
+              style={{ backgroundColor: "#7cb342" }}
+            ></div>
+            <span className="text-xs text-gray-700">SGEA</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-8 h-1 rounded"
+              style={{ backgroundColor: "#1f88e0" }}
+            ></div>
+            <span className="text-xs text-gray-700">Next Generation</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-700">
+              Spessore linee: {props.display}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,8 @@ import EmissionsMap, {
   type Airport,
 } from "@/components/EmissionsMap";
 import { useEffect, useState } from "react";
-import { Armchair, RulerDimensionLine } from "lucide-react";
+import { Armchair, Eye, RulerDimensionLine } from "lucide-react";
+import DisplaySelector from "@/components/DisplaySelector";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/emissions";
@@ -67,6 +68,12 @@ function EmissionsDashboard() {
   const [committedPassengers, setCommittedPassengers] = useState([21]);
   const commitPassengers = (value: []) => {
     setCommittedPassengers(value);
+  };
+
+  // Display
+  const [display, setDisplay] = useState("Frequenza");
+  const handleDisplay = async (value: string) => {
+    setDisplay(value);
   };
 
   useEffect(() => {
@@ -155,6 +162,16 @@ function EmissionsDashboard() {
               {passengers}
             </Typography>
           </div>
+          {/* Display mode */}
+          <div className="flex flex-col gap-y-2">
+            <div className="flex items-center gap-2">
+              <Eye className="h-6 w-6 text-primary" />
+              <Typography version="h4">
+                Modalità di visualizzazione:{" "}
+              </Typography>
+            </div>
+            <DisplaySelector handler={handleDisplay} />
+          </div>
         </div>
         {/* Mappa */}
         <div className="flex flex-col space-y-4">
@@ -163,6 +180,7 @@ function EmissionsDashboard() {
             zoom={6}
             polylines={flights}
             airports={airports}
+            display={display}
           />
         </div>
       </div>
