@@ -12,6 +12,7 @@ import type { Dispatch, SetStateAction } from "react";
 import { Separator } from "./ui/separator";
 import MOSTLogo from "@/assets/MOST.png";
 import LanguageSwitch from "./LanguageSwitch";
+import { useTranslation } from "react-i18next";
 
 interface NavbarProps {
   nightMode: boolean;
@@ -20,6 +21,8 @@ interface NavbarProps {
 }
 
 const Navbar = (props: NavbarProps) => {
+  const { t } = useTranslation();
+
   return (
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
@@ -34,38 +37,38 @@ const Navbar = (props: NavbarProps) => {
             <NavigationMenuLink
               onClick={() => props.setPage("electric-dashboard")}
             >
-              Mappa
+              {t("navbar.electric.map")}
             </NavigationMenuLink>
             <Separator />
             <NavigationMenuLink
               onClick={() => props.setPage("emissions-dashboard")}
             >
-              Emissioni per scenario
+              {t("navbar.electric.emissions")}
             </NavigationMenuLink>
             <Separator />
             <NavigationMenuLink
               onClick={() => props.setPage("electric-impact")}
             >
-              Impatto Economico - Sociale
+              {t("navbar.electric.social")}
             </NavigationMenuLink>
           </NavigationMenuContent>
         </NavigationMenuItem>
         {/* Evoluzione del settore */}
         <NavigationMenuItem>
           <NavigationMenuLink onClick={() => props.setPage("evolution")}>
-            Evoluzione del settore
+            {t("navbar.evolution")}
           </NavigationMenuLink>
         </NavigationMenuItem>
         {/* Droni cargo */}
         <NavigationMenuItem>
           <NavigationMenuLink onClick={() => props.setPage("cargo")}>
-            Droni cargo
+            {t("navbar.cargo")}
           </NavigationMenuLink>
         </NavigationMenuItem>
         {/* Riconoscimento biometrico */}
         <NavigationMenuItem>
           <NavigationMenuLink onClick={() => props.setPage("biometric")}>
-            Riconoscimento biometrico
+            {t("navbar.biometric")}
           </NavigationMenuLink>
         </NavigationMenuItem>
         {/* Night mode */}

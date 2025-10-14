@@ -40,5 +40,15 @@
       "savings": "Emissions saved",
       "airport": "Airport"
     }
+  },
+  "navbar": {
+    "electric": {
+      "map": "Map",
+      "emissions": "Emissions by scenario",
+      "social": "Socio-economic impact"
+    },
+    "evolution": "Sector evolution",
+    "cargo": "Cargo drones",
+    "biometric": "Biometrical recognition"
   }
 }
