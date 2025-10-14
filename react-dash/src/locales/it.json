@@ -1,0 +1,44 @@
+{
+  "electric": {
+    "title": "Electric Aircraft - Rotte Sostituibili",
+    "range": "Range operativo (km)",
+    "capacity": "Capacità aeromobile",
+    "perimeter": {
+      "title": "Perimetro",
+      "italy": "Italia",
+      "eu": "UE"
+    },
+    "download": "Scarica i dati",
+    "display": {
+      "title": "Visualizzazione",
+      "frequency": "Frequenza",
+      "usage": "Consumo",
+      "emissions": "Emissioni"
+    },
+    "kpi": {
+      "title": "Tabella dei KPI",
+      "metric": "Metrica",
+      "amount": "Quantità",
+      "number": "Numero di voli",
+      "km": "Km volati (migliaia)",
+      "fuel": "Carburante risparmiato (ton)",
+      "co2": "CO2 risparmiata (ton)",
+      "delta": "Delta costi operativi",
+      "desc": "KPI relativi all'impiego di aeromobili elettrici."
+    },
+    "legend": {
+      "title": "Legenda",
+      "thickness": "Spessore linee"
+    },
+    "map": {
+      "route": "Rotta",
+      "number": "Numero di voli sostituiti",
+      "length": "Lunghezza media della tratta",
+      "seats": "Numero medio di posti offerti",
+      "distance": "Distanza totale volata",
+      "emissions": "Emissioni totali (velivolo convenzionale)",
+      "savings": "Emissioni risparmiate",
+      "airport": "Aeroporto"
+    }
+  }
+}

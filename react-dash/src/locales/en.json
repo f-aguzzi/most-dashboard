@@ -1,0 +1,44 @@
+{
+  "electric": {
+    "title": "Electric Aircraft - Replaceable Routes",
+    "range": "Operating range (km)",
+    "capacity": "Aircraft capacity",
+    "perimeter": {
+      "title": "Perimeter",
+      "italy": "Italy",
+      "eu": "EU"
+    },
+    "download": "Download data",
+    "display": {
+      "title": "Display options",
+      "frequency": "Frequency",
+      "usage": "Fuel Consumption",
+      "emissions": "Emissions"
+    },
+    "kpi": {
+      "title": "KPI Table",
+      "metric": "Metric",
+      "amount": "Amount",
+      "number": "Total flights",
+      "km": "Km flown (thousands)",
+      "fuel": "Fuel saved (tons)",
+      "co2": "CO2 saved (tons)",
+      "delta": "Operating cost delta",
+      "desc": "KPIs about the use of electric aircraft."
+    },
+    "legend": {
+      "title": "Legend",
+      "thickness": "Line thickness"
+    },
+    "map": {
+      "route": "Route",
+      "number": "Number of replaced flights",
+      "length": "Average route length",
+      "seats": "Average offered seats",
+      "distance": "Total flown distance",
+      "emissions": "Total emissions (conventional aircraft)",
+      "savings": "Emissions saved",
+      "airport": "Airport"
+    }
+  }
+}

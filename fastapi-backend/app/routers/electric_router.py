@@ -111,22 +111,22 @@ def get_kpi(distance, seats, perimeter):
 
     result = [
         {
-            "metric": "Numero voli",
+            "metric": "number",
             "value": fmt(kpi_part["flight_number"]),
             "percentage": pfmt(kpi_part["flight_number"] / kpi_tot["flight_number"]),
         },
         {
-            "metric": "Km volati (migliaia)",
+            "metric": "km",
             "value": fmt(kpi_part["total_km"] / 1000.0),
             "percentage": pfmt(kpi_part["total_km"] / kpi_tot["total_km"]),
         },
         {
-            "metric": "Carburante risparmiato (ton)",
+            "metric": "fuel",
             "value": fmt(kpi_part["total_fuel"]),
             "percentage": pfmt(kpi_part["total_fuel"] / kpi_tot["total_fuel"]),
         },
         {
-            "metric": "CO2 risparmiata (ton)",
+            "metric": "co2",
             "value": fmt(
                 (kpi_part["total_emissions"] - kpi_part["electric_emissions"])
             ),
@@ -140,7 +140,7 @@ def get_kpi(distance, seats, perimeter):
     if int(seats) <= 50 and int(distance) <= 500:
         result.append(
             {
-                "metric": "Delta costi operativi",
+                "metric": "delta",
                 "value": fmt(
                     (kpi_part["cost_conventional"] - kpi_part["cost_electric"])
                     / kpi_tot["cost_conventional"]

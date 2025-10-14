@@ -11,6 +11,7 @@ import { Moon, Sun } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { Separator } from "./ui/separator";
 import MOSTLogo from "@/assets/MOST.png";
+import LanguageSwitch from "./LanguageSwitch";
 
 interface NavbarProps {
   nightMode: boolean;
@@ -83,6 +84,9 @@ const Navbar = (props: NavbarProps) => {
               <Moon className="h-5 w-5" />
             )}
           </Button>
+        </NavigationMenuItem>
+        <NavigationMenuItem className="mx-16">
+          <LanguageSwitch />
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

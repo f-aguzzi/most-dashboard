@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Typography } from "@/components/ui/typography";
 import { Slider } from "@/components/ui/slider";
 import ElectricMap, {
@@ -17,6 +19,8 @@ const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/electric";
 
 function ElectricDashboard() {
+  const { t } = useTranslation();
+
   const [passengers, setPassengers] = useState([20]);
   const [distance, setDistance] = useState([400]);
   const [committedPassengers, setCommittedPassengers] = useState([20]);
@@ -166,7 +170,7 @@ function ElectricDashboard() {
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
-        Electric Aircraft - Rotte Sostituibili
+        {t("electric.title")}
       </Typography>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
         <div className="flex flex-col space-y-6 h-auto mx-8">
@@ -174,7 +178,7 @@ function ElectricDashboard() {
           <div>
             <div className="flex items-center gap-2">
               <RulerDimensionLine className="h-6 w-6 text-primary" />
-              <Typography version="h4">Range operativo (km):</Typography>
+              <Typography version="h4">{t("electric.range")}</Typography>
             </div>
             <div className="flex flex-row">
               <Slider
@@ -203,7 +207,7 @@ function ElectricDashboard() {
           <div>
             <div className="flex items-center gap-2">
               <Armchair className="h-6 w-6 text-primary" />
-              <Typography version="h4">Capacità aeromobile: </Typography>
+              <Typography version="h4"> {t("electric.capacity")} </Typography>
             </div>
             <div className="flex flex-row">
               <Slider
@@ -245,20 +249,23 @@ function ElectricDashboard() {
             <div className="flex flex-col items-center gap-2">
               <div className="flex flex-row gap-2">
                 <Map className="h-6 w-6 text-primary" />
-                <Typography version="h4">Perimetro</Typography>
+                <Typography version="h4">
+                  {t("electric.perimeter.title")}
+                </Typography>
               </div>
               <Perimetro handler={handlePerimetro} className="p-2 m-2" />
             </div>
             {/* Scarica i dati */}
             <Button className="mx-4" onClick={fetchTable}>
-              {" "}
-              Scarica i dati{" "}
+              {t("electric.download")}
             </Button>
             {/* Display */}
             <div className="flex flex-col items-center gap-2">
               <div className="flex flex-row gap-2">
                 <Eye className="h-6 w-6 text-primary" />
-                <Typography version="h4">Visualizzazione</Typography>
+                <Typography version="h4">
+                  {t("electric.display.title")}
+                </Typography>
               </div>
               <DisplaySelector handler={handleDisplay} className="p-2 m-2" />
             </div>
@@ -267,12 +274,9 @@ function ElectricDashboard() {
           <div className="p-4">
             <div className="flex items-center gap-2">
               <FileKey2 className="h-6 w-6 text-primary" />
-              <Typography version="h3">Tabella dei KPI</Typography>
+              <Typography version="h3">{t("electric.kpi.title")}</Typography>
             </div>
-            <KpiTable
-              caption="KPI relativi all'impiego di aeromobili elettrici."
-              kpis={kpi}
-            />
+            <KpiTable caption={t("electric.kpi.desc")} kpis={kpi} />
           </div>
         </div>
         {/* Mappa */}

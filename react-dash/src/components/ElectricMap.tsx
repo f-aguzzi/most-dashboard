@@ -9,6 +9,7 @@ import L, { type LatLngExpression, type LatLngTuple } from "leaflet";
 
 // Fix for default markers
 import icon from "@/assets/circle-dot.png";
+import { useTranslation } from "react-i18next";
 
 L.Marker.prototype.options.icon = L.icon({
   iconUrl: icon,
@@ -42,6 +43,8 @@ interface LeafletMapProps {
 }
 
 export default function ElectricMap(props: LeafletMapProps) {
+  const { t } = useTranslation();
+
   const computeWeight = (positions: PolyLine) => {
     if (props.display === "Consumo")
       return Math.round(Math.max(1, Math.min(positions.fuel * 0.007, 20)));
@@ -58,6 +61,12 @@ export default function ElectricMap(props: LeafletMapProps) {
     } else {
       return "#1f88e0";
     }
+  };
+
+  const translateLegend = (key: string | null | undefined) => {
+    if (key === "Frequenza") return t("electric.display.frequency");
+    else if (key === "Consumo") return t("electric.display.consumption");
+    else return t("electric.display.emissions");
   };
 
   return (
@@ -82,24 +91,24 @@ export default function ElectricMap(props: LeafletMapProps) {
                 color={computeColor(positions)}
               >
                 <Popup key={index + positions.label + "label" + props.display}>
-                  <b>Rotta:</b> {positions.label}
+                  <b>{t("electric.map.route")}:</b> {positions.label}
                   <br />
-                  <b>Numero di voli sostituiti: </b> {positions.count}
+                  <b>{t("electric.map.number")}: </b> {positions.count}
                   <br />
-                  <b>Lunghezza della tratta: </b> {positions.distance} km
+                  <b>{t("electric.map.distance")}: </b> {positions.distance} km
                   <br />
-                  <b>Numero medio di posti offerti: </b> {positions.seats}
+                  <b>{t("electric.map.seats")}: </b> {positions.seats}
                   <br />
-                  <b>Distanza totale volata: </b>{" "}
+                  <b>{t("electric.map.distance")}: </b>{" "}
                   {(Math.round(positions.flown * 100) / 100).toLocaleString(
                     "it-IT",
                   )}{" "}
                   km
                   <br />
-                  <b>Emissioni totali (aereo convenzionale): </b>{" "}
+                  <b>{t("electric.map.emissions")}: </b>{" "}
                   {Math.round(positions.co2).toLocaleString("it-IT")} ton
                   <br />
-                  <b>Emissioni risparmiate: </b>{" "}
+                  <b>{t("electric.map.savings")}: </b>{" "}
                   {Math.round(positions.deltaco2).toLocaleString("it-IT")} ton
                 </Popup>
               </Polyline>
@@ -108,7 +117,7 @@ export default function ElectricMap(props: LeafletMapProps) {
             props.airports.map((positions, index) => (
               <Marker key={index} position={positions.location}>
                 <Popup>
-                  <b>Aeroporto: </b>
+                  <b>{t("electric.map.airport")}: </b>
                   {positions.label}
                 </Popup>
               </Marker>
@@ -117,7 +126,9 @@ export default function ElectricMap(props: LeafletMapProps) {
       </div>
       {/* Legend */}
       <div className="absolute bottom-6 right-6 bg-white p-4 rounded-lg shadow-lg z-[1000] border border-gray-200">
-        <h3 className="font-bold text-xs mb-3 text-gray-800">Legenda</h3>
+        <h3 className="font-bold text-xs mb-3 text-gray-800">
+          {t("electric.legend.title")}
+        </h3>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <div
@@ -142,7 +153,7 @@ export default function ElectricMap(props: LeafletMapProps) {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-700">
-              Spessore linee: {props.display}
+              {t("electric.legend.thickness")}: {translateLegend(props.display)}
             </span>
           </div>
         </div>

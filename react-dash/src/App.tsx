@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import "./i18n";
 import Navbar from "./components/Navbar";
 import ElectricDashboard from "./pages/ElectricDashboard";
 import { Typography } from "./components/ui/typography";
