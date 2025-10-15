@@ -51,5 +51,43 @@
     "evolution": "Evoluzione del settore",
     "cargo": "Droni cargo",
     "biometric": "Riconoscimento biometrico"
+  },
+  "biometric": {
+    "title": "Adozione del riconoscimento facciale presso gli aeroporti",
+    "display": {
+      "title": "Visualizzazione",
+      "time": "Tempi di processamento",
+      "price": "Prezzo del biglietto"
+    },
+    "parameters": "Parametri",
+    "traditional": "Processo aeroportuale tradizionale:",
+    "price": "Prezzo del biglietto aereo (€):",
+    "time": "Tempo di attesa ai controlli di sicurezza (min):",
+    "gate": "Tempo di attesa al gate (min):",
+    "biometric": "Processo aeroportuale con riconoscimento facciale:",
+    "biotype": {
+      "title": "Tipologia abbinamento identità biometrica:",
+      "home": "A casa",
+      "airport": "In aeroporto"
+    },
+    "bioparameters": {
+      "airfare": "Prezzo del biglietto aereo (€):",
+      "security": "Tempo di attesa ai controlli di sicurezza (min):",
+      "gate": "Tempo di attesa al gate (min):"
+    },
+    "table": {
+      "title": "Tasso % di adozione del riconoscimento facciale in corrisopondenza della rispettiva variazione ",
+      "delta": "Δ prezzo",
+      "overall": "Complessivo",
+      "business": "Viaggi business",
+      "leisure": "Viaggi leisure",
+      "time": "dei tempi di processamento:",
+      "price": "del prezzo del biglietto:",
+      "literalTime": "Tempo",
+      "literalPrice": "Prezzo",
+      "acceptance": "% Adozione tecnologia biometrica",
+      "valueTime": "ΔTempo (% rispetto al valore base)",
+      "valuePrice": "ΔPrezzbaselineo (% rispetto al valore base)"
+    }
   }
 }

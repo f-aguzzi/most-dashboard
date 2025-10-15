@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import { useTranslation } from "react-i18next";
 
 // Type definitions
 interface Coefficients {
@@ -138,6 +139,8 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
   bioSecurity,
   bioGate,
 }) => {
+  const { t } = useTranslation();
+
   // Fixed parameters
   const B = 0; // traditional
   const H = 0; // traditional - not at home
@@ -419,8 +422,8 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
               label={{
                 value:
                   display === "Prezzi"
-                    ? "ΔPrezzo (% vs baseline)"
-                    : "ΔTempo (% vs baseline)",
+                    ? t("biometric.table.valuePrice")
+                    : t("biometric.table.valueTime"),
                 position: "insideBottom",
                 offset: -5,
               }}
@@ -433,7 +436,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
             />
             <YAxis
               label={{
-                value: "% Accettazione",
+                value: t("biometric.table.acceptance"),
                 angle: -90,
                 position: "insideLeft",
               }}
@@ -442,7 +445,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
             <Tooltip
               formatter={(value: number) => `${value.toFixed(1)}%`}
               labelFormatter={(label) =>
-                `Δ${display === "Prezzi" ? "Prezzo" : "Tempo"}: ${Number(label).toFixed(1)}%`
+                `Δ${display === "Prezzi" ? t("biometric.table.literalPrice") : t("biometric.table.literalTime")}: ${Number(label).toFixed(1)}%`
               }
             />
             <Legend />
@@ -451,7 +454,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
               dataKey="overall"
               stroke="#3B82F6"
               strokeWidth={2}
-              name="Complessivo"
+              name={t("biometric.table.overall")}
               dot={false}
             />
             <Line
@@ -459,7 +462,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
               dataKey="business"
               stroke="#F59E0B"
               strokeWidth={2}
-              name="Business"
+              name={t("biometric.table.business")}
               dot={false}
             />
             <Line
@@ -467,7 +470,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
               dataKey="leisure"
               stroke="#10B981"
               strokeWidth={2}
-              name="Leisure"
+              name={t("biometric.table.leisure")}
               dot={false}
             />
           </LineChart>
@@ -476,18 +479,23 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
 
       <div className="bg-background text-foreground rounded-lg border overflow-hidden">
         <h3 className="text-lg font-semibold p-3 border-b">
-          Utilizzo stimato (%) alle soglie selezionate di Δ
-          {display === "Prezzi" ? "Prezzo" : "Tempo"}
+          {t("biometric.table.title")}
+          {display === "Prezzi"
+            ? t("biometric.table.price")
+            : t("biometric.table.time")}
         </h3>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>
-                Δ{display === "Prezzi" ? "Prezzo" : "Tempo"}
+                Δ
+                {display === "Prezzi"
+                  ? t("biometric.table.literalPrice")
+                  : t("biometric.table.literalTime")}
               </TableHead>
-              <TableHead>Complessivo</TableHead>
-              <TableHead>Business</TableHead>
-              <TableHead>Leisure</TableHead>
+              <TableHead>{t("biometric.table.overall")}</TableHead>
+              <TableHead>{t("biometric.table.business")}</TableHead>
+              <TableHead>{t("biometric.table.leisure")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

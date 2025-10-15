@@ -51,5 +51,43 @@
     "evolution": "Sector evolution",
     "cargo": "Cargo drones",
     "biometric": "Biometrical recognition"
+  },
+  "biometric": {
+    "title": "Biometric technology adoption at airports",
+    "display": {
+      "title": "View adoption by:",
+      "time": "Time (Security and gate time)",
+      "price": "Airfare"
+    },
+    "parameters": "Parameters",
+    "traditional": "Traditional process:",
+    "price": "Airfare (€)",
+    "time": "Security time (min):",
+    "gate": "Gate time (min):",
+    "biometric": "Biometric technology process:",
+    "biotype": {
+      "title": "Biometric initialization:",
+      "home": "At home",
+      "airport": "At the airport"
+    },
+    "bioparameters": {
+      "airfare": "Airfare (€):",
+      "security": "Security time (min):",
+      "gate": "Gate time (min):"
+    },
+    "table": {
+      "title": "Estimated % usage of biometric technologies at selected ",
+      "delta": "Δ Price",
+      "overall": "Overall",
+      "business": "Business trips",
+      "leisure": "Leisure trips",
+      "time": "ΔTime levels:",
+      "price": "ΔPrice levels:",
+      "literalTime": "Time",
+      "literalPrice": "Price",
+      "acceptance": "% Passengers using biometric technologies",
+      "valueTime": "ΔTime (% vs baseline)",
+      "valuePrice": "ΔPrice (% vs baseline)"
+    }
   }
 }

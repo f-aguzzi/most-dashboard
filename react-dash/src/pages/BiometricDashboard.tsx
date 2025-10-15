@@ -5,8 +5,11 @@ import { Eye } from "lucide-react";
 import LabeledSlider from "@/components/LabeledSlider";
 import BiometricIdentitySelector from "@/components/BiometricIdentitySelector";
 import BiometricGraph from "@/components/BiometricGraph";
+import { useTranslation } from "react-i18next";
 
 function BiometricDashboard() {
+  const { t } = useTranslation();
+
   const [display, setDisplay] = useState("Prezzi");
 
   const displayHandler = (value: string) => {
@@ -51,7 +54,7 @@ function BiometricDashboard() {
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
-        Adozione del riconoscimento facciale presso gli aeroporti
+        {t("biometric.title")}
       </Typography>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
         <div className="flex flex-col space-y-6 h-auto mx-8">
@@ -59,19 +62,19 @@ function BiometricDashboard() {
           <div className="flex flex-col space-y-2">
             <div className="flex flex-row space-x-3">
               <Eye />
-              <Typography version="p">Visualizzazione</Typography>
+              <Typography version="p">
+                {t("biometric.display.title")}
+              </Typography>
             </div>
             <BiometricDisplaySelector handler={displayHandler} />
           </div>
           {/* Sezione parametri */}
-          <Typography version="h2">Parametri</Typography>
+          <Typography version="h2">{t("biometric.parameters")}</Typography>
           {/* Tradizionale */}
-          <Typography version="h3">
-            Processo aeroportuale tradizionale:
-          </Typography>
+          <Typography version="h3">{t("biometric.traditional")}</Typography>
           <div className="flex flex-col space-y-2">
             <LabeledSlider
-              title={"Prezzo del biglietto aereo (€):"}
+              title={t("biometric.price")}
               value={price}
               onValueChange={handlePrice}
               defaultValue={[50]}
@@ -79,7 +82,7 @@ function BiometricDashboard() {
               max={150}
             />
             <LabeledSlider
-              title={"Tempo di attesa ai controlli di sicurezza (min):"}
+              title={t("biometric.time")}
               value={security}
               onValueChange={handleSecurity}
               defaultValue={[15]}
@@ -87,7 +90,7 @@ function BiometricDashboard() {
               max={30}
             />
             <LabeledSlider
-              title={"Tempo di attesa al gate (min):"}
+              title={t("biometric.gate")}
               value={gate}
               onValueChange={handleGate}
               defaultValue={[10]}
@@ -95,14 +98,12 @@ function BiometricDashboard() {
               max={20}
             />
           </div>
-          <Typography version="h3">
-            Processo aeroportuale con riconoscimento facciale:
-          </Typography>
+          <Typography version="h3">{t("biometric.biometric")}</Typography>
           <div className="flex flex-col space-y-4">
             <BiometricIdentitySelector handler={handleIdentity} />
             {display === "Prezzi" ? (
               <LabeledSlider
-                title={"Prezzo del biglietto aereo (€):"}
+                title={t("biometric.bioparameters.airfare")}
                 value={bioPrice}
                 onValueChange={handleBioPrice}
                 defaultValue={[50]}
@@ -112,7 +113,7 @@ function BiometricDashboard() {
             ) : (
               <>
                 <LabeledSlider
-                  title={"Tempo di attesa ai controlli di sicurezza (min):"}
+                  title={t("biometric.bioparameters.security")}
                   value={bioSecurity}
                   onValueChange={handleBioSecurity}
                   defaultValue={[15]}
@@ -120,7 +121,7 @@ function BiometricDashboard() {
                   max={30}
                 />
                 <LabeledSlider
-                  title={"Tempo di attesa al gate (min):"}
+                  title={t("biometric.bioparameters.gate")}
                   value={bioGate}
                   onValueChange={handleBioGate}
                   defaultValue={[10]}

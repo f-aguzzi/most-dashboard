@@ -1,5 +1,6 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { useTranslation } from "react-i18next";
 
 interface DisplaySelectorProps {
   handler: (perimeter: string) => void;
@@ -7,6 +8,8 @@ interface DisplaySelectorProps {
 }
 
 const BiometricIdentitySelector = (props: DisplaySelectorProps) => {
+  const { t } = useTranslation();
+
   return (
     <RadioGroup
       defaultValue="Casa"
@@ -15,11 +18,11 @@ const BiometricIdentitySelector = (props: DisplaySelectorProps) => {
     >
       <div className="flex items-center gap-3">
         <RadioGroupItem value="Casa" />
-        <Label className="font-normal">A casa</Label>
+        <Label className="font-normal">{t("biometric.biotype.home")}</Label>
       </div>
       <div className="flex items-center gap-3">
         <RadioGroupItem value="Aeroporto" />
-        <Label className="font-normal">In aeroporto</Label>
+        <Label className="font-normal">{t("biometric.biotype.airport")}</Label>
       </div>
     </RadioGroup>
   );
