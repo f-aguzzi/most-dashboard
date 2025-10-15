@@ -65,7 +65,7 @@ export default function ElectricMap(props: LeafletMapProps) {
 
   const translateLegend = (key: string | null | undefined) => {
     if (key === "Frequenza") return t("electric.display.frequency");
-    else if (key === "Consumo") return t("electric.display.consumption");
+    else if (key === "Consumo") return t("electric.display.usage");
     else return t("electric.display.emissions");
   };
 

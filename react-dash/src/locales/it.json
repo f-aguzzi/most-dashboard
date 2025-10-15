@@ -41,6 +41,7 @@
       "airport": "Aeroporto"
     }
   },
+  "emissions": "Electric Aircraft - Emissioni per scenario",
   "navbar": {
     "electric": {
       "map": "Mappa",

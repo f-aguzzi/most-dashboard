@@ -7,11 +7,14 @@ import EmissionsMap, {
 import { useEffect, useState } from "react";
 import { Armchair, Eye, RulerDimensionLine } from "lucide-react";
 import DisplaySelector from "@/components/DisplaySelector";
+import { useTranslation } from "react-i18next";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/emissions";
 
 function EmissionsDashboard() {
+  const { t } = useTranslation();
+
   const [flights, setFlights] = useState<[PolyLine] | null | undefined>(null);
 
   const fetchFlights = async () => {
@@ -84,14 +87,14 @@ function EmissionsDashboard() {
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
-        Electric Aircraft - Emissioni per scenario
+        {t("emissions")}
       </Typography>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
         <div className="flex flex-col space-y-6 h-auto mx-8">
           {/* Distance */}
           <div className="flex items-center gap-2">
             <RulerDimensionLine className="h-6 w-6 text-primary" />
-            <Typography version="h4">Range operativo (km):</Typography>
+            <Typography version="h4">{t("electric.range")}</Typography>
           </div>
           <div className="flex flex-row">
             <Slider
@@ -128,7 +131,7 @@ function EmissionsDashboard() {
           {/* Passengers */}
           <div className="flex items-center gap-2">
             <Armchair className="h-6 w-6 text-primary" />
-            <Typography version="h4">Capacità aeromobile: </Typography>
+            <Typography version="h4">{t("electric.capacity")}</Typography>
           </div>
           <div className="flex flex-row">
             <Slider
@@ -167,7 +170,7 @@ function EmissionsDashboard() {
             <div className="flex items-center gap-2">
               <Eye className="h-6 w-6 text-primary" />
               <Typography version="h4">
-                Modalità di visualizzazione:{" "}
+                {t("electric.display.title")}
               </Typography>
             </div>
             <DisplaySelector handler={handleDisplay} />
