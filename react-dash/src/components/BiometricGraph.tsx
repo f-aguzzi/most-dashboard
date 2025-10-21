@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  ReferenceLine,
 } from "recharts";
 import {
   Table,
@@ -34,14 +35,12 @@ interface CoeffsDict {
 }
 
 interface BiometricGraphProps {
-  display: string; // "Tempi" or "Prezzi"
   price: number[];
   security: number[];
   gate: number[];
-  identity: string; // "Casa" or "Aeroporto"
-  bioPrice: number[];
-  bioSecurity: number[];
-  bioGate: number[];
+  identity: string; // "Casa" o "Aeroporto"
+  bioSecurity: number[]; // Biometric Security Time
+  bioGate: number[]; // Biometric Gate Time
 }
 
 // Logit probability function
@@ -130,267 +129,142 @@ const coeffsDict: CoeffsDict = {
 };
 
 const BiometricGraph: React.FC<BiometricGraphProps> = ({
-  display,
   price,
   security,
   gate,
   identity,
-  bioPrice,
   bioSecurity,
   bioGate,
 }) => {
   const { t } = useTranslation();
 
-  // Fixed parameters
-  const B = 0; // traditional
-  const H = 0; // traditional - not at home
-  const b = 1; // biometric
+  // Parametri fissi
+  const B = 0; // tradizionale = 0
+  const H = 0; // tradizionale = non a casa
+  const b = 1; // check-in biometrico = 1
 
-  // Convert identity to h value
-  const h = identity === "Casa" ? 1 : 0;
+  // Converti luogo in booleano
+  const h = identity === "Casa" ? 1 : 0; // H: casa / aeroporto
 
   const chartData = useMemo(() => {
-    if (display === "Prezzi") {
-      // Price analysis
-      const data = [];
-      const numPoints = 150;
-      const baselinePrice = price[0];
-      const altGateTime = gate[0];
-      const altSecurityTime = security[0];
-      const baselineGateTime = gate[0];
-      const baselineSecurityTime = security[0];
+    // Analisi prezzo
+    const data = [];
+    const numPoints = 150;
 
-      for (let i = 0; i <= numPoints; i++) {
-        const deltaPerc = -0.5 + (1.5 * i) / numPoints;
-        const xVal = bioPrice[0] * (1 + deltaPerc);
+    // Baseline
+    const baselinePrice = price[0]; // X
+    const baselineGateTime = gate[0]; // G
+    const baselineSecurityTime = security[0]; // S
 
-        const overall =
-          0.31 *
-            logitProb(
-              coeffsDict["Class 1"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              xVal,
-              altGateTime,
-              altSecurityTime,
-            ) +
-          0.69 *
-            logitProb(
-              coeffsDict["Class 2"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              xVal,
-              altGateTime,
-              altSecurityTime,
-            );
+    const altGateTime = bioGate[0]; // g
+    const altSecurityTime = bioSecurity[0]; // s
 
-        const business =
-          0.31 *
-            logitProb(
-              coeffsDict["Class 1 - Business"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              xVal,
-              altGateTime,
-              altSecurityTime,
-            ) +
-          0.69 *
-            logitProb(
-              coeffsDict["Class 2 - Business"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              xVal,
-              altGateTime,
-              altSecurityTime,
-            );
+    for (let i = 0; i <= numPoints; i++) {
+      const deltaPerc = -0.5 + (1.5 * i) / numPoints;
+      const xVal = price[0] * (1 + deltaPerc); // x
 
-        const leisure =
-          0.31 *
-            logitProb(
-              coeffsDict["Class 1 - Leisure"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              xVal,
-              altGateTime,
-              altSecurityTime,
-            ) +
-          0.69 *
-            logitProb(
-              coeffsDict["Class 2 - Leisure"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              xVal,
-              altGateTime,
-              altSecurityTime,
-            );
+      const overall =
+        0.31 *
+          logitProb(
+            coeffsDict["Class 1"],
+            B,
+            H,
+            baselinePrice,
+            baselineGateTime,
+            baselineSecurityTime,
+            b,
+            h,
+            xVal,
+            altGateTime,
+            altSecurityTime,
+          ) +
+        0.69 *
+          logitProb(
+            coeffsDict["Class 2"],
+            B,
+            H,
+            baselinePrice,
+            baselineGateTime,
+            baselineSecurityTime,
+            b,
+            h,
+            xVal,
+            altGateTime,
+            altSecurityTime,
+          );
 
-        data.push({
-          deltaPerc: deltaPerc * 100,
-          overall,
-          business,
-          leisure,
-        });
-      }
-      return data;
-    } else {
-      // Time analysis ("Tempi")
-      const data = [];
-      const numPoints = 150;
-      const baselinePrice = price[0];
-      const baselineGateTime = gate[0];
-      const baselineSecurityTime = security[0];
+      const business =
+        0.31 *
+          logitProb(
+            coeffsDict["Class 1 - Business"],
+            B,
+            H,
+            baselinePrice,
+            baselineGateTime,
+            baselineSecurityTime,
+            b,
+            h,
+            xVal,
+            altGateTime,
+            altSecurityTime,
+          ) +
+        0.69 *
+          logitProb(
+            coeffsDict["Class 2 - Business"],
+            B,
+            H,
+            baselinePrice,
+            baselineGateTime,
+            baselineSecurityTime,
+            b,
+            h,
+            xVal,
+            altGateTime,
+            altSecurityTime,
+          );
 
-      for (let i = 0; i <= numPoints; i++) {
-        const deltaPerc = -0.8 + (1.0 * i) / numPoints;
-        const gVal = bioGate[0] * (1 + deltaPerc);
-        const sVal = bioSecurity[0] * (1 + deltaPerc);
+      const leisure =
+        0.31 *
+          logitProb(
+            coeffsDict["Class 1 - Leisure"],
+            B,
+            H,
+            baselinePrice,
+            baselineGateTime,
+            baselineSecurityTime,
+            b,
+            h,
+            xVal,
+            altGateTime,
+            altSecurityTime,
+          ) +
+        0.69 *
+          logitProb(
+            coeffsDict["Class 2 - Leisure"],
+            B,
+            H,
+            baselinePrice,
+            baselineGateTime,
+            baselineSecurityTime,
+            b,
+            h,
+            xVal,
+            altGateTime,
+            altSecurityTime,
+          );
 
-        const overall =
-          0.31 *
-            logitProb(
-              coeffsDict["Class 1"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              bioPrice[0],
-              gVal,
-              sVal,
-            ) +
-          0.69 *
-            logitProb(
-              coeffsDict["Class 2"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              bioPrice[0],
-              gVal,
-              sVal,
-            );
-
-        const business =
-          0.31 *
-            logitProb(
-              coeffsDict["Class 1 - Business"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              bioPrice[0],
-              gVal,
-              sVal,
-            ) +
-          0.69 *
-            logitProb(
-              coeffsDict["Class 2 - Business"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              bioPrice[0],
-              gVal,
-              sVal,
-            );
-
-        const leisure =
-          0.31 *
-            logitProb(
-              coeffsDict["Class 1 - Leisure"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              bioPrice[0],
-              gVal,
-              sVal,
-            ) +
-          0.69 *
-            logitProb(
-              coeffsDict["Class 2 - Leisure"],
-              B,
-              H,
-              baselinePrice,
-              baselineGateTime,
-              baselineSecurityTime,
-              b,
-              h,
-              bioPrice[0],
-              gVal,
-              sVal,
-            );
-
-        data.push({
-          deltaPerc: deltaPerc * 100,
-          overall,
-          business,
-          leisure,
-        });
-      }
-      return data;
+      data.push({
+        deltaPerc: deltaPerc * 100,
+        overall,
+        business,
+        leisure,
+      });
     }
-  }, [
-    display,
-    price,
-    security,
-    gate,
-    bioPrice,
-    identity,
-    h,
-    bioGate,
-    bioSecurity,
-  ]);
+    return data;
+  }, [price, security, gate, identity, h, bioGate, bioSecurity]);
 
   const thresholdData = useMemo(() => {
-    const thresholds =
-      display === "Prezzi"
-        ? [-0.5, -0.25, 0, 0.25, 0.5, 1.0]
-        : [-0.8, -0.6, -0.4, -0.2, 0, 0.2];
+    const thresholds = [-0.5, -0.25, 0, 0.25, 0.5, 1.0];
 
     return thresholds.map((thr) => {
       const closest = chartData.reduce((prev, curr) =>
@@ -407,7 +281,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
         leisure: closest.leisure.toFixed(1),
       };
     });
-  }, [chartData, display]);
+  }, [chartData]);
 
   return (
     <div className="w-full space-y-4 mr-8">
@@ -420,35 +294,30 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
               allowDataOverflow={true}
               dataKey="deltaPerc"
               label={{
-                value:
-                  display === "Prezzi"
-                    ? t("biometric.table.valuePrice")
-                    : t("biometric.table.valueTime"),
+                value: t("biometric.table.valuePrice"),
                 position: "insideBottom",
                 offset: -5,
               }}
-              domain={display === "Prezzi" ? [-50, 100] : [-80, 20]}
-              ticks={
-                display === "Prezzi"
-                  ? [-50, -25, 0, 25, 50, 75, 100]
-                  : [-80, -60, -40, -20, 0, 20]
-              }
+              domain={[-50, 100]}
+              ticks={[-50, -25, 0, 25, 50, 75, 100]}
             />
             <YAxis
               label={{
                 value: t("biometric.table.acceptance"),
                 angle: -90,
-                position: "insideLeft",
+                position: "outerLeft",
+                offset: -30,
               }}
               domain={[0, 100]}
             />
             <Tooltip
               formatter={(value: number) => `${value.toFixed(1)}%`}
               labelFormatter={(label) =>
-                `Δ${display === "Prezzi" ? t("biometric.table.literalPrice") : t("biometric.table.literalTime")}: ${Number(label).toFixed(1)}%`
+                `Δ${t("biometric.table.literalPrice")}: ${Number(label).toFixed(1)}%`
               }
             />
             <Legend />
+            <ReferenceLine x={0} stroke="#FF0000" strokeDasharray="3 3" />
             <Line
               type="monotone"
               dataKey="overall"
@@ -480,19 +349,12 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
       <div className="bg-background text-foreground rounded-lg border overflow-hidden">
         <h3 className="text-lg font-semibold p-3 border-b">
           {t("biometric.table.title")}
-          {display === "Prezzi"
-            ? t("biometric.table.price")
-            : t("biometric.table.time")}
+          {t("biometric.table.price")}
         </h3>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>
-                Δ
-                {display === "Prezzi"
-                  ? t("biometric.table.literalPrice")
-                  : t("biometric.table.literalTime")}
-              </TableHead>
+              <TableHead>Δ {t("biometric.table.literalPrice")}</TableHead>
               <TableHead>{t("biometric.table.overall")}</TableHead>
               <TableHead>{t("biometric.table.business")}</TableHead>
               <TableHead>{t("biometric.table.leisure")}</TableHead>
