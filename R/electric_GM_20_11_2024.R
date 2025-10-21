@@ -66,7 +66,10 @@ list_variables_supply=c("direct","fuelcost_seat",name_dum_airline,
 ############### We decrease/increase marginal costs of airlines adopting electric
 # aircraft under different scenarios, and we fix in any case their CO2
 # equal to 0 in the demand model
-theta0=t(thetafin3)
+theta0 = t(thetafin3)
+theta0 = theta0[2,]
+theta0 = as.numeric(theta0)
+
 nd=102
 ns=103
 #ns=length(list_variables_supply)+1
@@ -97,9 +100,6 @@ counterfactual <-function(j, mcchange){
   #### Demand equations
   mat_d=as.matrix(cbind(1,mydataloc[c(list_endog_demand,list_control_variables)]))
 
-  print(dim(mat_d))
-  print(length(theta_d))
-
   oldxi=mydataloc$log_ratio_sjms0m-mat_d%*%theta_d
   olddelta=mat_d%*%theta_d+oldxi-theta_d[3]*mydataloc$log_sjconditionalm
   ### New marginal cost
@@ -116,6 +116,7 @@ counterfactual <-function(j, mcchange){
   diff=1
   cpt=1
   tol=1e-2
+
   while (diff>tol){
     #### New marketshare
     newdelta=olddelta+alpha*oldprice-alpha*newprice-poll*oldco2+poll*newco2
@@ -124,6 +125,7 @@ counterfactual <-function(j, mcchange){
     newsjg=expdj/newdeno
     news0=1/(1+newdeno^lambda)
     newsj=newsjg*(1-news0)
+
     #### New markup ####
     matsk=t(matrix(c(newsj),nrow=nloc,ncol=nloc))
     dsdp=-(alpha/lambda*matsk*(diag(1,nloc)-matrix(c((1-lambda)*newsjg+lambda*newsj),nrow=nloc,ncol=nloc)))
@@ -140,7 +142,6 @@ counterfactual <-function(j, mcchange){
     newprice=newmc+mkuploc
     poll=0
     cpt=cpt+1
-    print(diff)
   }
   ###### Output #####
   newpax=newsj*popdep
@@ -191,7 +192,7 @@ counterfactual <-function(j, mcchange){
 
 ##### Loop on mcchange
 # mcvalues for the loop on mc changes
-mcvalues<-seq(0.01,0.1, by=0.01)
+mcvalues<-seq(0.01,0.1, by=0.1)
 mcvalues <- mcvalues[mcvalues != 0]  # Escludi il valore 0
 # Initialize storage for results
 all_market_results <- list()
