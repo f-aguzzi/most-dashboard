@@ -44,13 +44,14 @@
   "emissions": "Electric Aircraft - Emissions by scenario",
   "navbar": {
     "electric": {
-      "map": "Map",
-      "emissions": "Emissions by scenario",
-      "social": "Socio-economic impact"
+      "title": "Introduction of electric aircraft",
+      "map": "Overall impact",
+      "emissions": "Impact at the Italian level",
+      "social": "Socio-economic impact”"
     },
-    "evolution": "Sector evolution",
-    "cargo": "Cargo drones",
-    "biometric": "Biometrical recognition"
+    "evolution": "Industry evolution",
+    "cargo": "Introduction of cargo drones",
+    "biometric": "Facial recognition"
   },
   "biometric": {
     "title": "Biometric technology adoption at airports",

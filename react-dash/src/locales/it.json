@@ -44,13 +44,14 @@
   "emissions": "Electric Aircraft - Emissioni per scenario",
   "navbar": {
     "electric": {
-      "map": "Mappa",
-      "emissions": "Emissioni per scenario",
-      "social": "Impatto economico-sociale"
+      "title": "Introduzione di aeromobili elettrici",
+      "map": "Impatto complessivo",
+      "emissions": "Impatto a livello italiano",
+      "social": "Impatto economico sociale"
     },
     "evolution": "Evoluzione del settore",
-    "cargo": "Droni cargo",
-    "biometric": "Riconoscimento biometrico"
+    "cargo": "Utilizzo di droni cargo",
+    "biometric": "Riconoscimento facciale"
   },
   "biometric": {
     "title": "Adozione del riconoscimento facciale presso gli aeroporti",

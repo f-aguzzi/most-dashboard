@@ -32,7 +32,9 @@ const Navbar = (props: NavbarProps) => {
         </NavigationMenuItem>
         {/* Electric Aircraft */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Electric Aircraft</NavigationMenuTrigger>
+          <NavigationMenuTrigger>
+            {t("navbar.electric.title")}
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
             <NavigationMenuLink
               onClick={() => props.setPage("electric-dashboard")}
