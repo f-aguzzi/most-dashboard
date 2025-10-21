@@ -48,9 +48,7 @@ const Navbar = (props: NavbarProps) => {
               {t("navbar.electric.emissions")}
             </NavigationMenuLink>
             <Separator />
-            <NavigationMenuLink
-              onClick={() => props.setPage("electric-impact")}
-            >
+            <NavigationMenuLink onClick={() => props.setPage("social")}>
               {t("navbar.electric.social")}
             </NavigationMenuLink>
           </NavigationMenuContent>

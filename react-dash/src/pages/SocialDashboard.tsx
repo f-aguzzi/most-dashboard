@@ -1,0 +1,125 @@
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Typography } from "@/components/ui/typography";
+import { Armchair, Euro, RulerDimensionLine } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+function SocialDashboard() {
+  const { t } = useTranslation();
+
+  // Distance
+  const [distance, setDistance] = useState([400]);
+  const handleDistanceChange = (value: []) => {
+    setDistance(value);
+  };
+  const [committedDistance, setCommittedDistance] = useState([307]);
+  const commitDistance = (value: []) => {
+    setCommittedDistance(value);
+  };
+
+  // Passengers
+  const [passengers, setPassengers] = useState([20]);
+  const handlePassengerChange = (value: []) => {
+    setPassengers(value);
+  };
+  const [committedPassengers, setCommittedPassengers] = useState([21]);
+  const commitPassengers = (value: []) => {
+    setCommittedPassengers(value);
+  };
+
+  // Marginal Cost
+  const [mc, setMc] = useState([-10]);
+  const handleMcChange = (value: []) => {
+    if (value.toString() !== "0") setMc(value);
+    else setMc([1]);
+  };
+  const [committedMc, setCommittedMc] = useState([21]);
+  const commitMc = (value: []) => {
+    if (value.toString() !== "0") setCommittedMc(value);
+    else setCommittedMc([1]);
+  };
+
+  useEffect(() => {
+    console.log("TODO");
+  }, [committedPassengers, committedDistance, committedMc]);
+
+  return (
+    <div className="h-max">
+      <Typography version="h1" className="m-8 p-8">
+        {t("social.title")}
+      </Typography>
+      <Label className="mx-8">{t("captions.social")}</Label>
+      {/* Struttura principale */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
+        {/* Colonna sinistra */}
+        <div className="flex flex-col space-y-6 h-auto mx-8">
+          {/* Distance */}
+          <div className="flex items-center gap-2">
+            <RulerDimensionLine className="h-6 w-6 text-primary" />
+            <Typography version="h4">{t("social.range")}</Typography>
+          </div>
+          <div className="flex flex-row">
+            <Slider
+              className="m-8 w-lg mx-8 px-2"
+              value={distance}
+              onValueChange={handleDistanceChange}
+              onValueCommit={commitDistance}
+              defaultValue={[400]}
+              min={400}
+              max={800}
+              step={100}
+            />
+            <Typography version="p" className="p-8 m-4 w-4 text-center">
+              {distance}
+            </Typography>
+          </div>
+          {/* Passengers */}
+          <div className="flex items-center gap-2">
+            <Armchair className="h-6 w-6 text-primary" />
+            <Typography version="h4">{t("social.capacity")}</Typography>
+          </div>
+          <div className="flex flex-row">
+            <Slider
+              className="m-8 w-lg mx-8 px-2"
+              value={passengers}
+              onValueChange={handlePassengerChange}
+              onValueCommit={commitPassengers}
+              defaultValue={[20]}
+              min={20}
+              max={90}
+              step={10}
+            ></Slider>
+            <Typography version="p" className="p-8 m-4 w-4 text-center">
+              {passengers}
+            </Typography>
+          </div>
+          {/* Marginal Cost */}
+          <div className="flex items-center gap-2">
+            <Euro className="h-6 w-6 text-primary" />
+            <Typography version="h4">{t("social.mc")}</Typography>
+          </div>
+          <div className="flex flex-row">
+            <Slider
+              className="m-8 w-lg mx-8 px-2"
+              value={mc}
+              onValueChange={handleMcChange}
+              onValueCommit={commitMc}
+              defaultValue={[-10]}
+              min={-10}
+              max={10}
+              step={1}
+            ></Slider>
+            <Typography version="p" className="p-8 m-4 w-4 text-center">
+              {mc}
+            </Typography>
+          </div>
+        </div>
+      </div>
+      {/* Colonna destra */}
+      <div className="flex flex-col space-y-4"></div>
+    </div>
+  );
+}
+
+export default SocialDashboard;
