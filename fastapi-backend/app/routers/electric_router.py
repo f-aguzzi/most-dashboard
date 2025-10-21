@@ -175,7 +175,9 @@ def get_datasheet(distance, seats, perimeter):
             pl.col("Frequency").sum().alias("Flights_number"),
             pl.col("Flown_km").sum(),
             pl.col("co2_tot").sum(),
-            pl.col("delta_co2_tot").sum() / pl.col("co2_tot").sum(),
+            (pl.col("delta_co2_tot").sum() / pl.col("co2_tot").sum()).alias(
+                "delta_co2_tot_%"
+            ),
         ]
     )
 
@@ -195,5 +197,10 @@ def get_datasheet(distance, seats, perimeter):
     return StreamingResponse(
         io.BytesIO(excel_buffer.read()),
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        headers={"Content-Disposition": f"attachment; filename={filename}"},
+        headers={
+            "Content-Disposition": f"attachment; filename={filename}",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
     )

@@ -126,15 +126,19 @@ function ElectricDashboard() {
 
   const fetchTable = async () => {
     try {
-      // Build the query parameters
       const params = new URLSearchParams({
         distance: committedDistance.toString(),
         seats: committedPassengers.toString(),
         perimeter: perimetro.toString(),
+        _t: Date.now().toString(),
       });
 
-      // Make the request to your FastAPI endpoint
-      const response = await fetch(apiUrl + `/datasheet?${params}`);
+      const response = await fetch(apiUrl + `/datasheet?${params}`, {
+        cache: "no-store", // Force no caching
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(
