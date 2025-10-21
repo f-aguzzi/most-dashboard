@@ -42,17 +42,6 @@
     }
   },
   "emissions": "Electric Aircraft - Emissioni per scenario",
-  "navbar": {
-    "electric": {
-      "title": "Introduzione di aeromobili elettrici",
-      "map": "Impatto complessivo",
-      "emissions": "Impatto a livello italiano",
-      "social": "Impatto economico sociale"
-    },
-    "evolution": "Evoluzione del settore",
-    "cargo": "Utilizzo di droni cargo",
-    "biometric": "Riconoscimento facciale"
-  },
   "biometric": {
     "title": "Adozione del riconoscimento facciale presso gli aeroporti",
     "display": {
@@ -90,5 +79,21 @@
       "valueTime": "ΔTempo (% rispetto al valore base)",
       "valuePrice": "ΔPrezzbaselineo (% rispetto al valore base)"
     }
+  },
+  "captions": {
+    "electric": "Questa sezione della dashboard offre una panoramica sugli impatti potenziali dell’impiego di aeromobili elettrici. Selezionando parametri tecnici come il range operativo e la capacità passeggeri, è possibile analizzare le rotte intra-europee e italiane che potrebbero essere operate da questi velivoli. La dashboard fornisce una serie di KPI riguardanti il numero di voli interessati, il risparmio di carburante, la riduzione delle emissioni e gli effetti sui costi operativi, accompagnati da una visualizzazione delle rotte potenzialmente sostituibili.",
+    "emissions": "Questa sezione della dashboard fornisce una panoramica delle rotte domestiche che, in funzione delle caratteristiche tecniche degli aeromobili quali range operativo e la capacità passeggeri, potrebbero essere operate da velivoli elettrici. Vengono presentati tre scenari, ciascuno basato su una diversa tipologia di aeromobile attualmente in fase di sviluppo: Scenario 1 – Heart Aerospace ES-19; Scenario 2 – Elysian E9X; Scenario 3 – Wright Project.",
+    "biometric": "Questa sezione della dashboard consente di stimare il potenziale utilizzo della tecnologia di riconoscimento facciale nei processi aeroportuali. A partire da alcuni parametri del processo tradizionale, come il prezzo del biglietto aereo, i tempi di attesa ai controlli di sicurezza e al gate, la modalità di acquisizione dei dati biometrici (a casa o in aeroporto) e i tempi di elaborazione con il riconoscimento facciale, il grafico riporta il tasso di adozione del servizio in funzione della variazione del prezzo del processo aeroportuale biometrico rispetto al caso base (Δ%). I risultati sono distinti per passeggeri business, leisure e per l’intera popolazione."
+  },
+  "navbar": {
+    "electric": {
+      "title": "Introduzione di aeromobili elettrici",
+      "map": "Impatto complessivo",
+      "emissions": "Impatto a livello italiano",
+      "social": "Impatto economico sociale"
+    },
+    "evolution": "Evoluzione del settore",
+    "cargo": "Utilizzo di droni cargo",
+    "biometric": "Riconoscimento facciale"
   }
 }

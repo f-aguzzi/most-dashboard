@@ -6,6 +6,7 @@ import LabeledSlider from "@/components/LabeledSlider";
 import BiometricIdentitySelector from "@/components/BiometricIdentitySelector";
 import BiometricGraph from "@/components/BiometricGraph";
 import { useTranslation } from "react-i18next";
+import { Label } from "@/components/ui/label";
 
 function BiometricDashboard() {
   const { t } = useTranslation();
@@ -56,6 +57,7 @@ function BiometricDashboard() {
       <Typography version="h1" className="m-8 p-8">
         {t("biometric.title")}
       </Typography>
+      <Label className="mx-8">{t("captions.biometric")}</Label>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
         <div className="flex flex-col space-y-6 h-auto mx-8">
           {/* Visualizzazione */}
