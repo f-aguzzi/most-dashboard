@@ -84,7 +84,13 @@
     "title": "Socio-Economic Impact",
     "range": "Operating range (km)",
     "capacity": "Aircraft capacity",
-    "mc": "Marginal cost variation (%)"
+    "mc": "Marginal cost variation (%)",
+    "graph": {
+      "title": "Socio-economic impact",
+      "profit": "Profit",
+      "cs": "CS",
+      "welfare": "Welfare"
+    }
   },
   "captions": {
     "electric": "This section of the dashboard provides an overview of the potential impact of employing electric aricraft. By selecting technical parameters such as operating range and seat capacity, it's possible to analyze inter-European and Italian domestic routes that could be operated with such aircraft. The dashboard offers several KPIs regarding the overall number of affected flights, fuel savings, emission reduction and the effect on operating costs, accompanied by the display of potentially replaceable routes.",

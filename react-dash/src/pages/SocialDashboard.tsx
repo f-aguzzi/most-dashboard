@@ -1,9 +1,13 @@
+import SocialGraph from "@/components/SocialGraph";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Typography } from "@/components/ui/typography";
 import { Armchair, Euro, RulerDimensionLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+
+const url = import.meta.env.VITE_URL;
+const apiUrl = url + "/socioeconomic";
 
 function SocialDashboard() {
   const { t } = useTranslation();
@@ -13,7 +17,7 @@ function SocialDashboard() {
   const handleDistanceChange = (value: []) => {
     setDistance(value);
   };
-  const [committedDistance, setCommittedDistance] = useState([307]);
+  const [committedDistance, setCommittedDistance] = useState([400]);
   const commitDistance = (value: []) => {
     setCommittedDistance(value);
   };
@@ -23,7 +27,7 @@ function SocialDashboard() {
   const handlePassengerChange = (value: []) => {
     setPassengers(value);
   };
-  const [committedPassengers, setCommittedPassengers] = useState([21]);
+  const [committedPassengers, setCommittedPassengers] = useState([20]);
   const commitPassengers = (value: []) => {
     setCommittedPassengers(value);
   };
@@ -34,14 +38,53 @@ function SocialDashboard() {
     if (value.toString() !== "0") setMc(value);
     else setMc([1]);
   };
-  const [committedMc, setCommittedMc] = useState([21]);
+  const [committedMc, setCommittedMc] = useState([-10]);
   const commitMc = (value: []) => {
     if (value.toString() !== "0") setCommittedMc(value);
     else setCommittedMc([1]);
   };
 
+  // Results
+  const [deltaprof, setDeltaprof] = useState(0);
+  const [deltacs, setDeltacs] = useState(0);
+  const [deltawelfare, setDeltawelfare] = useState(0);
+
+  const fetchResults = async () => {
+    const params = new URLSearchParams({
+      distance: committedDistance.toString(),
+      seats: committedPassengers.toString(),
+      mc: committedMc.toString(),
+    });
+
+    interface Result {
+      totaldeltaprof: number;
+      totaldeltacs: number;
+      totaldeltawelfare: number;
+    }
+
+    const oldDeltaprof = deltaprof;
+    const oldDeltacs = deltacs;
+    const oldDeltawelfare = deltawelfare;
+
+    try {
+      const response = await fetch(apiUrl + `/?${params}`);
+
+      if (!response.ok) throw new Error("Network response was not ok");
+      const resultArray: [Result] = await response.json();
+      const result: Result = resultArray[0];
+
+      setDeltaprof(Math.round(result.totaldeltaprof * 100) / 100.0);
+      setDeltacs(Math.round(result.totaldeltacs * 100) / 100.0);
+      setDeltawelfare(Math.round(result.totaldeltawelfare * 100) / 100.0);
+    } catch {
+      setDeltaprof(oldDeltaprof);
+      setDeltacs(oldDeltacs);
+      setDeltawelfare(oldDeltawelfare);
+    }
+  };
+
   useEffect(() => {
-    console.log("TODO");
+    fetchResults();
   }, [committedPassengers, committedDistance, committedMc]);
 
   return (
@@ -111,13 +154,20 @@ function SocialDashboard() {
               step={1}
             ></Slider>
             <Typography version="p" className="p-8 m-4 w-4 text-center">
-              {mc}
+              {mc}%
             </Typography>
           </div>
         </div>
+
+        {/* Colonna destra */}
+        <div className="flex flex-col space-y-4">
+          <SocialGraph
+            deltaprof={deltaprof}
+            deltacs={deltacs}
+            deltawelfare={deltawelfare}
+          />
+        </div>
       </div>
-      {/* Colonna destra */}
-      <div className="flex flex-col space-y-4"></div>
     </div>
   );
 }
