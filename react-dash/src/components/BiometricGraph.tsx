@@ -286,7 +286,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
   return (
     <div className="w-full space-y-4 mr-8">
       <div className="bg-background text-foreground rounded-lg p-4">
-        <ResponsiveContainer width="100%" height={400}>
+        <ResponsiveContainer width="100%" height={350}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
@@ -300,6 +300,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
               }}
               domain={[-50, 100]}
               ticks={[-50, -25, 0, 25, 50, 75, 100]}
+              height={30}
             />
             <YAxis
               label={{
@@ -309,14 +310,19 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
                 offset: -30,
               }}
               domain={[0, 100]}
+              width={100}
             />
             <Tooltip
               formatter={(value: number) => `${value.toFixed(1)}%`}
               labelFormatter={(label) =>
-                `Δ${t("biometric.table.literalPrice")}: ${Number(label).toFixed(1)}%`
+                `Δ${t("biometric.table.literalPrice")}: ${Number(label).toFixed(2)}%`
               }
             />
-            <Legend />
+            <Legend
+              verticalAlign="bottom"
+              height={36}
+              wrapperStyle={{ paddingTop: "15px" }}
+            />
             <ReferenceLine x={0} stroke="#FF0000" strokeDasharray="3 3" />
             <Line
               type="monotone"
