@@ -268,14 +268,10 @@ average_results <- data.frame(mcchange = numeric(),
 # Ciclo sui valori di mcchange
 # Scenario 400
 # mcvalues for the loop on mc changes
-mcvalues<-seq(0.01,0.1, by=0.01)
-mcvalues <- mcvalues[mcvalues != 0]  # Escludi il valore 0
-
-# Scenario 800
-# mcvalues for the loop on mc changes
-# mcvalues for the loop on mc changes
 mcvalues<-seq(-0.1,0.1, by=0.01)
 mcvalues <- mcvalues[mcvalues != 0]  # Escludi il valore 0
+
+
 
 for (mcchange in mcvalues) {
   # Estrai tutti i risultati per l'attuale mcchange
@@ -458,7 +454,7 @@ profits_plots<-grid.arrange(plot_mean_profit, plot_sum_profit,
 
 # Specify the file path
 # Scenario 400
-output_path <- "/Users/gianmariamartini/Library/CloudStorage/Dropbox/Ricerca/settore_aereo/electric/graphs/profits_plots_400.jpeg"
+output_path <- "./profits_plots_400.jpeg"
 
 # Save the combined plot
 ggsave(
@@ -470,7 +466,7 @@ ggsave(
 )
 
 # Scenario 800
-output_path <- "/Users/gianmariamartini/Library/CloudStorage/Dropbox/Ricerca/settore_aereo/electric/graphs/profits_plots.jpeg"
+output_path <- "./profits_plots.jpeg"
 
 # Save the combined plot
 ggsave(
