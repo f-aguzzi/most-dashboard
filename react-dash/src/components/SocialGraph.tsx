@@ -29,7 +29,7 @@ function SocialGraph(props: SocialGraphProps) {
       value: props.deltacs,
     },
     {
-      name: t("social.graph.cs"),
+      name: t("social.graph.welfare"),
       value: props.deltawelfare,
     },
   ];
