@@ -12,31 +12,52 @@ scenario3 = pl.LazyFrame(pl.read_excel("scenario3.xlsx"))
 
 
 @emissions_router.get("/routes")
-def get_routes(distance: int, passengers: int):
-    data = scenario3
+def get_routes(distance: int):
+    aggregation = [
+        pl.col("lat_Dep").first().alias("Dep_apt_lat"),
+        pl.col("lon_Dep").first().alias("Dep_apt_lon"),
+        pl.col("lat_Arr").first().alias("Arr_apt_lat"),
+        pl.col("lon_Arr").first().alias("Arr_apt_lon"),
+        pl.col("GCD_km").first().alias("GCD"),
+        pl.col("GCD_km").count().alias("Number"),
+        pl.col("Seats_Total").mean().alias("Seats"),
+        pl.col("GCD_km").sum().alias("Total_flown"),
+    ]
+
+    aggregation1 = [
+        pl.col("sv_tr_IT_19").sum().alias("IT_19"),
+        pl.col("sv_tr_IT_LF").sum().alias("IT_LF"),
+        pl.col("sv_tr_EU_19").sum().alias("EU_19"),
+        pl.col("sv_tr_EU_LF").sum().alias("EU_LF"),
+    ]
+
+    aggregation2 = [
+        pl.col("sv_tr_EU_35").sum().alias("EU_35"),
+        pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
+    ]
+
+    if distance <= 400:
+        data = scenario1
+        aggregation += aggregation1
+        extracols = True
+    elif 400 < distance <= 800:
+        data = scenario2
+        aggregation += aggregation2
+        extracols = False
+    else:
+        data = scenario3
+        aggregation += aggregation2
+        extracols = False
 
     routes = (
-        data.filter([pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers])
+        data.filter([pl.col("GCD_km") <= distance])
         .group_by(
             [
                 pl.col("Dep_Airport_Code").alias("Dep_apt"),
                 pl.col("Arr_Airport_Code").alias("Arr_apt"),
             ]
         )
-        .agg(
-            [
-                pl.col("lat_Dep").first().alias("Dep_apt_lat"),
-                pl.col("lon_Dep").first().alias("Dep_apt_lon"),
-                pl.col("lat_Arr").first().alias("Arr_apt_lat"),
-                pl.col("lon_Arr").first().alias("Arr_apt_lon"),
-                pl.col("GCD_km").first().alias("GCD"),
-                pl.col("Frequency").sum().alias("Number"),
-                pl.col("Seats_Total").mean().alias("Seats"),
-                pl.col("GCD_km").sum().alias("Total_flown"),
-                pl.col("final_CO2_TON").sum().alias("co2_tot"),
-                pl.col("final_Fuel_TON").sum().alias("Fuel"),
-            ]
-        )
+        .agg(aggregation)
         .collect()
     )
 
@@ -46,26 +67,49 @@ def get_routes(distance: int, passengers: int):
             [row["Dep_apt_lat"], row["Dep_apt_lon"]],
             [row["Arr_apt_lat"], row["Arr_apt_lon"]],
         ]
-        result.append(
-            {
-                "route": route,
-                "label": row["Dep_apt"] + "-" + row["Arr_apt"],
-                "count": int(row["Number"]),
-                "distance": int(row["GCD"]),
-                "seats": int(row["Seats"]),
-                "flown": row["Total_flown"],
-                "co2": row["co2_tot"],
-                "fuel": row["Fuel"],
+        dict = {
+            "route": route,
+            "label": row["Dep_apt"] + "-" + row["Arr_apt"],
+            "count": int(row["Number"]),
+            "distance": int(row["GCD"]),
+            "seats": int(row["Seats"]),
+            "flown": row["Total_flown"],
+        }
+
+        if extracols:
+            dict = dict | {
+                "IT_19": row["IT_19"],
+                "IT_LF": row["IT_LF"],
+                "EU_19": row["EU_19"],
+                "EU_LF": row["EU_LF"],
+                "EU_35": None,
+                "EU_FR": None,
             }
-        )
+        else:
+            dict = dict | {
+                "IT_19": None,
+                "IT_LF": None,
+                "EU_19": None,
+                "EU_LF": None,
+                "EU_35": row["EU_35"],
+                "EU_FR": row["EU_FR"],
+            }
+
+        result.append(dict)
+
     return result
 
 
 @emissions_router.get("/airports")
-def get_airports(distance: int, passengers: int):
-    data = scenario3.filter(
-        [pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers]
-    )
+def get_airports(distance: int):
+    if distance <= 400:
+        data = scenario1
+    elif 400 < distance <= 800:
+        data = scenario2
+    else:
+        data = scenario3
+
+    data = data.filter([pl.col("GCD_km") <= distance])
 
     airports_left = data.group_by(pl.col("Dep_Airport_Code").alias("label")).agg(
         [
@@ -83,3 +127,68 @@ def get_airports(distance: int, passengers: int):
     for x in pl.concat([airports_left, airports_right]).unique().collect().to_dicts():
         results.append({"label": x["label"], "location": [x["lat"], x["lon"]]})
     return results
+
+
+@emissions_router.get("/kpi")
+def get_kpi(distance: int):
+    base_query = [
+        pl.col("GCD_km").count().alias("number"),
+        pl.col("GCD_km").sum().alias("flown"),
+    ]
+
+    scenario1_query = [
+        pl.col("sv_tr_IT_19").sum().alias("IT_19"),
+        pl.col("sv_tr_IT_LF").sum().alias("IT_LF"),
+        pl.col("sv_tr_EU_19").sum().alias("EU_19"),
+        pl.col("sv_tr_EU_LF").sum().alias("EU_LF"),
+    ]
+
+    scenario2_query = [
+        pl.col("sv_tr_EU_35").sum().alias("EU_35"),
+        pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
+    ]
+
+    if distance <= 400:
+        data = scenario1
+        query = base_query + scenario1_query
+        is_scenario1 = True
+    elif 400 < distance <= 800:
+        data = scenario2
+        query = base_query + scenario2_query
+        is_scenario1 = False
+    else:
+        data = scenario3
+        query = base_query + scenario2_query
+        is_scenario1 = False
+
+    data_filtered = data.filter(pl.col("GCD_km") <= distance)
+
+    data = scenario3.select(base_query).collect().to_dicts()[0]
+    data_filtered = data_filtered.select(query).collect().to_dicts()[0]
+
+    if is_scenario1:
+        return {
+            "number": data_filtered["number"],
+            "number_percentage": 100 * data_filtered["number"] / data["number"],
+            "flown": data_filtered["flown"],
+            "flown_percentage": 100 * data_filtered["flown"] / data["flown"],
+            "IT_19": data_filtered["IT_19"],
+            "IT_LF": data_filtered["IT_LF"],
+            "EU_19": data_filtered["EU_19"],
+            "EU_LF": data_filtered["EU_LF"],
+            "EU_35": None,
+            "EU_FR": None,
+        }
+    else:
+        return {
+            "number": data_filtered["number"],
+            "number_percentage": 100 * data_filtered["number"] / data["number"],
+            "flown": data_filtered["flown"],
+            "flown_percentage": 100 * data_filtered["flown"] / data["flown"],
+            "IT_19": None,
+            "IT_LF": None,
+            "EU_19": None,
+            "EU_LF": None,
+            "EU_35": data_filtered["EU_35"],
+            "EU_FR": data_filtered["EU_FR"],
+        }

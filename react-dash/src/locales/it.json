@@ -41,7 +41,12 @@
       "airport": "Aeroporto"
     }
   },
-  "emissions": "Electric Aircraft - Emissioni per scenario",
+  "emissions": {
+    "title": "Electric Aircraft - Emissioni per scenario",
+    "savings": "Risparmio di emissioni CO2",
+    "frequency": "Frequenza voli",
+    "kpi": "KPI relativi all'uso di aeromobili elettrici in Italia."
+  },
   "biometric": {
     "title": "Adozione del riconoscimento facciale presso gli aeroporti",
     "display": {

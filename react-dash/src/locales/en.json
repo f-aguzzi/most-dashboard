@@ -41,7 +41,12 @@
       "airport": "Airport"
     }
   },
-  "emissions": "Electric Aircraft - Emissions by scenario",
+  "emissions": {
+    "title": "Electric Aircraft - Emissions by scenario",
+    "savings": "CO2 emission savings",
+    "frequency": "Flight frequency",
+    "kpi": "KPIs relative to the deployment of electric aircraft in Italy."
+  },
   "biometric": {
     "title": "Biometric technology adoption at airports",
     "display": {

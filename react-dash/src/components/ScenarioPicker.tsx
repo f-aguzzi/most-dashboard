@@ -31,7 +31,6 @@ export function ScenarioPicker(props: ScenarioPickerProps) {
             <SelectItem value="s1">Scenario 1</SelectItem>
             <SelectItem value="s2">Scenario 2</SelectItem>
             <SelectItem value="s3">Scenario 3</SelectItem>
-            <SelectItem value="s4"> --- </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

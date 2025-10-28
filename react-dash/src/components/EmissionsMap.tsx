@@ -7,7 +7,6 @@ import {
 } from "react-leaflet";
 import L, { type LatLngExpression, type LatLngTuple } from "leaflet";
 
-// Fix for default markers
 import icon from "@/assets/circle-dot.png";
 import { useTranslation } from "react-i18next";
 
@@ -24,8 +23,12 @@ interface PolyLine {
   distance: number;
   seats: number;
   flown: number;
-  co2: number;
-  fuel: number;
+  IT_19: number | null;
+  IT_LF: number | null;
+  EU_19: number | null;
+  EU_LF: number | null;
+  EU_35: number | null;
+  EU_FR: number | null;
 }
 
 interface Airport {
@@ -39,30 +42,44 @@ interface LeafletMapProps {
   center?: LatLngExpression | [55.505, 13.0];
   zoom?: number | 4;
   display?: string | null;
+  scenario: string;
 }
 
 export default function EmissionsMap(props: LeafletMapProps) {
   const { t } = useTranslation();
 
   const computeWeight = (positions: PolyLine) => {
-    if (props.display === "Consumo")
-      return Math.round(Math.max(2, Math.min(positions.fuel * 0.006, 25)));
-    else if (props.display === "Emissioni")
-      return Math.round(Math.max(2, Math.min(positions.co2 * 0.004, 25)));
-    else return Math.round(Math.max(2, Math.min(positions.count * 0.006, 25)));
+    // Risparmio emissioni
+    if (props.display === "IT_19" && positions.IT_19 != null)
+      return Math.round(Math.max(2, Math.min(positions.IT_19 * 0.0002, 25)));
+    if (props.display === "IT_LF" && positions.IT_LF != null)
+      return Math.round(Math.max(2, Math.min(positions.IT_LF * 0.0002, 25)));
+    if (props.display === "EU_19" && positions.EU_19 != null)
+      return Math.round(Math.max(2, Math.min(positions.EU_19 * 0.0002, 25)));
+    if (props.display === "EU_LF" && positions.EU_LF != null)
+      return Math.round(Math.max(2, Math.min(positions.EU_LF * 0.0002, 25)));
+    if (props.display === "EU_35" && positions.EU_35 != null)
+      return Math.round(Math.max(2, Math.min(positions.EU_35 * 0.00001, 25)));
+    if (props.display === "EU_FR" && positions.EU_FR != null)
+      return Math.round(Math.max(2, Math.min(positions.EU_FR * 0.00001, 25)));
+    // Frequenza
+    return Math.round(Math.max(2, Math.min(positions.count * 0.006, 25)));
   };
 
   const computeColor = (positions: PolyLine) => {
-    if (positions.distance <= 307 && positions.seats <= 21) return "#ff6b35";
-    else if (positions.distance <= 787 && positions.seats <= 86)
-      return "#7cb342";
+    if (positions.distance <= 400) return "#ff6b35";
+    else if (positions.distance <= 800) return "#7cb342";
     else return "#1f88e0";
   };
 
   const translateLegend = (key: string | null | undefined) => {
-    if (key === "Frequenza") return t("electric.display.frequency");
-    else if (key === "Consumo") return t("electric.display.usage");
-    else return t("electric.display.emissions");
+    if (key === "Frequenza") return t("emissions.frequency");
+    else return t("emissions.savings");
+  };
+
+  const fmtco2 = (value: number | null) => {
+    if (value == null) return 0;
+    return Math.round(value / 1000);
   };
 
   return (
@@ -93,7 +110,7 @@ export default function EmissionsMap(props: LeafletMapProps) {
                   <br />
                   <b>{t("electric.map.length")}: </b> {positions.distance} km
                   <br />
-                  <b>{t("electric.map.seats)")}: </b> {positions.seats}
+                  <b>{t("electric.map.seats")}: </b> {positions.seats}
                   <br />
                   <b>{t("electric.map.distance")}: </b>{" "}
                   {(Math.round(positions.flown * 100) / 100).toLocaleString(
@@ -101,12 +118,31 @@ export default function EmissionsMap(props: LeafletMapProps) {
                   )}{" "}
                   km
                   <br />
-                  <b>{t("electric.map.emissions")}: </b>{" "}
-                  {(Math.round(positions.co2 * 100) / 100).toLocaleString(
-                    "it-IT",
-                  )}{" "}
-                  ton
-                  <br />
+                  {props.scenario === "s1" ? (
+                    <>
+                      <b>{t("emissions.savings")} (IT 2019): </b>
+                      {fmtco2(positions.IT_19)} ton
+                      <br />
+                      <b>{t("emissions.savings")} (IT LF): </b>
+                      {fmtco2(positions.IT_LF)} ton
+                      <br />
+                      <b>{t("emissions.savings")} (EU 2019): </b>
+                      {fmtco2(positions.EU_19)} ton
+                      <br />
+                      <b>{t("emissions.savings")} (EU LF): </b>
+                      {fmtco2(positions.EU_LF)} ton
+                      <br />
+                    </>
+                  ) : (
+                    <>
+                      <b>{t("emissions.savings")} (EU 2035): </b>
+                      {fmtco2(positions.EU_35)} ton
+                      <br />
+                      <b>{t("emissions.savings")} (EU Fully Renewable): </b>
+                      {fmtco2(positions.EU_FR)} ton
+                      <br />
+                    </>
+                  )}
                 </Popup>
               </Polyline>
             ))}

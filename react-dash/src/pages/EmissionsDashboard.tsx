@@ -5,15 +5,29 @@ import EmissionsMap, {
   type Airport,
 } from "@/components/EmissionsMap";
 import { useEffect, useState } from "react";
-import { Armchair, Eye, RulerDimensionLine } from "lucide-react";
-import DisplaySelector from "@/components/DisplaySelector";
+import { Eye, RulerDimensionLine } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Label } from "@/components/ui/label";
 import ScenarioPicker from "@/components/ScenarioPicker";
 import { Separator } from "@/components/ui/separator";
+import EmissionsDisplaySelector from "@/components/EmissionsDisplaySelector";
+import EmissionsKpiTable, { type Kpi } from "@/components/EmissionsKpiTable";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/emissions";
+
+const dummyKpi: Kpi = {
+  number: 0,
+  number_percentage: 0,
+  flown: 0,
+  flown_percentage: 0,
+  IT_19: 0,
+  IT_LF: 0,
+  EU_19: 0,
+  EU_LF: 0,
+  EU_35: 0,
+  EU_FR: 0,
+};
 
 function EmissionsDashboard() {
   const { t } = useTranslation();
@@ -23,11 +37,7 @@ function EmissionsDashboard() {
   const fetchFlights = async () => {
     try {
       const response = await fetch(
-        apiUrl +
-          "/routes?distance=" +
-          committedDistance +
-          "&passengers=" +
-          committedPassengers,
+        apiUrl + "/routes?distance=" + committedDistance,
       );
       if (!response.ok) throw new Error("Route response was not ok");
       const result = await response.json();
@@ -42,17 +52,28 @@ function EmissionsDashboard() {
   const fetchAirports = async () => {
     try {
       const response = await fetch(
-        apiUrl +
-          "/airports?distance=" +
-          committedDistance +
-          "&passengers=" +
-          committedPassengers,
+        apiUrl + "/airports?distance=" + committedDistance,
       );
       if (!response.ok) throw new Error("Airport response was not ok");
       const result = await response.json();
       setAirports(result);
     } catch {
       setAirports(null);
+    }
+  };
+
+  const [kpi, setKpi] = useState(dummyKpi);
+
+  const fetchKpi = async () => {
+    try {
+      const response = await fetch(
+        apiUrl + "/kpi?distance=" + committedDistance,
+      );
+      if (!response.ok) throw new Error("KPI response was not ok");
+      const result = await response.json();
+      setKpi(result);
+    } catch {
+      setKpi(dummyKpi);
     }
   };
 
@@ -69,16 +90,6 @@ function EmissionsDashboard() {
     setCommittedDistance(value);
   };
 
-  // Passengers
-  const [passengers, setPassengers] = useState([21]);
-  const handlePassengerChange = (value: []) => {
-    setPassengers(value);
-  };
-  const [committedPassengers, setCommittedPassengers] = useState([21]);
-  const commitPassengers = (value: []) => {
-    setCommittedPassengers(value);
-  };
-
   // Display
   const [display, setDisplay] = useState("Frequenza");
   const handleDisplay = async (value: string) => {
@@ -89,49 +100,42 @@ function EmissionsDashboard() {
   const scenarioHandler = (value: string) => {
     if (value === "s1") {
       setDistance([400]);
-      setPassengers([21]);
       setCommittedDistance([400]);
-      setCommittedPassengers([21]);
       setScenario("s1");
     } else if (value === "s2") {
       setDistance([800]);
-      setPassengers([86]);
       setCommittedDistance([800]);
-      setCommittedPassengers([86]);
       setScenario("s2");
-    } else if (value === "s3") {
-      setDistance([1300]);
-      setPassengers([100]);
-      setCommittedDistance([1300]);
-      setCommittedPassengers([100]);
-      setScenario("s3");
     } else {
-      setScenario("s4");
-      return;
+      setDistance([1300]);
+      setCommittedDistance([1300]);
+      setScenario("s3");
     }
   };
 
   useEffect(() => {
-    const isScenario1 = distance[0] === 400 && passengers[0] === 21;
-    const isScenario2 = distance[0] === 800 && passengers[0] === 86;
-    const isScenario3 = distance[0] === 1300 && passengers[0] === 100;
+    const isScenario1 = distance[0] <= 400;
+    const isScenario2 = distance[0] > 400 && distance[0] <= 800;
+    const isScenario3 = distance[0] > 800;
 
-    if (!isScenario1 && !isScenario2 && !isScenario3) {
-      setScenario("s4");
-    } else {
-      if (isScenario1) setScenario("s1");
-      if (isScenario2) setScenario("s2");
-      if (isScenario3) setScenario("s3");
-    }
+    if (isScenario1) setScenario("s1");
+    if (isScenario2) setScenario("s2");
+    if (isScenario3) setScenario("s3");
+
+    if (isScenario1 && (display === "EU_35" || display === "EU_FR"))
+      setDisplay("IT_19");
+
+    if (!isScenario1 && display !== "Frequenza") setDisplay("EU_35");
 
     fetchFlights();
     fetchAirports();
-  }, [committedPassengers, committedDistance]);
+    fetchKpi();
+  }, [committedDistance]);
 
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
-        {t("emissions")}
+        {t("emissions.title")}
       </Typography>
       <Label className="mx-8">{t("captions.emissions")}</Label>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
@@ -152,7 +156,7 @@ function EmissionsDashboard() {
               onValueCommit={commitDistance}
               defaultValue={[400]}
               min={200}
-              max={1400}
+              max={1300}
               step={1}
               referenceLines={[
                 {
@@ -176,43 +180,6 @@ function EmissionsDashboard() {
               {distance}
             </Typography>
           </div>
-          {/* Passengers */}
-          <div className="flex items-center gap-2">
-            <Armchair className="h-6 w-6 text-primary" />
-            <Typography version="h4">{t("electric.capacity")}</Typography>
-          </div>
-          <div className="flex flex-row">
-            <Slider
-              className="m-8 w-lg mx-8 px-2"
-              value={passengers}
-              onValueChange={handlePassengerChange}
-              onValueCommit={commitPassengers}
-              defaultValue={[20]}
-              min={10}
-              max={100}
-              step={1}
-              referenceLines={[
-                {
-                  value: 21,
-                  label: "Scenario 1",
-                  color: "#ff6b35",
-                },
-                {
-                  value: 86,
-                  label: "Scenario 2",
-                  color: "#7cb342",
-                },
-                {
-                  value: 100,
-                  label: "Scenario 3",
-                  color: "#1f88e0",
-                },
-              ]}
-            ></Slider>
-            <Typography version="p" className="p-8 m-4 w-4 text-center">
-              {passengers}
-            </Typography>
-          </div>
           <Separator />
           {/* Display mode */}
           <div className="flex flex-col gap-y-2">
@@ -222,8 +189,18 @@ function EmissionsDashboard() {
                 {t("electric.display.title")}
               </Typography>
             </div>
-            <DisplaySelector handler={handleDisplay} />
+            <EmissionsDisplaySelector
+              handler={handleDisplay}
+              scenario={scenario}
+              value={display}
+            />
           </div>
+          {/* Tabella KPI */}
+          <EmissionsKpiTable
+            scenario={scenario}
+            kpi={kpi}
+            caption={t("emissions.kpi")}
+          />
         </div>
         {/* Mappa */}
         <div className="flex flex-col space-y-4">
@@ -233,6 +210,7 @@ function EmissionsDashboard() {
             polylines={flights}
             airports={airports}
             display={display}
+            scenario={scenario}
           />
         </div>
       </div>
