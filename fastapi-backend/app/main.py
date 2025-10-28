@@ -5,6 +5,7 @@ Modulo principale del backend della Most-Dashboard.
 from sys import prefix
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routers.demand_router import demand_router
 from app.routers.socioeconomic_router import socioeconomic_router
 from app.routers.electric_router import electric_router
 from app.routers.emissions_router import emissions_router
@@ -35,3 +36,4 @@ def health_check():
 app.include_router(electric_router, prefix="/electric")
 app.include_router(emissions_router, prefix="/emissions")
 app.include_router(socioeconomic_router, prefix="/socioeconomic")
+app.include_router(demand_router, prefix="/demand")
