@@ -7,6 +7,7 @@ import { Typography } from "./components/ui/typography";
 import EmissionsDashboard from "./pages/EmissionsDashboard";
 import BiometricDashboard from "./pages/BiometricDashboard";
 import SocialDashboard from "./pages/SocialDashboard";
+import DemandDashboard from "./pages/DemandDashboard";
 
 function App() {
   const [nightMode, setNightMode] = useState(true);
@@ -17,6 +18,7 @@ function App() {
     else if (page === "emissions-dashboard") return <EmissionsDashboard />;
     else if (page === "biometric") return <BiometricDashboard />;
     else if (page === "social") return <SocialDashboard />;
+    else if (page === "demand-dashboard") return <DemandDashboard />;
     else
       return (
         <>

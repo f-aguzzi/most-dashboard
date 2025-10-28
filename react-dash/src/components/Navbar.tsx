@@ -55,9 +55,17 @@ const Navbar = (props: NavbarProps) => {
         </NavigationMenuItem>
         {/* Evoluzione del settore */}
         <NavigationMenuItem>
-          <NavigationMenuLink onClick={() => props.setPage("evolution")}>
-            {t("navbar.evolution")}
-          </NavigationMenuLink>
+          <NavigationMenuTrigger>
+            {t("navbar.evolution.title")}
+          </NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <NavigationMenuLink
+              onClick={() => props.setPage("demand-dashboard")}
+            >
+              {t("navbar.evolution.demand")}
+            </NavigationMenuLink>
+            <Separator />
+          </NavigationMenuContent>
         </NavigationMenuItem>
         {/* Droni cargo */}
         <NavigationMenuItem>
