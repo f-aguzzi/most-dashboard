@@ -2,6 +2,8 @@ import polars as pl
 from fastapi import APIRouter
 from xlsxwriter.workbook import Dict
 
+from app.service import price
+
 emissions_router = APIRouter()
 
 scenario1 = pl.LazyFrame(pl.read_excel("scenario1.xlsx"))
@@ -12,7 +14,7 @@ scenario3 = pl.LazyFrame(pl.read_excel("scenario3.xlsx"))
 
 
 @emissions_router.get("/routes")
-def get_routes(distance: int):
+def get_routes(distance: int, passengers: int):
     aggregation = [
         pl.col("lat_Dep").first().alias("Dep_apt_lat"),
         pl.col("lon_Dep").first().alias("Dep_apt_lon"),
@@ -36,11 +38,11 @@ def get_routes(distance: int):
         pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
     ]
 
-    if distance <= 400:
+    if distance <= 400 and passengers <= 20:
         data = scenario1
         aggregation += aggregation1
         extracols = True
-    elif 400 < distance <= 800:
+    elif 400 < distance <= 800 or 20 < passengers <= 40:
         data = scenario2
         aggregation += aggregation2
         extracols = False
@@ -50,7 +52,7 @@ def get_routes(distance: int):
         extracols = False
 
     routes = (
-        data.filter([pl.col("GCD_km") <= distance])
+        data.filter([pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers])
         .group_by(
             [
                 pl.col("Dep_Airport_Code").alias("Dep_apt"),
@@ -101,15 +103,17 @@ def get_routes(distance: int):
 
 
 @emissions_router.get("/airports")
-def get_airports(distance: int):
-    if distance <= 400:
+def get_airports(distance: int, passengers: int):
+    if distance <= 400 and passengers <= 20:
         data = scenario1
-    elif 400 < distance <= 800:
+    elif 400 < distance <= 800 or 20 < passengers <= 40:
         data = scenario2
     else:
         data = scenario3
 
-    data = data.filter([pl.col("GCD_km") <= distance])
+    data = data.filter(
+        [pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers]
+    )
 
     airports_left = data.group_by(pl.col("Dep_Airport_Code").alias("label")).agg(
         [
@@ -130,7 +134,7 @@ def get_airports(distance: int):
 
 
 @emissions_router.get("/kpi")
-def get_kpi(distance: int):
+def get_kpi(distance: int, passengers: int):
     base_query = [
         pl.col("GCD_km").count().alias("number"),
         pl.col("GCD_km").sum().alias("flown"),
@@ -148,11 +152,11 @@ def get_kpi(distance: int):
         pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
     ]
 
-    if distance <= 400:
+    if distance <= 400 and passengers <= 20:
         data = scenario1
         query = base_query + scenario1_query
         is_scenario1 = True
-    elif 400 < distance <= 800:
+    elif 400 < distance <= 800 or 20 < passengers <= 40:
         data = scenario2
         query = base_query + scenario2_query
         is_scenario1 = False
@@ -161,7 +165,9 @@ def get_kpi(distance: int):
         query = base_query + scenario2_query
         is_scenario1 = False
 
-    data_filtered = data.filter(pl.col("GCD_km") <= distance)
+    data_filtered = data.filter(
+        [pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers]
+    )
 
     data = scenario3.select(base_query).collect().to_dicts()[0]
     data_filtered = data_filtered.select(query).collect().to_dicts()[0]
@@ -191,4 +197,57 @@ def get_kpi(distance: int):
             "EU_LF": None,
             "EU_35": data_filtered["EU_35"],
             "EU_FR": data_filtered["EU_FR"],
+        }
+
+
+@emissions_router.get("/euro_kpi")
+def get_euro_kpi(distance: int, passengers: int):
+    scenario1_query = [
+        pl.col("sv_tr_IT_19").sum().alias("IT_19"),
+        pl.col("sv_tr_IT_LF").sum().alias("IT_LF"),
+        pl.col("sv_tr_EU_19").sum().alias("EU_19"),
+        pl.col("sv_tr_EU_LF").sum().alias("EU_LF"),
+    ]
+
+    scenario2_query = [
+        pl.col("sv_tr_EU_35").sum().alias("EU_35"),
+        pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
+    ]
+
+    if distance <= 400 and passengers <= 20:
+        data = scenario1
+        query = scenario1_query
+        is_scenario1 = True
+    elif 400 < distance <= 800 or 20 < passengers <= 40:
+        data = scenario2
+        query = scenario2_query
+        is_scenario1 = False
+    else:
+        data = scenario3
+        query = scenario2_query
+        is_scenario1 = False
+
+    data_filtered = data.filter(
+        [pl.col("GCD_km") <= distance, pl.col("Seats_Total") <= passengers]
+    )
+
+    data_filtered = data_filtered.select(query).collect().to_dicts()[0]
+
+    if is_scenario1:
+        return {
+            "IT_19": price(data_filtered["IT_19"]),
+            "IT_LF": price(data_filtered["IT_LF"]),
+            "EU_19": price(data_filtered["EU_19"]),
+            "EU_LF": price(data_filtered["EU_LF"]),
+            "EU_35": None,
+            "EU_FR": None,
+        }
+    else:
+        return {
+            "IT_19": None,
+            "IT_LF": None,
+            "EU_19": None,
+            "EU_LF": None,
+            "EU_35": price(data_filtered["EU_35"]),
+            "EU_FR": price(data_filtered["EU_FR"]),
         }

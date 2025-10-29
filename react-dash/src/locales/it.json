@@ -45,7 +45,12 @@
     "title": "Electric Aircraft - Emissioni per scenario",
     "savings": "Risparmio di emissioni CO2",
     "frequency": "Frequenza voli",
-    "kpi": "KPI relativi all'uso di aeromobili elettrici in Italia."
+    "kpi": "KPI relativi all'uso di aeromobili elettrici in Italia.",
+    "eurokpi": {
+      "title": "Tabella dei KPI economici",
+      "header": "Risparmio economico",
+      "caption": "KPI relativi al risparmio economico derivante dall'introduzione di aeromobili elettrici in Italia."
+    }
   },
   "biometric": {
     "title": "Adozione del riconoscimento facciale presso gli aeroporti",

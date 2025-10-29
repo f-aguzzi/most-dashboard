@@ -80,3 +80,7 @@ def filter_routes(data: pl.LazyFrame, distance: int, seats: int) -> pl.LazyFrame
             ]
         )
     )
+
+
+def price(value: float):
+    return [value * 0.08324, value * 0.20734, value * 0.905]
