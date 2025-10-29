@@ -134,11 +134,11 @@ function EmissionsDashboard() {
   };
 
   // Passengers
-  const [passengers, setPassengers] = useState([20]);
+  const [passengers, setPassengers] = useState([19]);
   const handlePassengersChange = (value: []) => {
     setPassengers(value);
   };
-  const [committedPassengers, setCommittedPassengers] = useState([20]);
+  const [committedPassengers, setCommittedPassengers] = useState([19]);
   const handleCommittedPassengers = (value: []) => {
     setCommittedPassengers(value);
   };
@@ -154,30 +154,30 @@ function EmissionsDashboard() {
     if (value === "s1") {
       setDistance([400]);
       setCommittedDistance([400]);
-      setPassengers([20]);
-      setCommittedPassengers([20]);
+      setPassengers([19]);
+      setCommittedPassengers([19]);
       setScenario("s1");
     } else if (value === "s2") {
       setDistance([800]);
       setCommittedDistance([800]);
-      setPassengers([40]);
-      setCommittedPassengers([40]);
+      setPassengers([90]);
+      setCommittedPassengers([90]);
       setScenario("s2");
     } else {
       setDistance([1300]);
       setCommittedDistance([1300]);
-      setPassengers([80]);
-      setCommittedPassengers([80]);
+      setPassengers([100]);
+      setCommittedPassengers([100]);
       setScenario("s3");
     }
   };
 
   useEffect(() => {
-    const isScenario1 = distance[0] <= 400 && passengers[0] <= 20;
+    const isScenario1 = distance[0] <= 400 && passengers[0] <= 19;
     const isScenario2 =
       (distance[0] > 400 && distance[0] <= 800) ||
-      (passengers[0] > 20 && passengers[0] <= 40);
-    const isScenario3 = distance[0] > 800 || passengers[0] > 40;
+      (passengers[0] > 19 && passengers[0] <= 90);
+    const isScenario3 = distance[0] > 800 || passengers[0] > 90;
 
     if (isScenario1) setScenario("s1");
     if (isScenario2) setScenario("s2");
@@ -202,8 +202,8 @@ function EmissionsDashboard() {
         {t("emissions.title")}
       </Typography>
       <Label className="mx-8">{t("captions.emissions")}</Label>
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
-        <div className="flex flex-col space-y-6 h-auto mx-8">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[2fr_3fr] gap-6 mt-6 h-auto w-auto">
+        <div className="flex flex-col space-y-6 h-auto mx-4">
           {/* Scenario Picker */}
           <ScenarioPicker handler={scenarioHandler} value={scenario} />
           <Separator />
@@ -255,24 +255,24 @@ function EmissionsDashboard() {
               value={passengers}
               onValueChange={handlePassengersChange}
               onValueCommit={handleCommittedPassengers}
-              defaultValue={[20]}
+              defaultValue={[19]}
               min={0}
-              max={80}
+              max={100}
               step={1}
               referenceLines={[
                 {
-                  value: 20,
+                  value: 19,
                   label: "Scenario 1",
                   color: "#ff6b35",
                 },
                 {
-                  value: 40,
-                  label: "Scenario 2",
+                  value: 90,
+                  label: "Sc. 2",
                   color: "#7cb342",
                 },
                 {
-                  value: 80,
-                  label: "Scenario 3",
+                  value: 100,
+                  label: "Sc. 3",
                   color: "#1f88e0",
                 },
               ]}
@@ -298,7 +298,7 @@ function EmissionsDashboard() {
           </div>
         </div>
         {/* Mappa */}
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-9">
           <EmissionsMap
             center={[42.0, 14.0]}
             zoom={6}

@@ -38,11 +38,11 @@ def get_routes(distance: int, passengers: int):
         pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
     ]
 
-    if distance <= 400 and passengers <= 20:
+    if distance <= 400 and passengers <= 19:
         data = scenario1
         aggregation += aggregation1
         extracols = True
-    elif 400 < distance <= 800 or 20 < passengers <= 40:
+    elif 400 < distance <= 800 or 19 < passengers <= 90:
         data = scenario2
         aggregation += aggregation2
         extracols = False
@@ -104,9 +104,9 @@ def get_routes(distance: int, passengers: int):
 
 @emissions_router.get("/airports")
 def get_airports(distance: int, passengers: int):
-    if distance <= 400 and passengers <= 20:
+    if distance <= 400 and passengers <= 19:
         data = scenario1
-    elif 400 < distance <= 800 or 20 < passengers <= 40:
+    elif 400 < distance <= 800 or 19 < passengers <= 90:
         data = scenario2
     else:
         data = scenario3
@@ -152,11 +152,11 @@ def get_kpi(distance: int, passengers: int):
         pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
     ]
 
-    if distance <= 400 and passengers <= 20:
+    if distance <= 400 and passengers <= 19:
         data = scenario1
         query = base_query + scenario1_query
         is_scenario1 = True
-    elif 400 < distance <= 800 or 20 < passengers <= 40:
+    elif 400 < distance <= 800 or 19 < passengers <= 90:
         data = scenario2
         query = base_query + scenario2_query
         is_scenario1 = False
@@ -214,11 +214,11 @@ def get_euro_kpi(distance: int, passengers: int):
         pl.col("sv_tr_EU_FR").sum().alias("EU_FR"),
     ]
 
-    if distance <= 400 and passengers <= 20:
+    if distance <= 400 and passengers <= 19:
         data = scenario1
         query = scenario1_query
         is_scenario1 = True
-    elif 400 < distance <= 800 or 20 < passengers <= 40:
+    elif 400 < distance <= 800 or 19 < passengers <= 80:
         data = scenario2
         query = scenario2_query
         is_scenario1 = False
