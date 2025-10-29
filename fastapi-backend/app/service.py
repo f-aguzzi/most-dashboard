@@ -82,5 +82,13 @@ def filter_routes(data: pl.LazyFrame, distance: int, seats: int) -> pl.LazyFrame
     )
 
 
+def fmt(s: float):
+    return format(round(s, 2), ",").replace(",", "˙").replace(".", ",")
+
+
+def pfmt(s: float):
+    return f"{round(100 * s, 2)}".replace(".", ",")
+
+
 def price(value: float):
-    return [value * 0.08324, value * 0.20734, value * 0.905]
+    return [fmt(value * 0.08324), fmt(value * 0.20734), fmt(value * 0.905)]

@@ -2,23 +2,15 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 import io
 import polars as pl
-from app.service import get_all_flights, filter_routes
+from app.service import get_all_flights, filter_routes, fmt, pfmt
 
 electric_router = APIRouter()
 
 data = pl.LazyFrame(pl.read_excel("data.xlsx"))
 
 
-def fmt(s):
-    return format(round(s, 2), ",").replace(",", "˙").replace(".", ",")
-
-
-def pfmt(s):
-    return f"{round(100 * s, 2)}".replace(".", ",")
-
-
 @electric_router.get("/routes_by")
-def get_routes_by(distance, seats, perimeter):
+def get_routes_by(distance: int, seats: int, perimeter: bool):
     """
     Restituisce una lista di dati sulle rotte.
     """
@@ -26,7 +18,7 @@ def get_routes_by(distance, seats, perimeter):
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
         route_data = data
-    routes = filter_routes(route_data, int(distance), int(seats)).collect()
+    routes = filter_routes(route_data, distance, seats).collect()
 
     result = []
     for row in routes.to_dicts():
@@ -52,7 +44,7 @@ def get_routes_by(distance, seats, perimeter):
 
 
 @electric_router.get("/routes_by/airports")
-def get_routes_by_apts(distance, seats, perimeter):
+def get_routes_by_apts(distance: int, seats: int, perimeter: bool):
     """
     Restituisce una lista di dati sugli aeroporti.
     """
@@ -61,8 +53,8 @@ def get_routes_by_apts(distance, seats, perimeter):
     else:
         route_data = data
 
-    routes = route_data.filter(pl.col("GCD") <= int(distance))
-    routes = routes.filter(pl.col("Seats") <= int(seats))
+    routes = route_data.filter([pl.col("GCD") <= distance, pl.col("Seats") <= seats])
+
     routes1 = routes.select(
         [
             pl.col("Dep_apt").alias("IATA"),
@@ -95,7 +87,7 @@ def get_routes_by_apts(distance, seats, perimeter):
 
 
 @electric_router.get("/kpi")
-def get_kpi(distance, seats, perimeter):
+def get_kpi(distance: int, seats: int, perimeter: bool):
     """
     Restituisce un dizionario di KPI sui voli.
     """
@@ -103,8 +95,9 @@ def get_kpi(distance, seats, perimeter):
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
         route_data = data
-    filtered_data = route_data.filter(pl.col("GCD") <= int(distance))
-    filtered_data = filtered_data.filter(pl.col("Seats") <= int(seats))
+    filtered_data = route_data.filter(
+        [pl.col("GCD") <= distance, pl.col("Seats") <= seats]
+    )
 
     kpi_tot = get_all_flights(route_data).collect().to_dicts()[0]
     kpi_part = get_all_flights(filtered_data).collect().to_dicts()[0]
@@ -137,7 +130,7 @@ def get_kpi(distance, seats, perimeter):
         },
     ]
 
-    if int(seats) <= 50 and int(distance) <= 500:
+    if seats <= 50 and distance <= 500:
         result.append(
             {
                 "metric": "delta",
@@ -156,7 +149,7 @@ def get_kpi(distance, seats, perimeter):
 
 
 @electric_router.get("/datasheet")
-def get_datasheet(distance, seats, perimeter):
+def get_datasheet(distance: int, seats: int, perimeter: bool):
     """
     Restituisce i dati sotto forma di file Excel scaricabile.
     """
@@ -164,8 +157,9 @@ def get_datasheet(distance, seats, perimeter):
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
         route_data = data
-    filtered_data = route_data.filter(pl.col("GCD") <= int(distance))
-    filtered_data = filtered_data.filter(pl.col("Seats") <= int(seats))
+    filtered_data = route_data.filter(
+        [pl.col("GCD") <= distance, pl.col("Seats") <= seats]
+    )
 
     result = filtered_data.group_by(pl.col("Dep_apt", "Arr_apt")).agg(
         [

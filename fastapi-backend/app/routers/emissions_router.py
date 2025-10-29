@@ -2,7 +2,7 @@ import polars as pl
 from fastapi import APIRouter
 from xlsxwriter.workbook import Dict
 
-from app.service import price
+from app.service import price, fmt, pfmt
 
 emissions_router = APIRouter()
 
@@ -80,10 +80,10 @@ def get_routes(distance: int, passengers: int):
 
         if extracols:
             dict = dict | {
-                "IT_19": row["IT_19"],
-                "IT_LF": row["IT_LF"],
-                "EU_19": row["EU_19"],
-                "EU_LF": row["EU_LF"],
+                "IT_19": fmt(row["IT_19"]),
+                "IT_LF": fmt(row["IT_LF"]),
+                "EU_19": fmt(row["EU_19"]),
+                "EU_LF": fmt(row["EU_LF"]),
                 "EU_35": None,
                 "EU_FR": None,
             }
@@ -93,8 +93,8 @@ def get_routes(distance: int, passengers: int):
                 "IT_LF": None,
                 "EU_19": None,
                 "EU_LF": None,
-                "EU_35": row["EU_35"],
-                "EU_FR": row["EU_FR"],
+                "EU_35": fmt(row["EU_35"]),
+                "EU_FR": fmt(row["EU_FR"]),
             }
 
         result.append(dict)
@@ -174,29 +174,29 @@ def get_kpi(distance: int, passengers: int):
 
     if is_scenario1:
         return {
-            "number": data_filtered["number"],
-            "number_percentage": 100 * data_filtered["number"] / data["number"],
+            "number": fmt(data_filtered["number"]),
+            "number_percentage": pfmt(data_filtered["number"] / data["number"]),
             "flown": data_filtered["flown"],
-            "flown_percentage": 100 * data_filtered["flown"] / data["flown"],
-            "IT_19": data_filtered["IT_19"],
-            "IT_LF": data_filtered["IT_LF"],
-            "EU_19": data_filtered["EU_19"],
-            "EU_LF": data_filtered["EU_LF"],
+            "flown_percentage": pfmt(data_filtered["flown"] / data["flown"]),
+            "IT_19": fmt(data_filtered["IT_19"] / 1000),
+            "IT_LF": fmt(data_filtered["IT_LF"] / 1000),
+            "EU_19": fmt(data_filtered["EU_19"] / 1000),
+            "EU_LF": fmt(data_filtered["EU_LF"] / 1000),
             "EU_35": None,
             "EU_FR": None,
         }
     else:
         return {
             "number": data_filtered["number"],
-            "number_percentage": 100 * data_filtered["number"] / data["number"],
+            "number_percentage": pfmt(data_filtered["number"] / data["number"]),
             "flown": data_filtered["flown"],
-            "flown_percentage": 100 * data_filtered["flown"] / data["flown"],
+            "flown_percentage": pfmt(data_filtered["flown"] / data["flown"]),
             "IT_19": None,
             "IT_LF": None,
             "EU_19": None,
             "EU_LF": None,
-            "EU_35": data_filtered["EU_35"],
-            "EU_FR": data_filtered["EU_FR"],
+            "EU_35": fmt(data_filtered["EU_35"] / 1000),
+            "EU_FR": fmt(data_filtered["EU_FR"] / 1000),
         }
 
 

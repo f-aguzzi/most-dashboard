@@ -20,25 +20,25 @@ const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/emissions";
 
 const dummyKpi: Kpi = {
-  number: 0,
-  number_percentage: 0,
-  flown: 0,
-  flown_percentage: 0,
-  IT_19: 0,
-  IT_LF: 0,
-  EU_19: 0,
-  EU_LF: 0,
-  EU_35: 0,
-  EU_FR: 0,
+  number: "0",
+  number_percentage: "0",
+  flown: "0",
+  flown_percentage: "0",
+  IT_19: "0",
+  IT_LF: "0",
+  EU_19: "0",
+  EU_LF: "0",
+  EU_35: "0",
+  EU_FR: "0",
 };
 
 const dummyEuroKpi: EuroKpi = {
-  IT_19: [0, 0, 0],
-  IT_LF: [0, 0, 0],
-  EU_19: [0, 0, 0],
-  EU_LF: [0, 0, 0],
-  EU_35: [0, 0, 0],
-  EU_FR: [0, 0, 0],
+  IT_19: ["0", "0", "0"],
+  IT_LF: ["0", "0", "0"],
+  EU_19: ["0", "0", "0"],
+  EU_LF: ["0", "0", "0"],
+  EU_35: ["0", "0", "0"],
+  EU_FR: ["0", "0", "0"],
 };
 
 function EmissionsDashboard() {

@@ -10,12 +10,12 @@ import {
 import { useTranslation } from "react-i18next";
 
 interface EuroKpi {
-  IT_19: [number, number, number] | null;
-  IT_LF: [number, number, number] | null;
-  EU_19: [number, number, number] | null;
-  EU_LF: [number, number, number] | null;
-  EU_35: [number, number, number] | null;
-  EU_FR: [number, number, number] | null;
+  IT_19: [string, string, string] | null;
+  IT_LF: [string, string, string] | null;
+  EU_19: [string, string, string] | null;
+  EU_LF: [string, string, string] | null;
+  EU_35: [string, string, string] | null;
+  EU_FR: [string, string, string] | null;
 }
 
 interface EmissionsEuroTableProps {
@@ -27,11 +27,7 @@ interface EmissionsEuroTableProps {
 const EmissionsEuroTable = (props: EmissionsEuroTableProps) => {
   const { t } = useTranslation();
 
-  const fmt = (value: number) => {
-    return Math.round(value * 100) / 100;
-  };
-
-  const fmteur = (value: [number, number, number] | null) => {
+  const fmteur = (value: [string, string, string] | null) => {
     if (value == null)
       return (
         <>
@@ -42,9 +38,9 @@ const EmissionsEuroTable = (props: EmissionsEuroTableProps) => {
       );
     return (
       <>
-        <TableCell>{fmt(value[0])} €</TableCell>
-        <TableCell>{fmt(value[1])} €</TableCell>
-        <TableCell>{fmt(value[2])} €</TableCell>
+        <TableCell>{value[0]} €</TableCell>
+        <TableCell>{value[1]} €</TableCell>
+        <TableCell>{value[2]} €</TableCell>
       </>
     );
   };
