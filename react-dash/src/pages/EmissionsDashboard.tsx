@@ -134,11 +134,11 @@ function EmissionsDashboard() {
   };
 
   // Passengers
-  const [passengers, setPassengers] = useState([19]);
+  const [passengers, setPassengers] = useState([21]);
   const handlePassengersChange = (value: []) => {
     setPassengers(value);
   };
-  const [committedPassengers, setCommittedPassengers] = useState([19]);
+  const [committedPassengers, setCommittedPassengers] = useState([21]);
   const handleCommittedPassengers = (value: []) => {
     setCommittedPassengers(value);
   };
@@ -154,8 +154,8 @@ function EmissionsDashboard() {
     if (value === "s1") {
       setDistance([400]);
       setCommittedDistance([400]);
-      setPassengers([19]);
-      setCommittedPassengers([19]);
+      setPassengers([21]);
+      setCommittedPassengers([21]);
       setScenario("s1");
     } else if (value === "s2") {
       setDistance([800]);
@@ -173,10 +173,10 @@ function EmissionsDashboard() {
   };
 
   useEffect(() => {
-    const isScenario1 = distance[0] <= 400 && passengers[0] <= 19;
+    const isScenario1 = distance[0] <= 400 && passengers[0] <= 21;
     const isScenario2 =
       (distance[0] > 400 && distance[0] <= 800) ||
-      (passengers[0] > 19 && passengers[0] <= 90);
+      (passengers[0] > 21 && passengers[0] <= 90);
     const isScenario3 = distance[0] > 800 || passengers[0] > 90;
 
     if (isScenario1) setScenario("s1");
@@ -255,13 +255,13 @@ function EmissionsDashboard() {
               value={passengers}
               onValueChange={handlePassengersChange}
               onValueCommit={handleCommittedPassengers}
-              defaultValue={[19]}
+              defaultValue={[21]}
               min={0}
               max={100}
               step={1}
               referenceLines={[
                 {
-                  value: 19,
+                  value: 21,
                   label: "Scenario 1",
                   color: "#ff6b35",
                 },
