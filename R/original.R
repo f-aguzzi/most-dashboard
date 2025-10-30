@@ -14,17 +14,63 @@ library(MASS)
 library(haven)
 library(texreg)
 
-library(readr)
-library(readxl)
-
 
 #### Path to be changed ####
-setwd(".")
+#gianmaria
+setwd("/Users/gianmariamartini/Library/CloudStorage/GoogleDrive-gianmaria.martini@unibg.it/.shortcut-targets-by-id/189MaPO75puoUggMeS_-QqLgXh3_zZs4S/2024_ELECTRIC/4_Analysis/R/electric")
+#andrea
+#setwd("G:/Il mio Drive/PC ANDREA/UNIBG/5 - RESEARCH/Scientific Papers/0_My Papers/2 - WP/2024_ELECTRIC/4_Analysis/R/electric")
 
 # Load data ----
-mydata<- read_csv("mydata.csv")
-names(mydata)
-thetafin3<- read_xlsx("Book2.xlsx")
+mydatainit<- read_dta("dataset_electric_co2_hsr.dta")
+names(mydatainit)
+
+##### Add IDs
+#rename(mydatainit$region_city_pair,citypair)
+names(mydatainit)[names(mydatainit) == "price_economy_def"] <- "price"
+#names(mydatainit)[names(mydatainit) == "year"] <- "timeid"
+#names(mydatainit)[names(mydatainit) == "fuelcost"] <- "fuelcost_seats"
+#mydatainit$fsc=ifelse(mydatainit$lcc == 1,0,1) 
+#mydatainit$directfsc=mydatainit$direct*mydatainit$fsc
+mydatainit$MkID=as.numeric(factor(paste(mydatainit$market,mydatainit$timeid,sep="-")))
+mydatainit$FirmID=as.numeric(factor(mydatainit$opalcodeleg1))
+mydata=mydatainit[order(mydatainit$MkID,mydatainit$FirmID),]
+mydata$ID=seq(1,nrow(mydata))
+nobs=max(mydata$ID)
+
+######## Get vector that holds market-firm combination positions ########
+mydata$one<-1
+#### Nb products per market and index of the first one
+# nbprodbyMkt=c(as.vector(aggregate(list(mydata$one), by = list(mydata$MkID), sum))[,2])
+nbprodbyMkt=c(as.vector(aggregate(list(mydata$one), by = list(mydata$MkID), sum))$c)
+#cdm[i] index of the first product of Market i
+cdm=rep(0,length(nbprodbyMkt))
+cdm[1] <-1
+for(i in 2:length(nbprodbyMkt)){
+  cdm[i] <- cdm[i-1] + nbprodbyMkt[i-1] 
+}
+
+#### Nb products per market per firm and index of the first one ########
+mydata$combination=paste(mydata$MkID,mydata$FirmID,sep="-")
+matproduct=data.table(mydata %>% group_by(combination) %>% summarize(nprod = sum(one), firmshare=sum(sjm), marketmax = max(MkID), 
+                                        firm = max(FirmID)))
+matindp=matproduct[order(as.numeric(matproduct$marketmax), as.numeric(matproduct$firm)),]
+
+#startm[i] index of the first product proposed by a given firm 
+# in a given market
+startm=rep(0,nrow(matindp))
+startm[1] <-1
+for(i in 2:nrow(matindp)){
+  startm[i] <- startm[i-1] + matindp$nprod[i-1]
+}
+mydata <- merge(mydata,matindp,by="combination")
+mydata=mydata[order(as.numeric(mydata$MkID),as.numeric(mydata$FirmID)),]
+remove(matindp)
+remove(matproduct)
+
+
+#### List of variables and instruments to adapt to our case
+#### Demand Estimation ####
 
 #### Creating Dummies for city of origin and of destination
 library("fastDummies")
@@ -37,11 +83,102 @@ name_dum_year=names(dum_year[,2:ncol(dum_year)])
 dum_dep_air=dummy_cols(mydata$depairportcode,remove_first_dummy = TRUE)
 name_dum_dep_air=names(dum_dep_air[,2:ncol(dum_dep_air)])
 
+mydata$arrAOI=0
+mydata$arrAOI[mydata$arrairportcode=="AOI"]=1
+mydata$arrBDS=0
+mydata$arrBDS[mydata$arrairportcode=="BDS"]=1
+mydata$arrBGY=0
+mydata$arrBGY[mydata$arrairportcode=="BGY"]=1
+mydata$arrBLQ=0
+mydata$arrBLQ[mydata$arrairportcode=="BLQ"]=1
+mydata$arrBRI=0
+mydata$arrBRI[mydata$arrairportcode=="BRI"]=1
+mydata$arrBZO=0
+mydata$arrBZO[mydata$arrairportcode=="BZO"]=1
+mydata$arrCAG=0
+mydata$arrCAG[mydata$arrairportcode=="CAG"]=1
+mydata$arrCIA=0
+mydata$arrCIA[mydata$arrairportcode=="CIA"]=1
+mydata$arrCIY=0
+mydata$arrCIY[mydata$arrairportcode=="CIY"]=1
+mydata$arrCRV=0
+mydata$arrCRV[mydata$arrairportcode=="CRV"]=1
+mydata$arrCTA=0
+mydata$arrCTA[mydata$arrairportcode=="CTA"]=1
+mydata$arrCUF=0
+mydata$arrCUF[mydata$arrairportcode=="CUF"]=1
+mydata$arrEBA=0
+mydata$arrEBA[mydata$arrairportcode=="EBA"]=1
+mydata$arrFCO=0
+mydata$arrFCO[mydata$arrairportcode=="FCO"]=1
+mydata$arrFLR=0
+mydata$arrFLR[mydata$arrairportcode=="FLR"]=1
+mydata$arrFRL=0
+mydata$arrFRL[mydata$arrairportcode=="FRL"]=1
+mydata$arrGOA=0
+mydata$arrGOA[mydata$arrairportcode=="GOA"]=1
+mydata$arrLIN=0
+mydata$arrLIN[mydata$arrairportcode=="LIN"]=1
+mydata$arrLMP=0
+mydata$arrLMP[mydata$arrairportcode=="LMP"]=1
+mydata$arrMXP=0
+mydata$arrMXP[mydata$arrairportcode=="MXP"]=1
+mydata$arrNAP=0
+mydata$arrNAP[mydata$arrairportcode=="NAP"]=1
+mydata$arrOLB=0
+mydata$arrOLB[mydata$arrairportcode=="OLB"]=1
+mydata$arrPEG=0
+mydata$arrPEG[mydata$arrairportcode=="PEG"]=1
+mydata$arrPMF=0
+mydata$arrPMF[mydata$arrairportcode=="PMF"]=1
+mydata$arrPMO=0
+mydata$arrPMO[mydata$arrairportcode=="PMO"]=1
+mydata$arrPNL=0
+mydata$arrPNL[mydata$arrairportcode=="PNL"]=1
+mydata$arrPSA=0
+mydata$arrPSA[mydata$arrairportcode=="PSA"]=1
+mydata$arrPSR=0
+mydata$arrPSR[mydata$arrairportcode=="PSR"]=1
+mydata$arrREG=0
+mydata$arrREG[mydata$arrairportcode=="REG"]=1
+mydata$arrRMI=0
+mydata$arrRMI[mydata$arrairportcode=="RMI"]=1
+mydata$arrSUF=0
+mydata$arrSUF[mydata$arrairportcode=="SUF"]=1
+mydata$arrTPS=0
+mydata$arrTPS[mydata$arrairportcode=="TPS"]=1
+mydata$arrTRN=0
+mydata$arrTRN[mydata$arrairportcode=="TRN"]=1
+mydata$arrTRS=0
+mydata$arrTRS[mydata$arrairportcode=="TRS"]=1
+mydata$arrTSF=0
+mydata$arrTSF[mydata$arrairportcode=="TSF"]=1
+mydata$arrVBS=0
+mydata$arrVBS[mydata$arrairportcode=="VBS"]=1
+mydata$arrVCE=0
+mydata$arrVCE[mydata$arrairportcode=="VCE"]=1
+mydata$arrVRN=0
+mydata$arrVRN[mydata$arrairportcode=="VRN"]=1
 
-#### Exogeneous variables ########
+# dum_arr_air=dummy_cols(mydata$arrairportcode,remove_first_dummy = TRUE)
+# name_dum_arr_air=names(dum_arr_air[,2:ncol(dum_arr_air)])
+mydata=cbind(mydata,dum_airline[,2:ncol(dum_airline)],dum_month[,2:ncol(dum_month)],
+             dum_year[,2:ncol(dum_year)],dum_dep_air[,2:ncol(dum_dep_air)])
+remove(dum_airline)
+remove(dum_month)
+remove(dum_year)
+remove(dum_dep_air)
+#remove(dum_arr_air)
+remove(mydatainit)
+
+#### Instruments, endog and exog. variables
+
 list_instr_demand=c("fuelcost_seat", "comp_products","compdirect_products")
 list_endog_demand=c("price", "log_sjconditionalm")
 
+#name_dum_airline,
+
+#### Exogeneous variables ########
 list_control_variables=c("direct","dist_od","co2seat_wavg_od","hsr","lcc",
              name_dum_month,name_dum_year,name_dum_dep_air,"arrAOI","arrBDS",
                "arrBGY","arrBLQ","arrBRI","arrBZO","arrCAG","arrCIA",
@@ -50,7 +187,114 @@ list_control_variables=c("direct","dist_od","co2seat_wavg_od","hsr","lcc",
                        "arrNAP","arrOLB","arrPEG","arrPMF","arrPMO","arrPNL",
                        "arrPSA","arrPSR","arrREG","arrRMI","arrSUF","arrTPS",
                        "arrTRN","arrTRS","arrTSF","arrVBS","arrVCE","arrVRN")
+# list_control_variables=c("direct","dist_od",name_dum_airline,name_dum_month,
+#                         name_dum_year,name_dum_dep_air)
 
+##### 2SLS ######
+lhs <- "log_ratio_sjms0m"
+ivs <- paste(c(list_instr_demand,list_control_variables), collapse = " + ")
+demand_vars <- paste(c(list_endog_demand,list_control_variables), collapse = " + ")
+
+formula <- as.formula(paste(paste(lhs, demand_vars, sep = " ~ "), ivs, sep = " | "))
+nliv <- ivreg(formula, data = mydata)
+
+summary(nliv, diagnostics=TRUE)
+nliv2<-vcovHC(nliv,type="HC1")
+coeftest(nliv,vcov=nliv2)
+# summary(nliv, vcov = sandwich, diagnostics = TRUE)
+# library(stargazer)
+# stargazer(summary(nliv, vcov = sandwich, diagnostics = TRUE))
+
+######################
+####### first stage regressions
+first_stage_models <- list()
+
+for (var in list_endog_demand) {
+  # Estrazione formula primo stadio
+  first_stage_formula <- as.formula(paste(var, "~", ivs))
+  
+  # Stima il primo stadio
+  first_stage_models[[var]] <- lm(first_stage_formula, data = mydata)
+  
+  # Sommario delle stime
+  print(summary(first_stage_models[[var]]))
+}
+
+
+# Lista per salvare i risultati del primo stadio
+first_stage_models <- list()
+
+# Ciclo su ciascuna variabile endogena
+for (var in list_endog_demand) {
+  # Crea la formula del primo stadio
+  first_stage_formula <- as.formula(paste(var, "~", ivs))
+  
+  # Stima il modello di primo stadio
+  first_stage_models[[var]] <- lm(first_stage_formula, data = mydata)
+  
+  # Stampa un messaggio chiaro per identificare il modello
+  cat("\n=== Primo stadio per variabile endogena:", var, "===\n")
+  print(summary(first_stage_models[[var]]))
+}
+
+theta0d=nliv$coefficients
+
+##### Some outcomes ########
+lambda=1-nliv$coefficients[3]
+alpha=-nliv$coefficients[2]
+markup<--(lambda)/(-alpha*(1-(1-lambda)*mydata$firmsharenest-(lambda)*mydata$firmshareobs))
+mydata$markup<-markup
+mydata$mc=(mydata$price-markup)
+summary(mydata$mc)
+summary(markup)
+tapply(mydata$mc,mydata$lcc,mean)
+tapply(mydata$mc,mydata$direct,mean)
+tapply(markup,mydata$lcc,mean)
+tapply(markup,mydata$direct,mean)
+
+
+#### Price elasticities
+## own price 
+own_price_elas=-(alpha/lambda)*(mydata$price)*(1-((1-lambda)*mydata$sjconditionalm)-(lambda*mydata$sjm))
+mean(own_price_elas)
+summary(own_price_elas)
+sd(own_price_elas)
+
+## codes for cross
+mydata2<-mydata
+names(mydata2)<-paste0(names(mydata2),"_")
+mydata2$MkID<-mydata2$MkID_
+mydata2$MkID_<-NULL
+datacross<-merge(mydata2,mydata,by="MkID")
+nrow(datacross[datacross$MkID==1,c("arrcitycode","arrcitycode_")])
+cross_elasticity=(alpha/lambda)*((datacross$sjm*datacross$price)/datacross$sjm_)*(((1-lambda)*datacross$sjconditionalm_)+lambda*datacross$sjm_)
+cross_elasticity[datacross$product_==0]=((alpha*datacross$sjm*datacross$price))
+cross_elasticity<-as.data.frame(cross_elasticity)
+cross_elasticity$MkID<-datacross$MkID
+cross_elasticity$product<-datacross$product
+cross_elasticity$product_<-datacross$product_
+
+crosselameanmk<-with(cross_elasticity, aggregate(list(cross_elasticity), by=list(MkID), FUN=mean))
+names(crosselameanmk)[1] <- "Market"
+names(crosselameanmk)[2]<-"Crossela"
+summary(crosselameanmk$Crossela)
+sd(crosselameanmk$Crossela)
+
+# ho due scelte: 1) in questo dataset nel cross elas metto anche le own 2) non le metto
+
+######## Supply estimates ########
+lhs <- "mc"
+# mydata$gatewayhub_fsc<-mydata$gatewayhub*mydata$fsc
+# list_variables_supply=c("direct","fuelcost_seat",name_dum_airline,name_dum_month,
+   #                     name_dum_year,name_dum_dep_air,"arrAOI","arrBDS",
+  #                      "arrBGY","arrBLQ","arrBRI","arrBZO","arrCAG","arrCIA",
+  #                      "arrCIY","arrCRV","arrCTA","arrCUF","arrEBA","arrFCO",
+  #                      "arrFLR","arrFRL","arrGOA","arrLIN","arrLMP","arrMXP",
+  #                      "arrNAP","arrOLB","arrPEG","arrPMF","arrPMO","arrPNL",
+  #                      "arrPSA","arrPSR","arrREG","arrRMI","arrSUF","arrTPS",
+  #                      "arrTRN","arrTRS","arrTSF","arrVBS","arrVCE","arrVRN")
+# list_variables_supply=c("direct","fuelcost_seat",name_dum_airline,name_dum_month,
+      #                  name_dum_year)
 list_variables_supply=c("direct","fuelcost_seat",name_dum_airline,
                         name_dum_year,name_dum_dep_air,"arrAOI","arrBDS",
                         "arrBGY","arrBLQ","arrBRI","arrBZO","arrCAG","arrCIA",
@@ -59,25 +303,259 @@ list_variables_supply=c("direct","fuelcost_seat",name_dum_airline,
                         "arrNAP","arrOLB","arrPEG","arrPMF","arrPMO","arrPNL",
                         "arrPSA","arrPSR","arrREG","arrRMI","arrSUF","arrTPS",
                         "arrTRN","arrTRS","arrTSF","arrVBS","arrVCE","arrVRN")
+formula <- as.formula(paste(lhs, paste(list_variables_supply, collapse = " + "), sep = " ~ "))
+supply_est<-lm(formula,data=mydata)
+summary(supply_est)
+
+supply_est2<-vcovHC(supply_est,type="HC1")
+coeftest(supply_est,vcov=supply_est2)
+
+theta0s=supply_est$coefficients
+theta0=c(theta0d,theta0s)
+
+# exporting estimates in latex (da controllare e finire)
+texreg(list(nliv,supply_est), file = "structural_results_25_10_24.tex",
+       caption = "Econometric estimates from structural model",
+       custom.model.names = c("Demand", "Supply"),
+       digits = 4, stars = c(0.01,0.05,0.1))
+
+################################################################################
+################### GMM estimation ####################
+################################################################################
+
+#### GMM function #####
+#### Add 1 for the constant term in the FOC
+nd=length(c(list_endog_demand,list_control_variables))+1
+ns=length(list_variables_supply)+1
+
+################################################################################
+mean_moment<-function(theta){
+  theta_d=theta[1:nd]
+  theta_s=theta[(nd+1):(nd+ns)]
+  
+  #### Demand equations
+  mat_d=as.matrix(cbind(1,mydata[c(list_endog_demand,list_control_variables)]))
+  xi=mydata$log_ratio_sjms0m-mat_d%*%theta_d
+  Z_d=as.matrix(cbind(1,mydata[c(list_instr_demand,list_control_variables)]))
+  xi_d=matrix(xi,nrow=nobs,ncol=ncol(Z_d))
+  mean_d=apply(Z_d*xi_d,2,mean)
+  
+  
+  ### Supply side, only alpha and lambda matter
+  lambdaloc=1-theta_d[3]
+  alphaloc=-theta_d[2]
+  #markuploc=-lambdaloc/alphaloc/((1-lambdaloc)*mydata$firmsharenest/(1-mydata$s0m)+lambdaloc*mydata$marketshare_firm_obs-1)
+  markuploc=-(lambdaloc)/(-alphaloc*(1-(1-lambdaloc)*mydata$firmsharenest-lambdaloc*mydata$firmshareobs))
+  mc=(mydata$price-markuploc)
+  mat_s=as.matrix(cbind(1,mydata[list_variables_supply]))
+  psi=mc-mat_s%*%theta_s
+  Z_s=mat_s
+  psi_s=matrix(psi,nrow=nrow(Z_s),ncol=ncol(Z_s))
+  mean_s=apply(Z_s*psi_s,2,mean)
+  
+  #### Mean_moment ###
+  m=as.vector(c(mean_d,mean_s))
+  return(m)
+}
+################################################################################
+varmom<-function(theta){
+  theta_d=theta[1:nd]
+  theta_s=theta[(nd+1):(nd+ns)]
+  
+  #### Demand equations
+  mat_d=as.matrix(cbind(1,mydata[c(list_endog_demand,list_control_variables)]))
+  xi=mydata$log_ratio_sjms0m-mat_d%*%theta_d
+  Z_d=as.matrix(cbind(1,mydata[c(list_instr_demand,list_control_variables)]))
+  xi_d=matrix(xi,nrow=nobs,ncol=ncol(Z_d))
+  momd=Z_d*xi_d
+  
+  ### Supply side, only alpha and lambda matter
+  lambdaloc=1-theta_d[3]
+  alphaloc=-theta_d[2]
+  #markuploc=-lambdaloc/alphaloc/((1-lambdaloc)*mydata$marketshare_firm_nest/(1-mydata$s0m)+lambdaloc*mydata$marketshare_firm_obs-1)
+  markuploc=-(lambdaloc)/(-alphaloc*(1-(1-lambdaloc)*mydata$firmsharenest-lambdaloc*mydata$firmshareobs))
+  mc=(mydata$price-markuploc)
+  mat_s=as.matrix(cbind(1,mydata[list_variables_supply]))
+  psi=mc-mat_s%*%theta_s
+  Z_s=mat_s
+  psi_s=matrix(psi,nrow=nrow(Z_s),ncol=ncol(Z_s))
+  moms=Z_s*psi_s
+  
+  ####M(X_i,\theta) ### nobs x (nd+ns)
+  mom=cbind(momd,moms)
+  
+  ### Estimated var 
+  mombar=apply(mom,2,mean)
+  estvar=(t(mom)%*%mom)/nobs-mombar%*%t(mombar)
+  return(estvar)
+}
+################################################################################
+meandmdtheta<-function(theta){
+  theta_d=theta[1:nd]
+  theta_s=theta[(nd+1):(nd+ns)]
+  #### First derivative with respect to the coefficients beta (excluding alpha and lambda)
+  mat_d=as.matrix(cbind(1,mydata[c(list_endog_demand,list_control_variables)]))
+  Z_d=as.matrix(cbind(1,mydata[c(list_instr_demand,list_control_variables)]))
+  ### Supply side
+  mat_s=as.matrix(cbind(1,mydata[list_variables_supply]))
+  Z_s=mat_s
+  ###### matm0 is the matrix
+  matm0=matrix(0,nrow=ncol(Z_d)+ncol(Z_s),ncol=nd+ns)
+  matm0[1:ncol(Z_d),1:nd]=-(t(Z_d)%*%mat_d)/nobs
+  matm0[(ncol(Z_d)+1):(ncol(Z_d)+ncol(Z_s)),(nd+1):(nd+ns)]=-(t(Z_s)%*%Z_s)/nobs
+  ###Specific formula for dmdalpha and dmdlambda
+  lambdaloc=1-theta_d[3]
+  alphaloc=-theta_d[2]
+  #markuploc=as.vector(-lambdaloc/alphaloc/((1-lambdaloc)*mydata$marketshare_firm_nest/(1-mydata$s0m)+lambdaloc*mydata$marketshare_firm_obs-1))
+  markuploc=as.vector(-(lambdaloc)/(-alphaloc*(1-(1-lambdaloc)*mydata$firmsharenest-lambdaloc*mydata$firmshareobs)))
+  #dmdalpha for the last rows
+  matm0[(ncol(Z_d)+1):(ncol(Z_d)+ncol(Z_s)),2]=(-1/alphaloc)*(t(Z_s)%*%markuploc)/nobs
+  #dmdlambda for the last rows
+  #Dm=as.vector(1/((1-lambdaloc)*mydata$firmshare/(1-mydata$s0m)+lambdaloc*mydata$firmshare-1))
+  Dm=as.vector(1/(1-(1-lambdaloc)*mydata$firmsharenest-lambdaloc*mydata$firmshareobs))
+  #dermkupdl=markuploc/lambdaloc+(mydata$firmshare*mydata$s0m*markuploc*Dm)/(1-mydata$s0m)
+  dermkupdl=(markuploc/lambdaloc)-markuploc*(mydata$firmsharenest-mydata$firmshareobs)*Dm
+  matm0[(ncol(Z_d)+1):(ncol(Z_d)+ncol(Z_s)),3]=(t(Z_s)%*%dermkupdl)/nobs
+  return(matm0)
+}
+################################################################################
+###### GMM with identity weighting matrix
+GMM1<-function(theta){
+  m=mean_moment(theta)
+  gtheta=t(m)%*%m
+  return(gtheta)
+}
+################################################################################
+#### Initial value for GMM and bounds for optim
+theta.init=theta0
+nparam=length(theta.init)
+lb0=rep(-Inf,nparam)
+ub0=rep(+Inf,nparam)
+ub0[2]=-1e-5
+lb0[3]=1e-10
+ub0[3]=1-1e-10  
+
+######### Basic GMM #########
+Estim_NL_ID <- nloptr(x0 = theta.init,
+                   eval_f = GMM1,
+                   eval_grad_f = NULL,
+                   lb=lb0,
+                   ub=ub0,
+                   opts = list("algorithm"="NLOPT_LN_BOBYQA",
+                               ftol_rel = 1.e-7, ftol_abs = 1.e-9, 
+                               xtol_rel = 1.e-7, xtol_abs = 0, 
+                               maxeval = 100000, "print_level"=2)
+                   )
+GMM1(theta.init)
+thetafin=Estim_NL_ID$solution
+GMM1(thetafin)
 
 
+##### Standard errors
+W=diag(length(c(list_instr_demand,list_control_variables))+1+ns)
+Gm=meandmdtheta(thetafin)
+
+Varm=varmom(thetafin)
+Mat1=spdinv(t(Gm)%*%W%*%Gm)
+
+Variance_thetafin=(Mat1%*%t(Gm)%*%W%*%Varm%*%W%*%Gm%*%Mat1)/nobs
+cbind(theta.init,thetafin,sqrt(diag(Variance_thetafin)))
+
+######### Optimal two step GMM #########
+#theta.init2=thetafin
+#epsilon<-0.0001
+#W2=spdinv(Varm)
+#W2=spdinv(Varm+epsilon*diag(220))
+
+#GMM2<-function(theta){
+#  m=mean_moment(theta)
+#  gtheta=t(m)%*%W2%*%m
+#  return(gtheta)
+#}
+
+#Estim_2SGMM <- nloptr(x0 = theta.init2,
+#                      eval_f = GMM2,
+#                      eval_grad_f = NULL,
+#                      lb=lb0,
+#                      ub=ub0,
+#                      opts = list("algorithm"="NLOPT_LN_BOBYQA",
+#                                  ftol_rel = 1.e-7, ftol_abs = 1.e-9, 
+#                                  xtol_rel = 1.e-7, xtol_abs = 0, 
+#                                  maxeval = 1, "print_level"=2)
+#)
+#GMM2(theta.init2)
+#thetafin2=Estim_2SGMM$solution
+#GMM2(thetafin2)
+
+
+##### Standard errors
+#Gm2=meandmdtheta(thetafin2)
+#Mat2=spdinv(t(Gm2)%*%W2%*%Gm2)
+#Variance_thetafin2=Mat2/nobs
+
+#cbind(theta.init,thetafin,sqrt(diag(Variance_thetafin)),thetafin2,sqrt(diag(Variance_thetafin2)))
+
+######### Optimal two step GMM + regularisation  #########
+theta.init3=thetafin
+W3=spdinv(Varm+0.01*diag(length(c(list_instr_demand,list_control_variables))+1+ns))
+
+GMM3<-function(theta){
+  m=mean_moment(theta)
+  gtheta=t(m)%*%W3%*%m
+  return(gtheta)
+}
+
+Estim_2SGMMR <- nloptr(x0 = theta.init3,
+                      eval_f = GMM3,
+                      eval_grad_f = NULL,
+                      lb=lb0,
+                      ub=ub0,
+                      opts = list("algorithm"="NLOPT_LN_BOBYQA",
+                                  ftol_rel = 1.e-7, ftol_abs = 1.e-9, 
+                                  xtol_rel = 1.e-7, xtol_abs = 0, 
+                                  maxeval = 100000, "print_level"=2)
+)
+GMM3(theta.init3)
+thetafin3=Estim_2SGMMR$solution
+GMM3(thetafin3)
+
+
+##### Standard errors
+Gm3=meandmdtheta(thetafin3)
+Mat3=spdinv(t(Gm3)%*%W3%*%Gm3)
+Varm3=varmom(thetafin3)
+
+Variance_thetafin3=(Mat3%*%t(Gm3)%*%W3%*%Varm3%*%W3%*%Gm3%*%Mat3)/nobs
+
+#modelfirst<-summary(nliv)
+#sterrornliv<-modelfirst$coefficients[,"Std. Error"]
+#toto1=summary(nliv, vcov = nliv2, diagnostics = TRUE)
+
+nomicoef<-c("const",list_endog_demand,list_control_variables,"const",list_variables_supply)
+names(thetafin3)<-nomicoef
+
+#matoutput=cbind(theta.init,thetafin,thetafin2,thetafin3,sqrt(diag(Variance_thetafin3)),sqrt(diag(Variance_thetafin2)),sqrt(diag(Variance_thetafin)),sqrt(c(diag(toto1$vcov),diag(vcov(supply_est)))))
+#colnames(matoutput)=c("Theta.2steps", "Theta.GMM_Id","Theta.2SGMM","Theta.2SGMMR","Std.2SGMMR","Std.2SGMM","Std.GMM_Id","Std_2steps")
+matoutput=cbind(theta.init,thetafin,thetafin3,sqrt(diag(Variance_thetafin3)),sqrt(diag(Variance_thetafin)))
+colnames(matoutput)=c("Theta_sep","Theta_GMM","Theta_2SGMMR","Std.2SGMMR","Std.GMM_Id")
+#matoutput=cbind(theta.init,thetafin,thetafin2,thetafin3,sqrt(diag(Variance_thetafin3)),sqrt(diag(Variance_thetafin2)),sqrt(diag(Variance_thetafin)),c(sterrornliv,sqrt(diag(vcov(supply_est)))))
+#colnames(matoutput)=c("Theta.2steps","Theta.GMM_Id","Theta.2SGMM","Theta.2SGMMR","Std.2SGMMR","Std.2SGMM","Std.GMM_Id","Std_2steps")
+
+write.csv(matoutput,"Demand_and_supply_estimates_GMM_08_nov_2024.csv")
+write.csv(matoutput,"Demand_and_supply_estimates_GMM_11_dic_2024.csv") 
 ############################################################
 ############### Counterfactual ###############
 ############################################################
 ############### We decrease/increase marginal costs of airlines adopting electric
 # aircraft under different scenarios, and we fix in any case their CO2
 # equal to 0 in the demand model
-theta0 = t(thetafin3)
-theta0 = theta0[2,]
-theta0 = as.numeric(theta0)
-
-nd=102
-ns=103
-#ns=length(list_variables_supply)+1
-theta_d=theta0[1:nd] # ATTENZIONE
-theta_d <- as.numeric(theta_d)
-theta_s=theta0[(nd+2):(nd+ns)]
-theta_s <- as.numeric(theta_s)
+theta0=thetafin3
+nd=length(c(list_endog_demand,list_control_variables))+1
+ns=length(list_variables_supply)+1
+theta_d=theta0[1:nd]
+#theta_d=theta0d
+theta_s=theta0[(nd+1):(nd+ns)]
+#theta_s=theta0s
 lambda=1-theta_d[3]
 alpha=-theta_d[2]
 poll=theta_d[6]
@@ -100,7 +578,6 @@ counterfactual <-function(j, mcchange){
   lcc<-mydataloc$lcc
   #### Demand equations
   mat_d=as.matrix(cbind(1,mydataloc[c(list_endog_demand,list_control_variables)]))
-
   oldxi=mydataloc$log_ratio_sjms0m-mat_d%*%theta_d
   olddelta=mat_d%*%theta_d+oldxi-theta_d[3]*mydataloc$log_sjconditionalm
   ### New marginal cost
@@ -117,7 +594,6 @@ counterfactual <-function(j, mcchange){
   diff=1
   cpt=1
   tol=1e-2
-
   while (diff>tol){
     #### New marketshare
     newdelta=olddelta+alpha*oldprice-alpha*newprice-poll*oldco2+poll*newco2
@@ -126,11 +602,10 @@ counterfactual <-function(j, mcchange){
     newsjg=expdj/newdeno
     news0=1/(1+newdeno^lambda)
     newsj=newsjg*(1-news0)
-
     #### New markup ####
     matsk=t(matrix(c(newsj),nrow=nloc,ncol=nloc))
     dsdp=-(alpha/lambda*matsk*(diag(1,nloc)-matrix(c((1-lambda)*newsjg+lambda*newsj),nrow=nloc,ncol=nloc)))
-    # dsdp=-(alpha/lambda)*matsk*(diag(1,nloc)*(1-matrix(c((1-lambda)*newsjg+lambda*newsj),nrow=nloc,ncol=nloc)))
+#    dsdp=-(alpha/lambda)*matsk*(diag(1,nloc)*(1-matrix(c((1-lambda)*newsjg+lambda*newsj),nrow=nloc,ncol=nloc)))
     indexloc=mydataloc$FirmID
     mat1=matrix(indexloc,nrow=nloc,ncol=nloc)
     ownership=(mat1==t(mat1))*1
@@ -157,15 +632,15 @@ counterfactual <-function(j, mcchange){
   deltaprofit=newprofit-oldprofit
   #totaloldprof<-sum(oldprofit)
   #totalnewprof<-sum(newprofit)
-
+  
   #totaldeltaprof<-sum(deltaprofit)
   #totaldeltaprof<-totaldeltaprof
   deltacs=(mydataloc$price-newprice)*paxeconomy+(mydataloc$price-newprice)*newsj*popdep/2
-
+  
   #totaldeltacs<-sum(deltacs)
   #dati_counter$totaldeltacs<-totaldeltacs
   deltawelfare<-deltacs+deltaprofit
-
+  
   #totaldeltawelfare<-sum(deltawelfare)
   #dati_counter$totaldeltawelfare<-totaldeltawelfare
   #passthrough=Deltaprice/Deltamc
@@ -175,9 +650,9 @@ counterfactual <-function(j, mcchange){
   #DeltapaxFSC=newnbpaxFSC-oldnbpaxFSC
   #ret1 is the original returned result
   #ret1<-c(j,oldnbpaxLCC,newnbpaxLCC,DeltapaxLCC,oldnbpaxFSC,newnbpaxFSC,DeltapaxFSC,DeltapriceLCC,DeltapriceFSC)
-
-  ret2<-data.frame(newprice=newprice, oldprice=mydataloc$price,newmc=newmc,
-                   oldmc=oldmc, oldsj=oldsj, newsj=newsj, newsjg=newsjg,
+  
+  ret2<-data.frame(newprice=newprice, oldprice=mydataloc$price,newmc=newmc, 
+                   oldmc=oldmc, oldsj=oldsj, newsj=newsj, newsjg=newsjg, 
                    newmkup=mkuploc, newpax=newpax,paxeconomy=paxeconomy,
                    popdep=popdep,lcc=lcc, Deltaprice=Deltaprice,
                    Deltamc=Deltamc,innov=innov, oldprofit=oldprofit,
@@ -193,7 +668,7 @@ counterfactual <-function(j, mcchange){
 
 ##### Loop on mcchange
 # mcvalues for the loop on mc changes
-mcvalues<-seq(0.01,0.1, by=0.1)
+mcvalues<-seq(0.01,0.1, by=0.01)
 mcvalues <- mcvalues[mcvalues != 0]  # Escludi il valore 0
 # Initialize storage for results
 all_market_results <- list()
@@ -211,16 +686,16 @@ for (mcchange in mcvalues) {
   # Convert result to a data frame to allow adding new columns
     result <- as.data.frame(result)
   # Accumulate deltaprofit, deltacs and deltawelfare across markets for this mcchange
-    totaldeltaprof <- totaldeltaprof + sum(result[["deltaprofit"]],na.rm = TRUE)
-    totaldeltacs <- totaldeltacs + sum(result[["deltacs"]],na.rm = TRUE)
-    totaldeltawelfare <- totaldeltawelfare + sum(result[["deltawelfare"]],na.rm = TRUE)
+    totaldeltaprof <- totaldeltaprof + sum(result[["deltaprofit"]],na.rm = TRUE)  
+    totaldeltacs <- totaldeltacs + sum(result[["deltacs"]],na.rm = TRUE)  
+    totaldeltawelfare <- totaldeltawelfare + sum(result[["deltawelfare"]],na.rm = TRUE)  
   # Add mcchange and market index j to each result
     result$mcchange <- mcchange
     result$j <- j
   # Save each market result in the list with a unique keys
-    all_market_results[[paste0("mcchange_", mcchange, "_j_", j)]] <- result
+    all_market_results[[paste0("mcchange_", mcchange, "_j_", j)]] <- result  
   }
-  # After processing all markets, we now add totaldeltaprof, totaldeltacs
+  # After processing all markets, we now add totaldeltaprof, totaldeltacs 
   # and totaldeltawelfare to all results for this mcchange
   for (j in 1:maxmarket) {
     # Retrieve the result for this mcchange and market j
@@ -233,11 +708,11 @@ for (mcchange in mcvalues) {
     # Update the result in the list
     all_market_results[[result_key]] <- result
   }
-}
+}  
 
 # Combine all results into a single data frame
   all_results_df <- do.call(rbind, all_market_results)
-
+  
 # Convert to a matrix if needed
 all_results_matrix <- as.matrix(all_results_df)
 
@@ -261,39 +736,43 @@ all_results_df <- read.csv("all_results_matrix_800.csv")
 ####### only in the markets where innov==1
 
 # Inizializza un data frame per salvare i risultati medi e passth
-average_results <- data.frame(mcchange = numeric(),
-                              mean_deltaprice = numeric(),
+average_results <- data.frame(mcchange = numeric(), 
+                              mean_deltaprice = numeric(), 
                               mean_deltamc = numeric(),
                               passth = numeric())
 
 # Ciclo sui valori di mcchange
 # Scenario 400
 # mcvalues for the loop on mc changes
-mcvalues<-seq(-0.1,0.1, by=0.01)
+mcvalues<-seq(0.01,0.1, by=0.01)
 mcvalues <- mcvalues[mcvalues != 0]  # Escludi il valore 0
 
-
+# Scenario 800
+# mcvalues for the loop on mc changes
+# mcvalues for the loop on mc changes
+mcvalues<-seq(-0.1,0.1, by=0.01)
+mcvalues <- mcvalues[mcvalues != 0]  # Escludi il valore 0
 
 for (mcchange in mcvalues) {
   # Estrai tutti i risultati per l'attuale mcchange
   results_for_mcchange <- do.call(rbind, lapply(all_market_results, function(x) {
     if (x$mcchange[1] == mcchange) return(as.data.frame(x))
   }))
-
+  
   # Filtra i mercati con innov == 1
   results_with_innov <- subset(results_for_mcchange, innov == 1)
-
+  
   # Calcola la media di Deltaprice e Deltamc
   mean_deltaprice <- mean(results_with_innov$Deltaprice, na.rm = TRUE)
   mean_deltamc <- mean(results_with_innov$Deltamc, na.rm = TRUE)
-
+  
   # Calcola passth come rapporto tra mean_deltaprice e mean_deltamc
   passth <- ifelse(mean_deltamc != 0, mean_deltaprice / mean_deltamc, NA)
-
+  
   # Aggiungi i risultati al data frame
-  average_results <- rbind(average_results,
-                           data.frame(mcchange = mcchange,
-                                      mean_deltaprice = mean_deltaprice,
+  average_results <- rbind(average_results, 
+                           data.frame(mcchange = mcchange, 
+                                      mean_deltaprice = mean_deltaprice, 
                                       mean_deltamc = mean_deltamc,
                                       passth = passth))
 }
@@ -302,7 +781,7 @@ for (mcchange in mcvalues) {
 print(average_results)
 
 ########################
-############ Conta quante sono le innovazioni e
+############ Conta quante sono le innovazioni e 
 ############ quante LCC fanno le innovazioni (basta un valore di mcchange)
 # Scenario 400
 # Filtra i dati per mcchange == 0.01
@@ -326,8 +805,8 @@ cat("Innovations by LCCs:", lcc_innovations, "\n")
 ############# calcolo il delta profitti di chi innova
 # Inizializza un data frame per salvare i risultati medi e la somma
 average_and_sum_deltaprofit <- data.frame(
-  mcchange = numeric(),
-  mean_deltaprofit = numeric(),
+  mcchange = numeric(), 
+  mean_deltaprofit = numeric(), 
   sum_deltaprofit = numeric(),
   mean_deltaprofitlcc = numeric(),
   sum_deltaprofitlcc = numeric(),
@@ -339,24 +818,24 @@ average_and_sum_deltaprofit <- data.frame(
 for (mcchange_value in mcvalues) {
   # Filtra i dati per mcchange corrente e innov == 1
   filtered_data <- subset(all_results_df, mcchange == mcchange_value & innov == 1)
-
+  
   # Calcola le medie e le somme di deltaprofit per innov == 1
   mean_deltaprofit <- mean(filtered_data$deltaprofit, na.rm = TRUE)
   sum_deltaprofit <- sum(filtered_data$deltaprofit, na.rm = TRUE)
-
+  
   # Filtra ulteriormente per LCC (lcc == 1)
   filtered_lcc <- subset(filtered_data, lcc == 1)
   mean_deltaprofitlcc <- mean(filtered_lcc$deltaprofit, na.rm = TRUE)
   sum_deltaprofitlcc <- sum(filtered_lcc$deltaprofit, na.rm = TRUE)
-
+  
   # Filtra ulteriormente per FSC (lcc == 0)
   filtered_fsc <- subset(filtered_data, lcc == 0)
   mean_deltaprofitfsc <- mean(filtered_fsc$deltaprofit, na.rm = TRUE)
   sum_deltaprofitfsc <- sum(filtered_fsc$deltaprofit, na.rm = TRUE)
-
+  
   # Aggiungi i risultati al data frame
-  average_and_sum_deltaprofit <- rbind(average_and_sum_deltaprofit,
-                                       data.frame(mcchange = mcchange_value,
+  average_and_sum_deltaprofit <- rbind(average_and_sum_deltaprofit, 
+                                       data.frame(mcchange = mcchange_value, 
                                                   mean_deltaprofit = mean_deltaprofit,
                                                   sum_deltaprofit = sum_deltaprofit,
                                                   mean_deltaprofitlcc = mean_deltaprofitlcc,
@@ -455,7 +934,7 @@ profits_plots<-grid.arrange(plot_mean_profit, plot_sum_profit,
 
 # Specify the file path
 # Scenario 400
-output_path <- "./profits_plots_400.jpeg"
+output_path <- "/Users/gianmariamartini/Library/CloudStorage/Dropbox/Ricerca/settore_aereo/electric/graphs/profits_plots_400.jpeg"
 
 # Save the combined plot
 ggsave(
@@ -467,7 +946,7 @@ ggsave(
 )
 
 # Scenario 800
-output_path <- "./profits_plots.jpeg"
+output_path <- "/Users/gianmariamartini/Library/CloudStorage/Dropbox/Ricerca/settore_aereo/electric/graphs/profits_plots.jpeg"
 
 # Save the combined plot
 ggsave(
@@ -652,3 +1131,4 @@ ggsave(
   units = "in", # Units can be "in", "cm", or "mm"
   dpi = 300     # Adjust DPI for high-quality image
 )
+

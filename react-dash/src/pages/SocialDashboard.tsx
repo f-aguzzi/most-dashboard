@@ -111,7 +111,7 @@ function SocialDashboard() {
               defaultValue={[400]}
               min={400}
               max={800}
-              step={100}
+              step={10}
             />
             <Typography version="p" className="p-8 m-4 w-4 text-center">
               {distance}
@@ -131,7 +131,7 @@ function SocialDashboard() {
               defaultValue={[20]}
               min={20}
               max={90}
-              step={10}
+              step={5}
             ></Slider>
             <Typography version="p" className="p-8 m-4 w-4 text-center">
               {passengers}

@@ -36,7 +36,6 @@ dum_dep_air=dummy_cols(mydata$depairportcode,remove_first_dummy = TRUE)
 name_dum_dep_air=names(dum_dep_air[,2:ncol(dum_dep_air)])
 
 #### Exogeneous variables ########
-list_instr_demand=c("fuelcost_seat", "comp_products","compdirect_products")
 list_endog_demand=c("price", "log_sjconditionalm")
 
 list_control_variables=c("direct","dist_od","co2seat_wavg_od","hsr","lcc",
@@ -77,25 +76,30 @@ seats<-mydata$fuelcost/mydata$fuelcost_seat
 mydata$seats<-seats
 maxmarket=max(mydata$MkID)
 
-##### Pre-compute market-level data (only once)
+##### Pre-compute only truly invariant market-level data
 market_data <- lapply(1:maxmarket, function(j) {
   mydataloc <- mydata[mydata$MkID==j,]
+  nloc <- nrow(mydataloc)
+
+  # Only pre-compute things that NEVER change across parameter combinations
   mat_d <- as.matrix(cbind(1, mydataloc[c(list_endog_demand, list_control_variables)]))
   oldxi <- mydataloc$log_ratio_sjms0m - mat_d %*% theta_d
-  olddelta <- mat_d %*% theta_d + oldxi - theta_d[3] * mydataloc$log_sjconditionalm
+
+  # Compute base delta (without the conditional term that varies)
+  base_delta <- mat_d %*% theta_d + oldxi
+
   markuploc <- -(lambda) / (-alpha * (1 - (1-lambda) * mydataloc$firmsharenest - lambda * mydataloc$firmshareobs))
   oldmc <- mydataloc$price - markuploc
 
   list(
     mydataloc = mydataloc,
-    nloc = nrow(mydataloc),
+    nloc = nloc,
     oldprice = mydataloc$price,
     oldsj = mydataloc$sjm,
     paxeconomy = mydataloc$pax_economy,
     popdep = mydataloc$pop_dep,
-    mat_d = mat_d,
-    oldxi = oldxi,
-    olddelta = olddelta,
+    base_delta = base_delta,
+    log_sjconditionalm = mydataloc$log_sjconditionalm,
     oldmc = oldmc,
     dist_od = mydataloc$dist_od,
     seats = mydataloc$seats,
@@ -119,11 +123,13 @@ counterfactual <- function(market_info, mcchange, dist_threshold, seat_threshold
     return(list(deltaprofit = 0, deltacs = 0, deltawelfare = 0))
   }
 
+  # Compute olddelta exactly as in original
+  olddelta <- market_info$base_delta - theta_d[3] * market_info$log_sjconditionalm
+
   oldmc <- market_info$oldmc
   newmc <- as.numeric(ifelse(oldmc >= 0, oldmc - mcchange * oldmc * innov, oldmc + mcchange * oldmc * innov))
   newco2 <- as.numeric(market_info$oldco2 * (1 - innov))
   oldprice <- market_info$oldprice
-  olddelta <- market_info$olddelta
 
   #### New price
   newprice <- oldprice + newmc - oldmc
@@ -175,8 +181,8 @@ counterfactual <- function(market_info, mcchange, dist_threshold, seat_threshold
 ##### Define grid of parameters
 mcvalues <- seq(-0.1, 0.1, by=0.01)
 mcvalues <- mcvalues[mcvalues != 0]  # Exclude 0
-dist_values <- seq(400, 800, by=100)  # Distance thresholds
-seat_values <- seq(20, 90, by=10)     # Seat thresholds
+dist_values <- seq(400, 800, by=10)  # Distance thresholds
+seat_values <- seq(20, 90, by=5)     # Seat thresholds
 
 # Create grid of all combinations
 param_grid <- expand.grid(mcchange = mcvalues,
@@ -204,9 +210,9 @@ for (i in 1:nrow(param_grid)) {
   seat_val <- param_grid$seat_threshold[i]
 
   # Progress indicator
-  #if (i %% 50 == 0) {
+  if (i %% 50 == 0) {
     cat("Processing combination", i, "of", total_combinations, "\n")
-    #}
+  }
 
   # Initialize totals for this parameter combination
   totaldeltaprof <- 0
