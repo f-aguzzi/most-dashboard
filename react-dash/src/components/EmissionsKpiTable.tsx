@@ -62,7 +62,7 @@ const EmissionsKpiTable = (props: EmissionsKpiTableProps) => {
             </TableRow>
             <TableRow>
               <TableCell>{t("emissions.savings")} (IT LF)</TableCell>
-              <TableCell>{props.kpi.IT_19} ton</TableCell>
+              <TableCell>{props.kpi.IT_LF} ton</TableCell>
               <TableCell> </TableCell>
             </TableRow>
             <TableRow>
