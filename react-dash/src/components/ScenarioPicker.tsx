@@ -16,6 +16,11 @@ interface ScenarioPickerProps {
 }
 
 export function ScenarioPicker(props: ScenarioPickerProps) {
+  const handleItemClick = (value: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    props.handler(value);
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col my-4">
@@ -28,9 +33,15 @@ export function ScenarioPicker(props: ScenarioPickerProps) {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Scenario</SelectLabel>
-            <SelectItem value="s1">Scenario 1</SelectItem>
-            <SelectItem value="s2">Scenario 2</SelectItem>
-            <SelectItem value="s3">Scenario 3</SelectItem>
+            <SelectItem value="s1" onMouseDown={handleItemClick("s1")}>
+              Scenario 1
+            </SelectItem>
+            <SelectItem value="s2" onMouseDown={handleItemClick("s2")}>
+              Scenario 2
+            </SelectItem>
+            <SelectItem value="s3" onMouseDown={handleItemClick("s3")}>
+              Scenario 3
+            </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
