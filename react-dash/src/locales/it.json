@@ -119,10 +119,7 @@
       "emissions": "Impatto a livello italiano",
       "social": "Impatto economico sociale"
     },
-    "evolution": {
-      "title": "Evoluzione del settore",
-      "demand": "Domanda di trasporto aereo per passeggeri e merci in Italia"
-    },
+    "evolution": "Evoluzione del settore",
     "cargo": "Utilizzo di droni cargo",
     "biometric": "Riconoscimento facciale"
   }

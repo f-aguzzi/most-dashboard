@@ -119,10 +119,7 @@
       "emissions": "Impact at the Italian level",
       "social": "Socio-economic impact"
     },
-    "evolution": {
-      "title": "Industry evolution",
-      "demand": "Air Transportation Demand for Passengers and Freight in Italy"
-    },
+    "evolution": "Industry evolution",
     "cargo": "Introduction of cargo drones",
     "biometric": "Facial recognition"
   }
