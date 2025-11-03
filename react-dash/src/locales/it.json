@@ -103,7 +103,12 @@
     }
   },
   "demand": {
-    "title": "Domanda per voli Passeggeri e Merci in Italia"
+    "title": "Domanda per voli Passeggeri e Merci in Italia",
+    "timeframe": {
+      "title": "Risoluzione temporale",
+      "monthly": "Mensile",
+      "yearly": "Annuale"
+    }
   },
   "captions": {
     "electric": "Questa sezione della dashboard offre una panoramica sugli impatti potenziali dell’impiego di aeromobili elettrici. Selezionando parametri tecnici come il range operativo e la capacità passeggeri, è possibile analizzare le rotte intra-europee e italiane che potrebbero essere operate da questi velivoli. La dashboard fornisce una serie di KPI riguardanti il numero di voli interessati, il risparmio di carburante, la riduzione delle emissioni e gli effetti sui costi operativi, accompagnati da una visualizzazione delle rotte potenzialmente sostituibili.",
