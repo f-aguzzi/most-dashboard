@@ -3,8 +3,33 @@ import TimeFrameSelector from "@/components/TimeFrameSelector";
 import { Label } from "@/components/ui/label";
 import { Typography } from "@/components/ui/typography";
 import { Timer } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { type MonthlyData, type YearlyData } from "@/components/DemandGraph";
+
+const url = import.meta.env.VITE_URL;
+const apiUrl = url + "/demand";
+
+const dummyMonthData: MonthlyData = {
+  date: "",
+  data: 0,
+  predicted: 0,
+  forecasted: 0,
+  eighty_lower: 0,
+  eighty_upper: 0,
+  ninetyfive_lower: 0,
+  ninetyfive_upper: 0,
+};
+
+const dummyYearlyData: YearlyData = {
+  date: "",
+  data: 0,
+  forecasted: 0,
+  eighty_upper: 0,
+  eighty_lower: 0,
+  ninetyfive_upper: 0,
+  ninetyfive_lower: 0,
+};
 
 function DemandDashboard() {
   const { t } = useTranslation();
@@ -14,6 +39,62 @@ function DemandDashboard() {
   const handleTime = (value: string) => {
     setTime(value);
   };
+
+  const [passengerMonthly, setPassengerMonthly] = useState<[MonthlyData]>([
+    dummyMonthData,
+  ]);
+  const [passengerYearly, setPassengerYearly] = useState<[YearlyData]>([
+    dummyYearlyData,
+  ]);
+  const [freightMonthly, setFreightMonthly] = useState<[MonthlyData]>([
+    dummyMonthData,
+  ]);
+  const [freightYearly, setFreightYearly] = useState<[YearlyData]>([
+    dummyYearlyData,
+  ]);
+
+  async function fetchData<T>(
+    endpoint: "passenger" | "freight",
+    timeframe: "monthly" | "yearly",
+  ) {
+    try {
+      const response = await fetch(
+        `${apiUrl}/${endpoint}?timeframe=${timeframe}`,
+      );
+      if (!response.ok) throw new Error("Failed to fetch data");
+      return response.json();
+    } catch {
+      if (timeframe === "monthly") return [dummyMonthData];
+      else return [dummyYearlyData];
+    }
+  }
+
+  const fetchPassengerMonthly = async () => {
+    const result = await fetchData<MonthlyData>("passenger", "monthly");
+    setPassengerMonthly(result);
+  };
+
+  const fetchPassengerYearly = async () => {
+    const result = await fetchData<MonthlyData>("passenger", "yearly");
+    setPassengerYearly(result);
+  };
+
+  const fetchFreightMonthly = async () => {
+    const result = await fetchData<MonthlyData>("freight", "monthly");
+    setFreightMonthly(result);
+  };
+
+  const fetchFreightYearly = async () => {
+    const result = await fetchData<MonthlyData>("freight", "yearly");
+    setFreightYearly(result);
+  };
+
+  useEffect(() => {
+    fetchPassengerMonthly();
+    fetchPassengerYearly();
+    fetchFreightMonthly();
+    fetchFreightYearly();
+  }, []);
 
   return (
     <div className="h-max">
@@ -29,7 +110,13 @@ function DemandDashboard() {
         </div>
         <TimeFrameSelector className="py-4" handler={handleTime} />
       </div>
-      <DemandGraph mode={time} />
+      <DemandGraph
+        mode={time}
+        passengerYearly={passengerYearly}
+        passengerMonthly={passengerMonthly}
+        freightYearly={freightYearly}
+        freightMonthly={freightMonthly}
+      />
     </div>
   );
 }

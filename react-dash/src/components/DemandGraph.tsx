@@ -22,12 +22,10 @@ interface YearlyData {
 }
 
 interface DemandGraphProps {
-  /*
   passengerMonthly: [MonthlyData];
   passengerYearly: [YearlyData];
   freightMonthly: [MonthlyData];
   freightYearly: [YearlyData];
-  */
   mode: string;
 }
 
