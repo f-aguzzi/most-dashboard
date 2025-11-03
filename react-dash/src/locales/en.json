@@ -103,14 +103,14 @@
     }
   },
   "demand": {
-    "title": "Demand for Passengers and Freight in Italy"
+    "title": "Demand for Passengers and Freight flights in Italy"
   },
   "captions": {
     "electric": "This section of the dashboard provides an overview of the potential impact of employing electric aricraft. By selecting technical parameters such as operating range and seat capacity, it's possible to analyze inter-European and Italian domestic routes that could be operated with such aircraft. The dashboard offers several KPIs regarding the overall number of affected flights, fuel savings, emission reduction and the effect on operating costs, accompanied by the display of potentially replaceable routes.",
     "emissions": "This section of the dashboard provides an overview of Italian domestic routes that, varying on the technical specifications of aircraft such as operating range and seat capacity, could be operated by electric aircraft. Three scenarios are displayed, each based on a type of aircraft currently being developed: Scenario 1 – Heart Aerospace ES-19; Scenario 2 – Elysian E9X; Scenario 3 – Wright Project.",
     "biometric": "This section of the dashboard allows to estimate the potential use of facial recognition technology in airport processes. Starting from several parameters from the traditional process, such as airfare, wait times at security checks and at the gate, the modality of acquisition of biometric data (at home or at the airport) and the processing time with facial recognition, the chart displays the adoption rate for the service as a function of the biometrical airport process relative to the baseline (Δ%). The results are divided by business passengers, leisure passengers and the overall population.",
     "social": "Insert caption.",
-    "demand": "Insert caption."
+    "demand": "A preliminary step to WP6 activities concerned the forecasting of air transport evolution in a time period marked by high uncertainty, due both to the recovery phase that followed the COVID-19 pandemic and to vicissitudes tied to both the ongoing conflicts. This section of the dashboard displays the results of forecast models for passenger and freight traffic, referring to the Italian airport system. The passenger traffic forecasts were obtained from an integrated model for demand estimation, which allows to consider both demand generation and its allocation on different itineraries. The model, fine-tuned on historical data, allowed the production of forward-looking estimates based on the evolution of air networks and on macroeconomic trends. The freight traffic estimation model is instead based on historical series analysis, using macroeconomic forecasts as additional inputs."
   },
   "navbar": {
     "electric": {
