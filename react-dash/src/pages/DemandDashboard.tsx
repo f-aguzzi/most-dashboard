@@ -1,3 +1,4 @@
+import DemandGraph from "@/components/DemandGraph";
 import TimeFrameSelector from "@/components/TimeFrameSelector";
 import { Label } from "@/components/ui/label";
 import { Typography } from "@/components/ui/typography";
@@ -8,7 +9,7 @@ import { useTranslation } from "react-i18next";
 function DemandDashboard() {
   const { t } = useTranslation();
 
-  const [time, setTime] = useState();
+  const [time, setTime] = useState("monthly");
 
   const handleTime = (value: string) => {
     setTime(value);
@@ -28,9 +29,7 @@ function DemandDashboard() {
         </div>
         <TimeFrameSelector className="py-4" handler={handleTime} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
-        CONTENT
-      </div>
+      <DemandGraph mode={time} />
     </div>
   );
 }
