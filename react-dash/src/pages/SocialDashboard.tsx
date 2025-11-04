@@ -53,7 +53,7 @@ function SocialDashboard() {
     const params = new URLSearchParams({
       distance: committedDistance.toString(),
       seats: committedPassengers.toString(),
-      mc: committedMc.toString(),
+      mc: (-committedMc).toString(),
     });
 
     interface Result {
