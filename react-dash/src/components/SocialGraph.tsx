@@ -34,6 +34,28 @@ function SocialGraph(props: SocialGraphProps) {
     },
   ];
 
+  const formatNumber = (num: number) => {
+    const parts = num.toFixed(2).split(".");
+    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "˙");
+    return `${integerPart},${parts[1]} €`;
+  };
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-background border border-border rounded-lg shadow-lg p-3">
+          <p className="font-semibold text-foreground mb-1">
+            {payload[0].payload.name}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {formatNumber(payload[0].value)}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Card className="w-full mx-auto max-w-2xl bg-background text-foreground">
       <CardHeader>
@@ -45,7 +67,7 @@ function SocialGraph(props: SocialGraphProps) {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis width={80} />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="value" fill="#ff6b35" />
           </BarChart>
         </ResponsiveContainer>
