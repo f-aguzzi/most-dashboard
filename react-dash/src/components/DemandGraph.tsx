@@ -1,3 +1,4 @@
+import MonthlyGraph from "./MonthlyGraph";
 import { Typography } from "./ui/typography";
 
 interface MonthlyData {
@@ -27,14 +28,21 @@ interface DemandGraphProps {
   freightMonthly: [MonthlyData];
   freightYearly: [YearlyData];
   mode: string;
+  darkmode: boolean;
 }
 
 const DemandGraph = (props: DemandGraphProps) => {
   if (props.mode === "monthly")
     return (
-      <div className="columns-2">
-        <Typography version="h3">Passenger Monthly</Typography>
-        <Typography version="h3">Freight Monthly</Typography>
+      <div className="grid grid-cols-2 gap-x-8">
+        <div className="grid grid-cols-1 gap-y-4">
+          <Typography version="h3">Passenger Monthly</Typography>
+          <MonthlyGraph data={props.passengerMonthly} mode={props.darkmode} />
+        </div>
+        <div className="grid grid-cols-1 gap-y-4">
+          <Typography version="h3">Freight Monthly</Typography>
+          <MonthlyGraph data={props.freightMonthly} mode={props.darkmode} />
+        </div>
       </div>
     );
   else

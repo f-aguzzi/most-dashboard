@@ -18,7 +18,8 @@ function App() {
     else if (page === "emissions-dashboard") return <EmissionsDashboard />;
     else if (page === "biometric") return <BiometricDashboard />;
     else if (page === "social") return <SocialDashboard />;
-    else if (page === "demand-dashboard") return <DemandDashboard />;
+    else if (page === "demand-dashboard")
+      return <DemandDashboard darkMode={nightMode} />;
     else
       return (
         <>

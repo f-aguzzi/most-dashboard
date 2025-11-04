@@ -31,7 +31,11 @@ const dummyYearlyData: YearlyData = {
   ninetyfive_lower: 0,
 };
 
-function DemandDashboard() {
+interface DemandDashboardProps {
+  darkMode: boolean;
+}
+
+function DemandDashboard(props: DemandDashboardProps) {
   const { t } = useTranslation();
 
   const [time, setTime] = useState("monthly");
@@ -112,6 +116,7 @@ function DemandDashboard() {
       </div>
       <DemandGraph
         mode={time}
+        darkmode={props.darkMode}
         passengerYearly={passengerYearly}
         passengerMonthly={passengerMonthly}
         freightYearly={freightYearly}
