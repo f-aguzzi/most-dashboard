@@ -29,13 +29,16 @@ interface MonthlyGraphProps {
 
 const MonthlyGraph = (props: MonthlyGraphProps) => {
   const [foreground, setForeground] = useState("#222222");
+  const [accent, setAccent] = useState("#000000");
 
   useEffect(() => {
     console.log(props.mode);
     if (props.mode) {
       setForeground("#dddddd");
+      setAccent("#ffffff");
     } else {
       setForeground("#222222");
+      setAccent("#000000");
     }
   }, [props.mode]);
 
@@ -117,14 +120,14 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-background dark:bg-accent">
       <CardHeader>
         <CardTitle>Monthly Number of Passengers</CardTitle>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-foreground">
           (Black Points, in Millions), Fitted and Forecasted Values up to
           December 2035
         </p>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-foreground">
           Point Estimate in Blue, 80% Confidence Interval in Pink, 95%
           Confidence Interval in Grey
         </p>
@@ -135,13 +138,19 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
             data={chartData}
             margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-            <XAxis dataKey="date" tickFormatter={formatXAxis} stroke="#666" />
+            <CartesianGrid strokeDasharray="2 2" stroke={foreground} />
+            <XAxis
+              dataKey="date"
+              tickFormatter={formatXAxis}
+              stroke="#666"
+              color={foreground}
+            />
             <YAxis
               label={{
                 value: "Number of passengers",
                 angle: -90,
                 position: "insideLeft",
+                fill: foreground,
               }}
               stroke="#666"
             />
@@ -153,7 +162,7 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
               dataKey="ci95_range"
               stroke="none"
               fill="#d0d0d0"
-              fillOpacity={0.3}
+              fillOpacity={0.5}
             />
 
             {/* 80% Confidence Interval */}
@@ -162,7 +171,7 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
               dataKey="ci80_range"
               stroke="none"
               fill="#ffc0cb"
-              fillOpacity={0.4}
+              fillOpacity={0.5}
             />
 
             {/* Actual Data Line */}
@@ -170,8 +179,8 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
               type="monotone"
               dataKey="data"
               stroke={foreground}
-              strokeWidth={2}
-              dot={{ fill: foreground, r: 3 }}
+              strokeWidth={1}
+              dot={{ fill: accent, r: 2 }}
               connectNulls={false}
             />
 
@@ -180,8 +189,8 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
               type="monotone"
               dataKey="forecasted"
               stroke="#3b82f6"
-              strokeWidth={2}
-              dot={{ fill: "#3b82f6", r: 3 }}
+              strokeWidth={1}
+              dot={{ fill: "#3b82f6", r: 2 }}
               connectNulls={false}
             />
           </ComposedChart>
