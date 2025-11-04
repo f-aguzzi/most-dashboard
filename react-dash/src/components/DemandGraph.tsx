@@ -47,3 +47,5 @@ const DemandGraph = (props: DemandGraphProps) => {
 };
 
 export default DemandGraph;
+
+export { type MonthlyData, type YearlyData };

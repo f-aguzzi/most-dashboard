@@ -53,7 +53,7 @@ function DemandDashboard() {
     dummyYearlyData,
   ]);
 
-  async function fetchData<T>(
+  async function fetchData(
     endpoint: "passenger" | "freight",
     timeframe: "monthly" | "yearly",
   ) {
@@ -70,22 +70,22 @@ function DemandDashboard() {
   }
 
   const fetchPassengerMonthly = async () => {
-    const result = await fetchData<MonthlyData>("passenger", "monthly");
+    const result = await fetchData("passenger", "monthly");
     setPassengerMonthly(result);
   };
 
   const fetchPassengerYearly = async () => {
-    const result = await fetchData<MonthlyData>("passenger", "yearly");
+    const result = await fetchData("passenger", "yearly");
     setPassengerYearly(result);
   };
 
   const fetchFreightMonthly = async () => {
-    const result = await fetchData<MonthlyData>("freight", "monthly");
+    const result = await fetchData("freight", "monthly");
     setFreightMonthly(result);
   };
 
   const fetchFreightYearly = async () => {
-    const result = await fetchData<MonthlyData>("freight", "yearly");
+    const result = await fetchData("freight", "yearly");
     setFreightYearly(result);
   };
 
