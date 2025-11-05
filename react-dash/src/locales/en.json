@@ -123,7 +123,19 @@
     }
   },
   "drone": {
-    "title": "Introduction of cargo drones"
+    "title": "Introduction of cargo drones",
+    "model": {
+      "title": "Model",
+      "m1": "Maximization of total transported freight",
+      "m2": "Maximization of the number of substituted ground transport routes",
+      "m3": "Minimization of CO2 emissions"
+    },
+    "display": {
+      "title": "Display (map)",
+      "flights": "Number of flights",
+      "freight": "Freight amount (kg)"
+    },
+    "number": "Amount of drones (map)"
   },
   "captions": {
     "electric": "This section of the dashboard provides an overview of the potential impact of employing electric aricraft. By selecting technical parameters such as operating range and seat capacity, it's possible to analyze inter-European and Italian domestic routes that could be operated with such aircraft. The dashboard offers several KPIs regarding the overall number of affected flights, fuel savings, emission reduction and the effect on operating costs, accompanied by the display of potentially replaceable routes.",

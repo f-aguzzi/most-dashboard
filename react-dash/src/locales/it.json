@@ -123,7 +123,19 @@
     }
   },
   "drone": {
-    "title": "Utilizzo di droni cargo"
+    "title": "Utilizzo di droni cargo",
+    "model": {
+      "title": "Modello",
+      "m1": "Massimizzazione della merce trasportata",
+      "m2": "Massimizzazione del numero di movimenti via terra sostituiti",
+      "m3": "Minimizzazione delle emissioni di CO2"
+    },
+    "display": {
+      "title": "Visualizzazione (mappa)",
+      "flights": "Numero di voli",
+      "freight": "Merce trasportata (kg)"
+    },
+    "number": "Numero di droni (mappa)"
   },
   "captions": {
     "electric": "Questa sezione della dashboard offre una panoramica sugli impatti potenziali dell’impiego di aeromobili elettrici. Selezionando parametri tecnici come il range operativo e la capacità passeggeri, è possibile analizzare le rotte intra-europee e italiane che potrebbero essere operate da questi velivoli. La dashboard fornisce una serie di KPI riguardanti il numero di voli interessati, il risparmio di carburante, la riduzione delle emissioni e gli effetti sui costi operativi, accompagnati da una visualizzazione delle rotte potenzialmente sostituibili.",
