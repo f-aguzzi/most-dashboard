@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Line,
   Area,
@@ -10,35 +10,51 @@ import {
   ComposedChart,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface MonthlyData {
-  date: string;
-  data: number | null;
-  predicted: number | null;
-  forecasted: number | null;
-  eighty_lower: number | null;
-  eighty_upper: number | null;
-  ninetyfive_lower: number | null;
-  ninetyfive_upper: number | null;
-}
+import { type MonthlyData } from "./DemandGraph";
 
 interface MonthlyGraphProps {
   mode: boolean;
   data: [MonthlyData];
+  title: string;
+  description: string;
+  legend: string;
 }
 
+interface Colors {
+  foreground: string;
+  accent: string;
+  muted: string;
+  eighty: string;
+  ninetyfive: string;
+  predicted: string;
+}
+
+const defaultColors: Colors = {
+  foreground: "#222222",
+  accent: "#000000",
+  muted: "#C2C2C2",
+  eighty: "#FF64F7",
+  ninetyfive: "#818181",
+  predicted: "#3B6CCD",
+};
+
 const MonthlyGraph = (props: MonthlyGraphProps) => {
-  const [foreground, setForeground] = useState("#222222");
-  const [accent, setAccent] = useState("#000000");
+  const [color, setColor] = useState(defaultColors);
 
   useEffect(() => {
     console.log(props.mode);
     if (props.mode) {
-      setForeground("#dddddd");
-      setAccent("#ffffff");
+      const cols: Colors = {
+        foreground: "#dddddd",
+        accent: "#ffffff",
+        muted: "#545454FF",
+        eighty: "#FF64F7",
+        ninetyfive: "#D8D8D8",
+        predicted: "#44BEFA",
+      };
+      setColor(cols);
     } else {
-      setForeground("#222222");
-      setAccent("#000000");
+      setColor(defaultColors);
     }
   }, [props.mode]);
 
@@ -58,9 +74,16 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
   const formatXAxis = (dateStr: string) => {
     const year = dateStr.split("-")[0];
     const month = dateStr.split("-")[1];
-    if (month === "01") return `${year} Jan`;
-    return "";
+    if (month === "01") return year;
+    return "-";
   };
+
+  const yearTicks = props.data
+    .filter((d) => {
+      const month = d.date.split("-")[1];
+      if (month === "01") return true;
+    })
+    .map((d) => d.date);
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (!active || !payload || !payload.length) {
@@ -72,11 +95,11 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
       if (!data) return null;
 
       return (
-        <div className="bg-white p-3 border border-gray-300 rounded shadow-lg">
-          <p className="font-semibold">{data.date}</p>
+        <div className="bg-muted border border-muted-foreground rounded shadow-lg p-2">
+          <p className="font-semibold text-foreground">{data.date}</p>
           {data.data !== null && data.data !== undefined && (
             <p className="text-sm">
-              <span className="text-black">Data: </span>
+              <span className="text-foreground">Data: </span>
               <span className="font-medium">
                 {Number(data.data).toFixed(1)}
               </span>
@@ -86,14 +109,14 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
             <>
               <p className="text-sm">
                 <span className="text-blue-600">Forecast: </span>
-                <span className="font-medium">
+                <span className="font-medium text-foreground">
                   {Number(data.forecasted).toFixed(1)}
                 </span>
               </p>
               {data.eighty_lower !== null && data.eighty_upper !== null && (
                 <p className="text-sm">
                   <span className="text-pink-400">80% CI: </span>
-                  <span className="font-medium">
+                  <span className="font-medium text-foreground">
                     [{Number(data.eighty_lower).toFixed(1)},{" "}
                     {Number(data.eighty_upper).toFixed(1)}]
                   </span>
@@ -102,8 +125,8 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
               {data.ninetyfive_lower !== null &&
                 data.ninetyfive_upper !== null && (
                   <p className="text-sm">
-                    <span className="text-gray-400">95% CI: </span>
-                    <span className="font-medium">
+                    <span className="text-muted-foreground">95% CI: </span>
+                    <span className="font-medium text-foreground">
                       [{Number(data.ninetyfive_lower).toFixed(1)},{" "}
                       {Number(data.ninetyfive_upper).toFixed(1)}]
                     </span>
@@ -122,35 +145,31 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
   return (
     <Card className="w-full bg-background dark:bg-accent">
       <CardHeader>
-        <CardTitle>Monthly Number of Passengers</CardTitle>
-        <p className="text-sm text-foreground">
-          (Black Points, in Millions), Fitted and Forecasted Values up to
-          December 2035
-        </p>
-        <p className="text-xs text-foreground">
-          Point Estimate in Blue, 80% Confidence Interval in Pink, 95%
-          Confidence Interval in Grey
-        </p>
+        <CardTitle>{props.title}</CardTitle>
+        <p className="text-sm text-foreground">{props.description}</p>
+        <p className="text-xs text-foreground">{props.legend}</p>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>
           <ComposedChart
             data={chartData}
-            margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+            margin={{ top: 5, right: 30, left: 15, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="2 2" stroke={foreground} />
+            <CartesianGrid strokeDasharray="3 3" stroke={color.muted} />
             <XAxis
               dataKey="date"
+              ticks={yearTicks}
               tickFormatter={formatXAxis}
-              stroke="#666"
-              color={foreground}
+              stroke={color.muted}
+              color={color.muted}
             />
             <YAxis
               label={{
                 value: "Number of passengers",
                 angle: -90,
                 position: "insideLeft",
-                fill: foreground,
+                fill: color.foreground,
+                offset: -3,
               }}
               stroke="#666"
             />
@@ -161,7 +180,7 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
               type="monotone"
               dataKey="ci95_range"
               stroke="none"
-              fill="#d0d0d0"
+              fill={color.ninetyfive}
               fillOpacity={0.5}
             />
 
@@ -170,7 +189,7 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
               type="monotone"
               dataKey="ci80_range"
               stroke="none"
-              fill="#ffc0cb"
+              fill={color.eighty}
               fillOpacity={0.5}
             />
 
@@ -178,9 +197,9 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
             <Line
               type="monotone"
               dataKey="data"
-              stroke={foreground}
+              stroke={color.foreground}
               strokeWidth={1}
-              dot={{ fill: accent, r: 2 }}
+              dot={{ fill: color.accent, r: 2 }}
               connectNulls={false}
             />
 
@@ -188,9 +207,9 @@ const MonthlyGraph = (props: MonthlyGraphProps) => {
             <Line
               type="monotone"
               dataKey="forecasted"
-              stroke="#3b82f6"
+              stroke={color.predicted}
               strokeWidth={1}
-              dot={{ fill: "#3b82f6", r: 2 }}
+              dot={{ fill: color.predicted, r: 2 }}
               connectNulls={false}
             />
           </ComposedChart>

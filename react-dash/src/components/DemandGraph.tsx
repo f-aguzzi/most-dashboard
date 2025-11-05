@@ -1,5 +1,6 @@
+import { useTranslation } from "react-i18next";
 import MonthlyGraph from "./MonthlyGraph";
-import { Typography } from "./ui/typography";
+import YearlyGraph from "./YearlyGraph";
 
 interface MonthlyData {
   date: string;
@@ -32,24 +33,52 @@ interface DemandGraphProps {
 }
 
 const DemandGraph = (props: DemandGraphProps) => {
+  const { t } = useTranslation();
+
   if (props.mode === "monthly")
     return (
       <div className="grid grid-cols-2 gap-x-8">
         <div className="grid grid-cols-1 gap-y-4">
-          <Typography version="h3">Passenger Monthly</Typography>
-          <MonthlyGraph data={props.passengerMonthly} mode={props.darkmode} />
+          <MonthlyGraph
+            data={props.passengerMonthly}
+            mode={props.darkmode}
+            title={t("demand.monthly.passenger")}
+            description={t("demand.monthly.description")}
+            legend={t("demand.monthly.legend")}
+          />
         </div>
         <div className="grid grid-cols-1 gap-y-4">
-          <Typography version="h3">Freight Monthly</Typography>
-          <MonthlyGraph data={props.freightMonthly} mode={props.darkmode} />
+          <MonthlyGraph
+            data={props.freightMonthly}
+            mode={props.darkmode}
+            title={t("demand.monthly.freight")}
+            description={t("demand.monthly.description")}
+            legend={t("demand.monthly.legend")}
+          />
         </div>
       </div>
     );
   else
     return (
-      <div className="columns-2">
-        <Typography version="h3">Passenger Yearly</Typography>
-        <Typography version="h3">Freight Yearly</Typography>
+      <div className="grid grid-cols-2 gap-x-8">
+        <div className="grid grid-cols-1 gap-y-4">
+          <YearlyGraph
+            data={props.passengerYearly}
+            mode={props.darkmode}
+            title={t("demand.yearly.passenger")}
+            description={t("demand.yearly.description")}
+            legend={t("demand.yearly.legend")}
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-y-4">
+          <YearlyGraph
+            data={props.freightYearly}
+            mode={props.darkmode}
+            title={t("demand.yearly.freight")}
+            description={t("demand.yearly.description")}
+            legend={t("demand.yearly.legend")}
+          />
+        </div>
       </div>
     );
 };

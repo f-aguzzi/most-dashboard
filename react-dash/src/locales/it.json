@@ -108,6 +108,18 @@
       "title": "Risoluzione temporale",
       "monthly": "Mensile",
       "yearly": "Annuale"
+    },
+    "monthly": {
+      "passenger": "Numero mensile di passeggeri",
+      "freight": "Carico merci mensile",
+      "description": "Valori mensili (in milioni) fino a dicembre 2024, valori smussati e previsti dal 2025 fino a dicembre 2035",
+      "legend": "Stime in blu, Intervallo di confidenza all'80% in rosa, Intervallo di confidenza al 95% in grigio"
+    },
+    "yearly": {
+      "passenger": "Numero annuale di passeggeri",
+      "freight": "Carico merci annuale",
+      "description": "Valori annuali (in milioni) fino al 2022, valori smussati e previsti fino al 2035",
+      "legend": "Stime in blu, Intervallo di confidenza all'80% in rosa, Intervallo di confidenza al 95% in grigio"
     }
   },
   "captions": {
