@@ -8,6 +8,7 @@ import EmissionsDashboard from "./pages/EmissionsDashboard";
 import BiometricDashboard from "./pages/BiometricDashboard";
 import SocialDashboard from "./pages/SocialDashboard";
 import DemandDashboard from "./pages/DemandDashboard";
+import DroneDashboard from "./pages/DroneDashboard";
 
 function App() {
   const [nightMode, setNightMode] = useState(true);
@@ -20,6 +21,7 @@ function App() {
     else if (page === "social") return <SocialDashboard />;
     else if (page === "demand-dashboard")
       return <DemandDashboard darkMode={nightMode} />;
+    else if (page === "cargo") return <DroneDashboard />;
     else
       return (
         <>
