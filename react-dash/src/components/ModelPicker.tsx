@@ -36,13 +36,13 @@ export function ModelPicker(props: ModelPickerProps) {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>{t("drone.model.title")}</SelectLabel>
-            <SelectItem value="1" onMouseDown={handleItemClick("s1")}>
+            <SelectItem value="cargo" onMouseDown={handleItemClick("s1")}>
               {t("drone.model.title")} 1
             </SelectItem>
-            <SelectItem value="2" onMouseDown={handleItemClick("s2")}>
+            <SelectItem value="movements" onMouseDown={handleItemClick("s2")}>
               {t("drone.model.title")} 2
             </SelectItem>
-            <SelectItem value="3" onMouseDown={handleItemClick("s3")}>
+            <SelectItem value="co2" onMouseDown={handleItemClick("s3")}>
               {t("drone.model.title")} 3
             </SelectItem>
           </SelectGroup>

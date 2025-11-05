@@ -1,16 +1,20 @@
 import DroneDisplaySelector from "@/components/DroneDisplaySelector";
+import DroneMap, { type Location, type PolyLine } from "@/components/DroneMap";
 import ModelPicker from "@/components/ModelPicker";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Typography } from "@/components/ui/typography";
 import { Drone, Eye } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+
+const url = import.meta.env.VITE_URL;
+const apiUrl = url + "/drone";
 
 function DroneDashboard() {
   const { t } = useTranslation();
 
-  const [model, setModel] = useState("1");
+  const [model, setModel] = useState("cargo");
   const handleModel = (value: string) => {
     setModel(value);
   };
@@ -22,6 +26,43 @@ function DroneDashboard() {
 
   const [drones, setDrones] = useState([10]);
   const [committedDrones, setCommittedDrones] = useState([10]);
+
+  const [routes, setRoutes] = useState<[PolyLine] | null | undefined>(null);
+
+  const fetchRoutes = async () => {
+    try {
+      const response = await fetch(
+        apiUrl + "/routes/?number=" + committedDrones + "&model=" + model,
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      setRoutes(result);
+    } catch {
+      setRoutes(null);
+    }
+  };
+
+  const [locations, setLocations] = useState<[Location] | null | undefined>(
+    null,
+  );
+
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch(
+        apiUrl + "/points?number=" + committedDrones + "&model=" + model,
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      setLocations(result);
+    } catch {
+      setLocations(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoutes();
+    fetchLocations();
+  }, [committedDrones, model]);
 
   return (
     <div className="h-max">
@@ -41,6 +82,7 @@ function DroneDashboard() {
             </div>
             <DroneDisplaySelector handler={handleDisplay} />
           </div>
+          {display} {committedDrones}
           {/* Slider */}
           <div>
             <div className="flex items-center gap-2">
@@ -64,7 +106,15 @@ function DroneDashboard() {
             </div>
           </div>
         </div>
-        <div className="col-span-2">Center column (2x)</div>
+        <div className="col-span-2">
+          <DroneMap
+            polylines={routes}
+            locations={locations}
+            display={display}
+            center={[44.132, 11.05]}
+            zoom={8}
+          />
+        </div>
         <div className="col-span-1">Right column</div>
       </div>
     </div>
