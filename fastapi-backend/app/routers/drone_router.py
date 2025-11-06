@@ -57,3 +57,26 @@ def get_points(number: int, model: str):
     for row in result:
         results.append({"location": [row["lat"], row["lon"]], "label": row["loc"]})
     return results
+
+
+def kpi_query(type: str):
+    if type == "diverted":
+        return pl.col("peso_diverted").alias("data").sum() / 1000
+    if type == "co2":
+        return pl.col("CO2_reduction").alias("data").sum() / 1000
+    if type == "movements":
+        return pl.col("nr_movs_replaced").alias("data").sum()
+
+
+@drone_router.get("/kpi")
+def get_diverted(model: str, type: str):
+    result = (
+        data.filter(pl.col("modello") == model)
+        .group_by(
+            [
+                pl.col("droni").alias("value"),
+            ]
+        )
+        .agg(kpi_query(type))
+    )
+    return result.sort(pl.col("value")).collect().to_dicts()

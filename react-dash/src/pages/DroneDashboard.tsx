@@ -1,4 +1,5 @@
 import DroneDisplaySelector from "@/components/DroneDisplaySelector";
+import { DroneKpiGraph, type KpiData } from "@/components/DroneKpiGraph";
 import DroneMap, { type Location, type PolyLine } from "@/components/DroneMap";
 import ModelPicker from "@/components/ModelPicker";
 import { Label } from "@/components/ui/label";
@@ -59,10 +60,60 @@ function DroneDashboard() {
     }
   };
 
+  const [diverted, setDiverted] = useState<[KpiData] | undefined>(undefined);
+  const [co2, setCo2] = useState<[KpiData] | undefined>(undefined);
+  const [movements, setMovements] = useState<[KpiData] | undefined>(undefined);
+
+  const fetchDiverted = async () => {
+    try {
+      const response = await fetch(
+        apiUrl + "/kpi?model=" + model + "&type=diverted",
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      setDiverted(result);
+    } catch {
+      setDiverted(undefined);
+    }
+  };
+
+  const fetchCo2 = async () => {
+    try {
+      const response = await fetch(
+        apiUrl + "/kpi?model=" + model + "&type=co2",
+      );
+      const result = await response.json();
+      setCo2(result);
+    } catch {
+      setCo2(undefined);
+    }
+  };
+
+  const fetchMovements = async () => {
+    try {
+      const response = await fetch(
+        apiUrl + "/kpi?model=" + model + "&type=movements",
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      setMovements(result);
+    } catch {
+      setMovements(undefined);
+    }
+  };
+
   useEffect(() => {
     fetchRoutes();
     fetchLocations();
+    fetchDiverted();
+    fetchCo2();
+    fetchMovements();
+    console.log(co2, movements, diverted);
   }, [committedDrones, model]);
+
+  const createFooter = () => {
+    return t("drone.kpi.footer.base") + t("drone.kpi.footer." + model);
+  };
 
   return (
     <div className="h-max">
@@ -115,7 +166,29 @@ function DroneDashboard() {
             zoom={8}
           />
         </div>
-        <div className="col-span-1">Right column</div>
+        <div className="col-span-1 space-y-4 px-4">
+          <DroneKpiGraph
+            chartData={diverted}
+            title={t("drone.kpi.diverted.title")}
+            footer={createFooter()}
+            x={t("drone.kpi.x")}
+            y={t("drone.kpi.diverted.y")}
+          />
+          <DroneKpiGraph
+            chartData={co2}
+            title={t("drone.kpi.co2.title")}
+            footer={createFooter()}
+            x={t("drone.kpi.x")}
+            y={t("drone.kpi.co2.y")}
+          />
+          <DroneKpiGraph
+            chartData={movements}
+            title={t("drone.kpi.movements.title")}
+            footer={createFooter()}
+            x={t("drone.kpi.x")}
+            y={t("drone.kpi.movements.y")}
+          />
+        </div>
       </div>
     </div>
   );

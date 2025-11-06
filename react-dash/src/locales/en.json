@@ -135,7 +135,28 @@
       "flights": "Number of flights",
       "freight": "Freight amount (kg)"
     },
-    "number": "Amount of drones (map)"
+    "number": "Amount of drones (map)",
+    "kpi": {
+      "footer": {
+        "base": "Referencing the model that ",
+        "cargo": "maximizes the freight amount.",
+        "co2": "minimizes the CO₂ emission.",
+        "movements": "maximizes the amount of replaced ground movements."
+      },
+      "x": "Amount of drones",
+      "diverted": {
+        "title": "Diverted freight",
+        "y": "Diverted freight (ton)"
+      },
+      "co2": {
+        "title": "CO₂ savings",
+        "y": "CO₂ savings (ton)"
+      },
+      "movements": {
+        "title": "Diverted movements",
+        "y": "Diverted ground movements"
+      }
+    }
   },
   "captions": {
     "electric": "This section of the dashboard provides an overview of the potential impact of employing electric aricraft. By selecting technical parameters such as operating range and seat capacity, it's possible to analyze inter-European and Italian domestic routes that could be operated with such aircraft. The dashboard offers several KPIs regarding the overall number of affected flights, fuel savings, emission reduction and the effect on operating costs, accompanied by the display of potentially replaceable routes.",
