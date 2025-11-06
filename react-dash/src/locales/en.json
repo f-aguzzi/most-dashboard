@@ -136,6 +136,13 @@
       "freight": "Freight amount (kg)"
     },
     "number": "Amount of drones (map)",
+    "map": {
+      "route": "Route",
+      "count": "Drones used",
+      "replaced": "Replaced ground movements",
+      "weight": "Transported mass",
+      "co2": "CO₂ saved"
+    },
     "kpi": {
       "footer": {
         "base": "Referencing the model that ",

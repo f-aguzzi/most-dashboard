@@ -22,7 +22,7 @@
       "number": "Numero di voli",
       "km": "Km volati (migliaia)",
       "fuel": "Carburante risparmiato (ton)",
-      "co2": "CO2 risparmiata (ton)",
+      "co2": "CO₂ risparmiata (ton)",
       "delta": "Delta costi operativi",
       "desc": "KPI relativi all'impiego di aeromobili elettrici."
     },
@@ -43,7 +43,7 @@
   },
   "emissions": {
     "title": "Electric Aircraft - Emissioni per scenario",
-    "savings": "Risparmio di emissioni CO2",
+    "savings": "Risparmio di emissioni CO₂",
     "frequency": "Frequenza voli",
     "kpi": "KPI relativi all'uso di aeromobili elettrici in Italia.",
     "eurokpi": {
@@ -128,7 +128,7 @@
       "title": "Modello",
       "m1": "Massimizzazione della merce trasportata",
       "m2": "Massimizzazione del numero di movimenti via terra sostituiti",
-      "m3": "Minimizzazione delle emissioni di CO2"
+      "m3": "Minimizzazione delle emissioni di CO₂"
     },
     "display": {
       "title": "Visualizzazione (mappa)",
@@ -136,6 +136,13 @@
       "freight": "Merce trasportata (kg)"
     },
     "number": "Numero di droni (mappa)",
+    "map": {
+      "route": "Rotta",
+      "count": "Droni impiegati",
+      "replaced": "Spostamenti terrestri sostituiti",
+      "weight": "Massa trasportata",
+      "co2": "CO₂ risparmiata"
+    },
     "kpi": {
       "footer": {
         "base": "In riferimento al modello di ",
@@ -149,8 +156,8 @@
         "y": "Carico evitato (ton)"
       },
       "co2": {
-        "title": "CO2 risparmiata",
-        "y": "CO2 risparmiata (ton)"
+        "title": "CO₂ risparmiata",
+        "y": "CO₂ risparmiata (ton)"
       },
       "movements": {
         "title": "Spostamenti evitati",

@@ -2,6 +2,7 @@ import DroneDisplaySelector from "@/components/DroneDisplaySelector";
 import { DroneKpiGraph, type KpiData } from "@/components/DroneKpiGraph";
 import DroneMap, { type Location, type PolyLine } from "@/components/DroneMap";
 import ModelPicker from "@/components/ModelPicker";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Typography } from "@/components/ui/typography";
@@ -122,7 +123,7 @@ function DroneDashboard() {
       </Typography>
       <Label className="mx-8">{t("captions.drone")}</Label>
       <div className="grid grid-cols-4 gap-4 p-8">
-        <div className="col-span-1 h-full space-y-8">
+        <Card className="col-span-1 h-auto space-y-8 px-6">
           {/* Scelta modello */}
           <ModelPicker handler={handleModel} value={model} />
           {/* Visualizzazione */}
@@ -133,7 +134,6 @@ function DroneDashboard() {
             </div>
             <DroneDisplaySelector handler={handleDisplay} />
           </div>
-          {display} {committedDrones}
           {/* Slider */}
           <div>
             <div className="flex items-center gap-2">
@@ -156,8 +156,8 @@ function DroneDashboard() {
               </Typography>
             </div>
           </div>
-        </div>
-        <div className="col-span-2">
+        </Card>
+        <Card className="col-span-2 px-4">
           <DroneMap
             polylines={routes}
             locations={locations}
@@ -165,8 +165,8 @@ function DroneDashboard() {
             center={[44.132, 11.05]}
             zoom={8}
           />
-        </div>
-        <div className="col-span-1 space-y-4 px-4">
+        </Card>
+        <div className="col-span-1 space-y-4">
           <DroneKpiGraph
             chartData={diverted}
             title={t("drone.kpi.diverted.title")}

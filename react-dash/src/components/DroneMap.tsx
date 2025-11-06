@@ -71,16 +71,14 @@ export default function DroneMap(props: DroneMapProps) {
                 <Popup key={index + positions.label + "label" + props.display}>
                   <b>{t("drone.map.route")}:</b> {positions.label}
                   <br />
-                  <b>{t("drone.map.number")}: </b> {positions.count}
-                  <br />
                   <b>{t("drone.map.count")}: </b> {positions.count} km
                   <br />
-                  <b>{t("electric.map.replaced")}: </b> {positions.replaced}
+                  <b>{t("drone.map.replaced")}: </b> {positions.replaced}
                   <br />
-                  <b>{t("electric.map.weight")}: </b> {positions.weight}
+                  <b>{t("drone.map.weight")}: </b> {positions.weight} kg
                   <br />
-                  <b>{t("electric.map.co2")}: </b>{" "}
-                  {Math.round(positions.co2).toLocaleString("it-IT")} ton
+                  <b>{t("drone.map.co2")}: </b>{" "}
+                  {Math.round(positions.co2).toLocaleString("it-IT")} kg
                   <br />
                 </Popup>
               </Polyline>
