@@ -37,7 +37,7 @@ const DroneKpiTable = (props: DroneKpiTableProps) => {
           <TableHead>{t("drone.table.drones")}</TableHead>
           <TableHead>ton</TableHead>
           <TableHead>%</TableHead>
-          <TableHead>nr.</TableHead>
+          <TableHead>no.</TableHead>
           <TableHead>%</TableHead>
           <TableHead>ton</TableHead>
           <TableHead>%</TableHead>

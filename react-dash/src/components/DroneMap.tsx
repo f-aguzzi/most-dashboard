@@ -71,7 +71,7 @@ export default function DroneMap(props: DroneMapProps) {
                 <Popup key={index + positions.label + "label" + props.display}>
                   <b>{t("drone.map.route")}:</b> {positions.label}
                   <br />
-                  <b>{t("drone.map.count")}: </b> {positions.count} km
+                  <b>{t("drone.map.count")}: </b> {positions.count}
                   <br />
                   <b>{t("drone.map.replaced")}: </b> {positions.replaced}
                   <br />

@@ -138,7 +138,7 @@
     "number": "Amount of drones (map)",
     "map": {
       "route": "Route",
-      "count": "Drones used",
+      "count": "Number of connections",
       "replaced": "Replaced ground movements",
       "weight": "Transported mass",
       "co2": "CO₂ saved",
@@ -170,7 +170,7 @@
       "diverted": "Freight diverted",
       "movements": "Ground movements replaced",
       "co2": "CO₂ emissions avoided",
-      "drones": "Nr. drones"
+      "drones": "No. drones"
     }
   },
   "captions": {

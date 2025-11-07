@@ -11,7 +11,7 @@ import DemandDashboard from "./pages/DemandDashboard";
 import DroneDashboard from "./pages/DroneDashboard";
 
 function App() {
-  const [nightMode, setNightMode] = useState(true);
+  const [nightMode, setNightMode] = useState(false);
   const [page, setPage] = useState("electric-dashboard");
 
   const PageMaker = () => {
