@@ -95,7 +95,7 @@ export default function DroneMap(props: DroneMapProps) {
                 position={positions.location}
               >
                 <Popup>
-                  <b>{t("electric.map.airport")}: </b>
+                  <b>{t("drone.map.label")}: </b>
                   {positions.label}
                 </Popup>
               </Marker>

@@ -141,7 +141,8 @@
       "count": "Droni impiegati",
       "replaced": "Spostamenti terrestri sostituiti",
       "weight": "Massa trasportata",
-      "co2": "CO₂ risparmiata"
+      "co2": "CO₂ risparmiata",
+      "label": "Centro"
     },
     "kpi": {
       "footer": {

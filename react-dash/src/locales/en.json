@@ -141,7 +141,8 @@
       "count": "Drones used",
       "replaced": "Replaced ground movements",
       "weight": "Transported mass",
-      "co2": "CO₂ saved"
+      "co2": "CO₂ saved",
+      "label": "Center"
     },
     "kpi": {
       "footer": {
