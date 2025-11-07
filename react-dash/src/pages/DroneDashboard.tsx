@@ -1,12 +1,14 @@
 import DroneDisplaySelector from "@/components/DroneDisplaySelector";
 import { DroneKpiGraph, type KpiData } from "@/components/DroneKpiGraph";
+import type { KpiTableData } from "@/components/DroneKpiTable";
+import DroneKpiTable from "@/components/DroneKpiTable";
 import DroneMap, { type Location, type PolyLine } from "@/components/DroneMap";
 import ModelPicker from "@/components/ModelPicker";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Typography } from "@/components/ui/typography";
-import { Drone, Eye } from "lucide-react";
+import { Drone, Eye, Key } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -103,13 +105,26 @@ function DroneDashboard() {
     }
   };
 
+  const [kpi, setKpi] = useState<[KpiTableData] | null>(null);
+
+  const fetchKpi = async () => {
+    try {
+      const response = await fetch(apiUrl + "/kpi/table?model=" + model);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      setKpi(result);
+    } catch {
+      setKpi(null);
+    }
+  };
+
   useEffect(() => {
     fetchRoutes();
     fetchLocations();
     fetchDiverted();
     fetchCo2();
     fetchMovements();
-    console.log(co2, movements, diverted);
+    fetchKpi();
   }, [committedDrones, model]);
 
   const createFooter = () => {
@@ -121,8 +136,10 @@ function DroneDashboard() {
       <Typography version="h1" className="m-8 p-8">
         {t("drone.title")}
       </Typography>
-      <Label className="mx-8">{t("captions.drone")}</Label>
-      <div className="grid grid-cols-4 gap-4 p-8">
+      <Card className="p-4 mx-4">
+        <Label>{t("captions.drone")}</Label>
+      </Card>
+      <div className="grid grid-cols-4 gap-4 p-4">
         <Card className="col-span-1 h-auto space-y-8 px-6">
           {/* Scelta modello */}
           <ModelPicker handler={handleModel} value={model} />
@@ -149,7 +166,7 @@ function DroneDashboard() {
                 defaultValue={[10]}
                 min={10}
                 max={210}
-                step={10}
+                step={20}
               ></Slider>
               <Typography version="p" className="p-8 m-4 w-4 text-center">
                 {drones}
@@ -157,16 +174,28 @@ function DroneDashboard() {
             </div>
           </div>
         </Card>
-        <Card className="col-span-2 px-4">
-          <DroneMap
-            polylines={routes}
-            locations={locations}
-            display={display}
-            center={[44.132, 11.05]}
-            zoom={8}
-          />
-        </Card>
-        <div className="col-span-1 space-y-4">
+        <div className="col-span-2 space-y-4">
+          <Card className="px-4">
+            <DroneMap
+              polylines={routes}
+              locations={locations}
+              display={display}
+              center={[44.132, 11.05]}
+              zoom={8}
+            />
+          </Card>
+          <Card>
+            <div className="flex items-center gap-2 mx-auto">
+              <Key className="h-6 w-6 text-primary" />
+              <Typography version="h4">{t("drone.table.title")}:</Typography>
+            </div>
+            <DroneKpiTable data={kpi} />
+            <Label className="text-sm text-muted-foreground mx-auto">
+              {createFooter()}
+            </Label>
+          </Card>
+        </div>
+        <div className="col-span-1 space-y-4 h-auto">
           <DroneKpiGraph
             chartData={diverted}
             title={t("drone.kpi.diverted.title")}

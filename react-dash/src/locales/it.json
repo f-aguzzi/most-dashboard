@@ -152,8 +152,8 @@
       },
       "x": "Numero di droni",
       "diverted": {
-        "title": "Carico evitato",
-        "y": "Carico evitato (ton)"
+        "title": "Carico trasferito",
+        "y": "Carico trasferito (ton)"
       },
       "co2": {
         "title": "CO₂ risparmiata",
@@ -163,6 +163,13 @@
         "title": "Spostamenti evitati",
         "y": "Spostamenti terrestri evitati"
       }
+    },
+    "table": {
+      "title": "Tabella dei KPI",
+      "diverted": "Carico trasferito",
+      "movements": "Spostamenti terrestri evitati",
+      "co2": "Emissioni di CO₂ evitate",
+      "drones": "Nr. droni"
     }
   },
   "captions": {

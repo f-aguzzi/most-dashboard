@@ -22,7 +22,7 @@
       "number": "Total flights",
       "km": "Km flown (thousands)",
       "fuel": "Fuel saved (tons)",
-      "co2": "CO2 saved (tons)",
+      "co2": "CO₂ saved (tons)",
       "delta": "Operating cost delta",
       "desc": "KPIs about the use of electric aircraft."
     },
@@ -43,7 +43,7 @@
   },
   "emissions": {
     "title": "Electric Aircraft - Emissions by scenario",
-    "savings": "CO2 emission savings",
+    "savings": "CO₂ emission savings",
     "frequency": "Flight frequency",
     "kpi": "KPIs relative to the deployment of electric aircraft in Italy.",
     "eurokpi": {
@@ -128,7 +128,7 @@
       "title": "Model",
       "m1": "Maximization of total transported freight",
       "m2": "Maximization of the number of substituted ground transport routes",
-      "m3": "Minimization of CO2 emissions"
+      "m3": "Minimization of CO₂ emissions"
     },
     "display": {
       "title": "Display (map)",
@@ -163,6 +163,13 @@
         "title": "Diverted movements",
         "y": "Diverted ground movements"
       }
+    },
+    "table": {
+      "title": "KPI Table",
+      "diverted": "Freight diverted",
+      "movements": "Ground movements replaced",
+      "co2": "CO₂ emissions avoided",
+      "drones": "Nr. drones"
     }
   },
   "captions": {

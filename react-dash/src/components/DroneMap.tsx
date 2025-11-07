@@ -44,8 +44,8 @@ export default function DroneMap(props: DroneMapProps) {
 
   const computeWeight = (positions: PolyLine) => {
     if (props.display === "flights")
-      return Math.round(Math.max(1, Math.min(positions.count * 0.1, 20)));
-    else return Math.round(Math.max(1, Math.min(positions.co2 * 0.02, 20)));
+      return Math.round(Math.max(5, Math.min(positions.count * 0.1, 20)));
+    else return Math.round(Math.max(5, Math.min(positions.co2 * 0.02, 20)));
   };
 
   return (
@@ -66,7 +66,7 @@ export default function DroneMap(props: DroneMapProps) {
                 key={index + positions.label + props.display}
                 positions={positions.route}
                 weight={computeWeight(positions)}
-                opacity={0.5}
+                opacity={0.8}
               >
                 <Popup key={index + positions.label + "label" + props.display}>
                   <b>{t("drone.map.route")}:</b> {positions.label}
@@ -85,7 +85,15 @@ export default function DroneMap(props: DroneMapProps) {
             ))}
           {props.locations &&
             props.locations.map((positions, index) => (
-              <Marker key={index} position={positions.location}>
+              <Marker
+                key={
+                  index +
+                  positions.location[0] +
+                  positions.location[1] +
+                  positions.label
+                }
+                position={positions.location}
+              >
                 <Popup>
                   <b>{t("electric.map.airport")}: </b>
                   {positions.label}
