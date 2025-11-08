@@ -131,7 +131,7 @@ function SocialDashboard() {
               defaultValue={[20]}
               min={20}
               max={90}
-              step={5}
+              step={1}
             ></Slider>
             <Typography version="p" className="p-8 m-4 w-4 text-center">
               {passengers}

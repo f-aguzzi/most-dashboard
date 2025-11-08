@@ -182,7 +182,7 @@ counterfactual <- function(market_info, mcchange, dist_threshold, seat_threshold
 mcvalues <- seq(-0.1, 0.1, by=0.01)
 mcvalues <- mcvalues[mcvalues != 0]  # Exclude 0
 dist_values <- seq(400, 800, by=10)  # Distance thresholds
-seat_values <- seq(20, 90, by=5)     # Seat thresholds
+seat_values <- seq(20, 90, by=1)     # Seat thresholds
 
 # Create grid of all combinations
 param_grid <- expand.grid(mcchange = mcvalues,
