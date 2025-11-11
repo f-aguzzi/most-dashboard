@@ -37,7 +37,7 @@ def get_points(number: int, model: str):
 
     result1 = (
         result.group_by(
-            pl.col("Origin").alias("loc"),
+            [pl.col("Origin").alias("loc"), pl.col("Origin_name").alias("loc_name")]
         )
         .agg(
             [
@@ -49,7 +49,12 @@ def get_points(number: int, model: str):
     )
 
     result2 = (
-        result.group_by(pl.col("Destination").alias("loc"))
+        result.group_by(
+            [
+                pl.col("Destination").alias("loc"),
+                pl.col("Destination_name").alias("loc_name"),
+            ]
+        )
         .agg(
             [
                 pl.col("lat_dest").first().alias("lat"),
@@ -63,7 +68,12 @@ def get_points(number: int, model: str):
 
     results = []
     for row in result:
-        results.append({"location": [row["lat"], row["lon"]], "label": row["loc"]})
+        results.append(
+            {
+                "location": [row["lat"], row["lon"]],
+                "label": str(row["loc"]) + " - " + row["loc_name"],
+            }
+        )
     return results
 
 
