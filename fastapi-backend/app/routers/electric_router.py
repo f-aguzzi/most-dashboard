@@ -14,7 +14,7 @@ def get_routes_by(distance: int, seats: int, perimeter: bool):
     """
     Restituisce una lista di dati sulle rotte.
     """
-    if perimeter == "true":
+    if perimeter is True:
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
         route_data = data
@@ -48,7 +48,7 @@ def get_routes_by_apts(distance: int, seats: int, perimeter: bool):
     """
     Restituisce una lista di dati sugli aeroporti.
     """
-    if perimeter == "true":
+    if perimeter is True:
         route_data = data.filter(pl.col("Perimetro") == "Italia")
     else:
         route_data = data
