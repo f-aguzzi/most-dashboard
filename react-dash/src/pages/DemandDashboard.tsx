@@ -1,25 +1,13 @@
 import DemandGraph from "@/components/DemandGraph";
-import TimeFrameSelector from "@/components/TimeFrameSelector";
 import { Label } from "@/components/ui/label";
 import { Typography } from "@/components/ui/typography";
 import { Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { type MonthlyData, type YearlyData } from "@/components/DemandGraph";
+import { type YearlyData } from "@/components/DemandGraph";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/demand";
-
-const dummyMonthData: MonthlyData = {
-  date: "",
-  data: 0,
-  predicted: 0,
-  forecasted: 0,
-  eighty_lower: 0,
-  eighty_upper: 0,
-  ninetyfive_lower: 0,
-  ninetyfive_upper: 0,
-};
 
 const dummyYearlyData: YearlyData = {
   date: "",
@@ -38,66 +26,33 @@ interface DemandDashboardProps {
 function DemandDashboard(props: DemandDashboardProps) {
   const { t } = useTranslation();
 
-  const [time, setTime] = useState("monthly");
+  const [passenger, setPassenger] = useState<[YearlyData]>([dummyYearlyData]);
 
-  const handleTime = (value: string) => {
-    setTime(value);
-  };
+  const [freight, setFreight] = useState<[YearlyData]>([dummyYearlyData]);
 
-  const [passengerMonthly, setPassengerMonthly] = useState<[MonthlyData]>([
-    dummyMonthData,
-  ]);
-  const [passengerYearly, setPassengerYearly] = useState<[YearlyData]>([
-    dummyYearlyData,
-  ]);
-  const [freightMonthly, setFreightMonthly] = useState<[MonthlyData]>([
-    dummyMonthData,
-  ]);
-  const [freightYearly, setFreightYearly] = useState<[YearlyData]>([
-    dummyYearlyData,
-  ]);
-
-  async function fetchData(
-    endpoint: "passenger" | "freight",
-    timeframe: "monthly" | "yearly",
-  ) {
+  async function fetchData(endpoint: "passenger" | "freight") {
     try {
-      const response = await fetch(
-        `${apiUrl}/${endpoint}?timeframe=${timeframe}`,
-      );
+      const response = await fetch(`${apiUrl}/${endpoint}`);
       if (!response.ok) throw new Error("Failed to fetch data");
       return response.json();
     } catch {
-      if (timeframe === "monthly") return [dummyMonthData];
-      else return [dummyYearlyData];
+      return [dummyYearlyData];
     }
   }
 
-  const fetchPassengerMonthly = async () => {
-    const result = await fetchData("passenger", "monthly");
-    setPassengerMonthly(result);
+  const fetchPassenger = async () => {
+    const result = await fetchData("passenger");
+    setPassenger(result);
   };
 
-  const fetchPassengerYearly = async () => {
-    const result = await fetchData("passenger", "yearly");
-    setPassengerYearly(result);
-  };
-
-  const fetchFreightMonthly = async () => {
-    const result = await fetchData("freight", "monthly");
-    setFreightMonthly(result);
-  };
-
-  const fetchFreightYearly = async () => {
-    const result = await fetchData("freight", "yearly");
-    setFreightYearly(result);
+  const fetchFreight = async () => {
+    const result = await fetchData("freight");
+    setFreight(result);
   };
 
   useEffect(() => {
-    fetchPassengerMonthly();
-    fetchPassengerYearly();
-    fetchFreightMonthly();
-    fetchFreightYearly();
+    fetchPassenger();
+    fetchFreight();
   }, []);
 
   return (
@@ -106,21 +61,11 @@ function DemandDashboard(props: DemandDashboardProps) {
         {t("demand.title")}
       </Typography>
       <Label className="mx-8">{t("captions.demand")}</Label>
-      {/* Timeframe */}
-      <div className="p-8">
-        <div className="flex items-center gap-2">
-          <Timer className="h-6 w-6 text-primary" />
-          <Typography version="h4">{t("demand.timeframe.title")}</Typography>
-        </div>
-        <TimeFrameSelector className="py-4" handler={handleTime} />
-      </div>
       <DemandGraph
-        mode={time}
+        className="my-8"
         darkmode={props.darkMode}
-        passengerYearly={passengerYearly}
-        passengerMonthly={passengerMonthly}
-        freightYearly={freightYearly}
-        freightMonthly={freightMonthly}
+        passenger={passenger}
+        freight={freight}
       />
     </div>
   );

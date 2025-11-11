@@ -32,20 +32,12 @@ yearly_names = {
 
 
 @demand_router.get("/passenger")
-def get_passenger(timeframe: str):
-    if timeframe == "monthly":
-        data = passenger_monthly.rename(monthly_names | passenger_names)
-        return data.collect().to_dicts()
-    else:
-        data = passenger_yearly.rename(yearly_names | passenger_names)
-        return data.collect().to_dicts()
+def get_passenger():
+    data = passenger_yearly.rename(yearly_names | passenger_names)
+    return data.collect().to_dicts()
 
 
 @demand_router.get("/freight")
-def get_freight(timeframe: str):
-    if timeframe == "monthly":
-        data = freight_monthly.rename(monthly_names | freight_names)
-        return data.collect().to_dicts()
-    else:
-        data = freight_yearly.rename(yearly_names | freight_names)
-        return data.collect().to_dicts()
+def get_freight():
+    data = freight_yearly.rename(yearly_names | freight_names)
+    return data.collect().to_dicts()

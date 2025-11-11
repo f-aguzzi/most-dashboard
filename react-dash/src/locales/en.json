@@ -104,17 +104,6 @@
   },
   "demand": {
     "title": "Demand for Passengers and Freight flights in Italy",
-    "timeframe": {
-      "title": "Time resolution",
-      "monthly": "Monthly",
-      "yearly": "Yearly"
-    },
-    "monthly": {
-      "passenger": "Monthly number of passengers",
-      "freight": "Monthly freight load",
-      "description": "Monthly values (in millions) up to December 2024, fitted and forecasted values from 2025 up to December 2035",
-      "legend": "Point Estimate in Blue, 80% Confidence Interval in Pink, 95% Confidence Interval in Grey"
-    },
     "yearly": {
       "passenger": "Yearly number of passengers",
       "freight": "Yearly freight load",
