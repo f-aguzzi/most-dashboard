@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Line,
-  Area,
   XAxis,
   YAxis,
   CartesianGrid,

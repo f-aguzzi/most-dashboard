@@ -1,7 +1,6 @@
 import DemandGraph from "@/components/DemandGraph";
 import { Label } from "@/components/ui/label";
 import { Typography } from "@/components/ui/typography";
-import { Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type YearlyData } from "@/components/DemandGraph";
