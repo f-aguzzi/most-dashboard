@@ -80,10 +80,10 @@ def get_routes(distance: int, passengers: int):
 
         if extracols:
             dict = dict | {
-                "IT_19": fmt(row["IT_19"]),
-                "IT_LF": fmt(row["IT_LF"]),
-                "EU_19": fmt(row["EU_19"]),
-                "EU_LF": fmt(row["EU_LF"]),
+                "IT_19": row["IT_19"],
+                "IT_LF": row["IT_LF"],
+                "EU_19": row["EU_19"],
+                "EU_LF": row["EU_LF"],
                 "EU_35": None,
                 "EU_FR": None,
             }
@@ -93,8 +93,8 @@ def get_routes(distance: int, passengers: int):
                 "IT_LF": None,
                 "EU_19": None,
                 "EU_LF": None,
-                "EU_35": fmt(row["EU_35"]),
-                "EU_FR": fmt(row["EU_FR"]),
+                "EU_35": row["EU_35"],
+                "EU_FR": row["EU_FR"],
             }
 
         result.append(dict)
