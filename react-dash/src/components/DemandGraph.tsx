@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import YearlyGraph from "./YearlyGraph";
+import FreightGraph from "./FreightGraph";
+import PassengerGraph from "./PassengerGraph";
 
 interface YearlyData {
   date: string;
@@ -29,7 +30,7 @@ const DemandGraph = (props: DemandGraphProps) => {
       }
     >
       <div className="grid grid-cols-1 gap-y-4">
-        <YearlyGraph
+        <PassengerGraph
           data={props.passenger}
           mode={props.darkmode}
           title={t("demand.yearly.passenger")}
@@ -38,7 +39,7 @@ const DemandGraph = (props: DemandGraphProps) => {
         />
       </div>
       <div className="grid grid-cols-1 gap-y-4">
-        <YearlyGraph
+        <FreightGraph
           data={props.freight}
           mode={props.darkmode}
           title={t("demand.yearly.freight")}

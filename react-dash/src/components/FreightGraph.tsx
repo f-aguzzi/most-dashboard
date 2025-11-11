@@ -12,7 +12,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type YearlyData } from "./DemandGraph";
 
-interface YearlyGraphProps {
+interface FreightGraphProps {
   mode: boolean;
   data: [YearlyData];
   title: string;
@@ -38,7 +38,7 @@ const defaultColors: Colors = {
   predicted: "#3B6CCD",
 };
 
-const YearlyGraph = (props: YearlyGraphProps) => {
+const FreightGraph = (props: FreightGraphProps) => {
   const [color, setColor] = useState(defaultColors);
 
   useEffect(() => {
@@ -199,4 +199,4 @@ const YearlyGraph = (props: YearlyGraphProps) => {
   );
 };
 
-export default YearlyGraph;
+export default FreightGraph;
