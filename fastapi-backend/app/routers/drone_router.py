@@ -92,14 +92,9 @@ def get_kpi(model: str, type: str):
 
 @drone_router.get("/kpi/table")
 def get_kpi_table(model: str):
-    data1 = data.filter(pl.col("modello") == model, pl.col("droni") == 210)
-    max_diverted = data1.select(pl.col("peso_diverted").sum())
-    max_co2 = data1.select(pl.col("CO2_reduction").sum())
-    max_movements = data1.select(pl.col("nr_movs_replaced").sum())
-
-    max_diverted = max_diverted.collect().to_dicts()[0]["peso_diverted"]
-    max_co2 = max_co2.collect().to_dicts()[0]["CO2_reduction"]
-    max_movements = max_movements.collect().to_dicts()[0]["nr_movs_replaced"]
+    max_diverted = 77845.22
+    max_co2 = 4490981.01238192
+    max_movements = 257
 
     result = (
         data.filter(pl.col("modello") == model)
@@ -128,5 +123,6 @@ def get_kpi_table(model: str):
                 ).round(2),
             ]
         )
+        .filter(pl.col("value").is_in([10, 50, 90, 110, 150]))
     )
     return result.sort(pl.col("value")).collect().to_dicts()
