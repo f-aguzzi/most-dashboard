@@ -176,7 +176,7 @@ def get_kpi(distance: int, passengers: int):
         return {
             "number": fmt(data_filtered["number"]),
             "number_percentage": pfmt(data_filtered["number"] / data["number"]),
-            "flown": data_filtered["flown"],
+            "flown": fmt(data_filtered["flown"]),
             "flown_percentage": pfmt(data_filtered["flown"] / data["flown"]),
             "IT_19": fmt(data_filtered["IT_19"] / 1000),
             "IT_LF": fmt(data_filtered["IT_LF"] / 1000),
@@ -187,9 +187,9 @@ def get_kpi(distance: int, passengers: int):
         }
     else:
         return {
-            "number": data_filtered["number"],
+            "number": fmt(data_filtered["number"]),
             "number_percentage": pfmt(data_filtered["number"] / data["number"]),
-            "flown": data_filtered["flown"],
+            "flown": fmt(data_filtered["flown"]),
             "flown_percentage": pfmt(data_filtered["flown"] / data["flown"]),
             "IT_19": None,
             "IT_LF": None,
