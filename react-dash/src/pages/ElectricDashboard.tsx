@@ -15,6 +15,7 @@ import KpiTable, { type Kpi } from "@/components/KpiTable";
 import { Button } from "@/components/ui/button";
 import DisplaySelector from "@/components/DisplaySelector";
 import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/electric";
@@ -177,7 +178,9 @@ function ElectricDashboard() {
       <Typography version="h1" className="m-8 p-8">
         {t("electric.title")}
       </Typography>
-      <Label className="mx-8">{t("captions.electric")}</Label>
+      <Card>
+        <Label className="mx-8">{t("captions.electric")}</Label>
+      </Card>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
         <div className="flex flex-col space-y-6 h-auto mx-8">
           {/* Autonomia */}

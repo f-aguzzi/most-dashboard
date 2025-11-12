@@ -119,7 +119,9 @@ function DemandDashboard(props: DemandDashboardProps) {
       <Typography version="h1" className="m-8 p-8">
         {t("demand.title")}
       </Typography>
-      <Label className="mx-8">{t("captions.demand")}</Label>
+      <Card>
+        <Label className="mx-8">{t("captions.demand")}</Label>
+      </Card>
       <DemandGraph
         className="my-8"
         darkmode={props.darkMode}
