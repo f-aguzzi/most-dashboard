@@ -109,6 +109,10 @@
       "freight": "Carico merci annuale",
       "description": "Valori annuali (in milioni) fino al 2022, valori smussati e previsti fino al 2035",
       "legend": "Stime in blu, Intervallo di confidenza all'80% in rosa, Intervallo di confidenza al 95% in grigio"
+    },
+    "table": {
+      "passengers": "Passeggeri",
+      "freight": "Merci"
     }
   },
   "drone": {

@@ -4,6 +4,15 @@ import { Typography } from "@/components/ui/typography";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type YearlyData } from "@/components/DemandGraph";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/demand";
@@ -54,6 +63,57 @@ function DemandDashboard(props: DemandDashboardProps) {
     fetchFreight();
   }, []);
 
+  const KpiTable = () => {
+    return (
+      <>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead> </TableHead>
+              <TableHead colSpan={2}>
+                <b>{t("demand.table.passengers")}</b>
+              </TableHead>
+              <TableHead colSpan={2}>
+                <b>{t("demand.table.freight")}</b>
+              </TableHead>
+            </TableRow>
+            <TableRow>
+              <TableHead> </TableHead>
+              <TableHead>
+                <b>mln</b>
+              </TableHead>
+              <TableHead>
+                <b>% vs 2024</b>
+              </TableHead>
+              <TableHead>
+                <b>K tons</b>
+              </TableHead>
+              <TableHead>
+                <b>% vs 2024</b>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>2030</TableCell>
+              <TableCell>249,1</TableCell>
+              <TableCell>13,7%</TableCell>
+              <TableCell>1.430</TableCell>
+              <TableCell>14,5%</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>2035</TableCell>
+              <TableCell>265,4</TableCell>
+              <TableCell>21,1%</TableCell>
+              <TableCell>1.589</TableCell>
+              <TableCell>27,2%</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </>
+    );
+  };
+
   return (
     <div className="h-max">
       <Typography version="h1" className="m-8 p-8">
@@ -66,6 +126,9 @@ function DemandDashboard(props: DemandDashboardProps) {
         passenger={passenger}
         freight={freight}
       />
+      <Card className="p-4 w-auto">
+        <KpiTable />
+      </Card>
     </div>
   );
 }

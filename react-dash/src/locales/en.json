@@ -109,6 +109,10 @@
       "freight": "Yearly freight load",
       "description": "Yearly values (in millions) up to 2022, fitted and forecasted values from 2025 up to 2035",
       "legend": "Point estimate in Blue, 80% Confidence Interval in pink, 95% Confidence Interval in grey"
+    },
+    "table": {
+      "passengers": "Passenger",
+      "freight": "Freight"
     }
   },
   "drone": {
