@@ -16,7 +16,6 @@ interface FreightGraphProps {
   data: [YearlyData];
   title: string;
   description: string;
-  legend: string;
 }
 
 interface Colors {
@@ -94,7 +93,6 @@ const PassengerGraph = (props: FreightGraphProps) => {
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
         <p className="text-sm text-foreground">{props.description}</p>
-        <p className="text-xs text-foreground">{props.legend}</p>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>

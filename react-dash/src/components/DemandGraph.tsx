@@ -35,7 +35,6 @@ const DemandGraph = (props: DemandGraphProps) => {
           mode={props.darkmode}
           title={t("demand.yearly.passenger")}
           description={t("demand.yearly.description")}
-          legend={t("demand.yearly.legend")}
         />
       </div>
       <div className="grid grid-cols-1 gap-y-4">
