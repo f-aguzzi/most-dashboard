@@ -30,6 +30,12 @@ const Navbar = (props: NavbarProps) => {
         <NavigationMenuItem>
           <img src={MOSTLogo} alt="MOST" className="h-16 w-auto" />
         </NavigationMenuItem>
+        {/* Evoluzione del settore */}
+        <NavigationMenuItem>
+          <NavigationMenuLink onClick={() => props.setPage("demand-dashboard")}>
+            {t("navbar.evolution")}
+          </NavigationMenuLink>
+        </NavigationMenuItem>
         {/* Electric Aircraft */}
         <NavigationMenuItem>
           <NavigationMenuTrigger>
@@ -52,12 +58,6 @@ const Navbar = (props: NavbarProps) => {
               {t("navbar.electric.social")}
             </NavigationMenuLink>
           </NavigationMenuContent>
-        </NavigationMenuItem>
-        {/* Evoluzione del settore */}
-        <NavigationMenuItem>
-          <NavigationMenuLink onClick={() => props.setPage("demand-dashboard")}>
-            {t("navbar.evolution")}
-          </NavigationMenuLink>
         </NavigationMenuItem>
         {/* Droni cargo */}
         <NavigationMenuItem>
