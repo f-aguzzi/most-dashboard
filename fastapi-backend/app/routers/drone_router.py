@@ -21,7 +21,7 @@ def get_data(number: int, model: str):
         results.append(
             {
                 "route": route,
-                "label": f"{row['Origin']} - {row['Destination']}",
+                "label": f"{row['Origin_name']} - {row['Destination_name']}",
                 "count": row["nr_flights"],
                 "replaced": row["nr_movs_replaced"],
                 "weight": row["peso_trasport"],
@@ -71,7 +71,7 @@ def get_points(number: int, model: str):
         results.append(
             {
                 "location": [row["lat"], row["lon"]],
-                "label": str(row["loc"]) + " - " + row["loc_name"],
+                "label": str(row["loc_name"]),
             }
         )
     return results
