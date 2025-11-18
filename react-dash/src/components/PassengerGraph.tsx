@@ -16,6 +16,7 @@ interface FreightGraphProps {
   data: [YearlyData];
   title: string;
   description: string;
+  axisLabel: string;
 }
 
 interface Colors {
@@ -104,7 +105,7 @@ const PassengerGraph = (props: FreightGraphProps) => {
             <XAxis dataKey="date" stroke="#666" color={color.foreground} />
             <YAxis
               label={{
-                value: "Number of passengers",
+                value: props.axisLabel,
                 angle: -90,
                 position: "insideLeft",
                 fill: color.foreground,

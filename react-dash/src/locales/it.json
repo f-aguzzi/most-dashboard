@@ -104,12 +104,19 @@
     }
   },
   "demand": {
-    "title": "Domanda per voli Passeggeri e Merci in Italia",
+    "title": "Previsione del traffico passeggeri e merci in Italia",
     "yearly": {
-      "passenger": "Numero annuale di passeggeri",
-      "freight": "Carico merci annuale",
-      "description": "Valori annuali (in milioni) fino al 2022, valori smussati e previsti fino al 2035",
-      "legend": "Stime in blu, Intervallo di confidenza all'80% in rosa, Intervallo di confidenza al 95% in grigio"
+      "passenger": "Traffico annuale di passeggeri",
+      "freight": "Traffico merci annuale",
+      "description": {
+        "passenger": "Traffico passeggeri annuale effettivo (in milioni) fino al 2024 e volumi previsti fino al 2035",
+        "freight": "Volume traffico merci (in milioni di tonnellate) fino al 2022 e volumi previsti dal 2025 fino al 2035"
+      },
+      "legend": "Stime in blu, Intervallo di confidenza all'80% in rosa, Intervallo di confidenza al 95% in grigio",
+      "axis": {
+        "passenger": "Numero di passeggeri",
+        "freight": "Traffico merci"
+      }
     },
     "table": {
       "passengers": "Passeggeri",
@@ -180,7 +187,7 @@
       "title": "Introduzione di aeromobili elettrici",
       "map": "Impatto complessivo",
       "emissions": "Impatto a livello italiano",
-      "social": "Impatto economico sociale"
+      "social": "Impatto economico-sociale"
     },
     "evolution": "Evoluzione del settore",
     "cargo": "Utilizzo di droni cargo",

@@ -18,6 +18,7 @@ interface FreightGraphProps {
   title: string;
   description: string;
   legend: string;
+  axisLabel: string;
 }
 
 interface Colors {
@@ -145,7 +146,7 @@ const FreightGraph = (props: FreightGraphProps) => {
             <XAxis dataKey="date" stroke="#666" color={color.foreground} />
             <YAxis
               label={{
-                value: "Number of passengers",
+                value: props.axisLabel,
                 angle: -90,
                 position: "insideLeft",
                 fill: color.foreground,
@@ -180,7 +181,7 @@ const FreightGraph = (props: FreightGraphProps) => {
               stroke={color.foreground}
               strokeWidth={1}
               dot={{ fill: color.accent, r: 2 }}
-              connectNulls={false}
+              connectNulls={true}
             />
 
             {/* Forecast Line */}
@@ -190,7 +191,7 @@ const FreightGraph = (props: FreightGraphProps) => {
               stroke={color.predicted}
               strokeWidth={1}
               dot={{ fill: color.predicted, r: 2 }}
-              connectNulls={false}
+              connectNulls={true}
             />
           </ComposedChart>
         </ResponsiveContainer>
