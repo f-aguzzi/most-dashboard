@@ -10,15 +10,11 @@ data = pl.LazyFrame(pl.read_excel("data.xlsx"))
 
 
 @electric_router.get("/routes_by")
-def get_routes_by(distance: int, seats: int, perimeter: bool):
+def get_routes_by(distance: int, seats: int):
     """
     Restituisce una lista di dati sulle rotte.
     """
-    if perimeter is True:
-        route_data = data.filter(pl.col("Perimetro") == "Italia")
-    else:
-        route_data = data
-    routes = filter_routes(route_data, distance, seats).collect()
+    routes = filter_routes(data, distance, seats).collect()
 
     result = []
     for row in routes.to_dicts():
@@ -44,16 +40,12 @@ def get_routes_by(distance: int, seats: int, perimeter: bool):
 
 
 @electric_router.get("/routes_by/airports")
-def get_routes_by_apts(distance: int, seats: int, perimeter: bool):
+def get_routes_by_apts(distance: int, seats: int):
     """
     Restituisce una lista di dati sugli aeroporti.
     """
-    if perimeter is True:
-        route_data = data.filter(pl.col("Perimetro") == "Italia")
-    else:
-        route_data = data
 
-    routes = route_data.filter([pl.col("GCD") <= distance, pl.col("Seats") <= seats])
+    routes = data.filter([pl.col("GCD") <= distance, pl.col("Seats") <= seats])
 
     routes1 = routes.select(
         [
@@ -87,19 +79,14 @@ def get_routes_by_apts(distance: int, seats: int, perimeter: bool):
 
 
 @electric_router.get("/kpi")
-def get_kpi(distance: int, seats: int, perimeter: bool):
+def get_kpi(distance: int, seats: int):
     """
     Restituisce un dizionario di KPI sui voli.
     """
-    if perimeter == "true":
-        route_data = data.filter(pl.col("Perimetro") == "Italia")
-    else:
-        route_data = data
-    filtered_data = route_data.filter(
-        [pl.col("GCD") <= distance, pl.col("Seats") <= seats]
-    )
 
-    kpi_tot = get_all_flights(route_data).collect().to_dicts()[0]
+    filtered_data = data.filter([pl.col("GCD") <= distance, pl.col("Seats") <= seats])
+
+    kpi_tot = get_all_flights(data).collect().to_dicts()[0]
     kpi_part = get_all_flights(filtered_data).collect().to_dicts()[0]
 
     result = [
@@ -149,17 +136,11 @@ def get_kpi(distance: int, seats: int, perimeter: bool):
 
 
 @electric_router.get("/datasheet")
-def get_datasheet(distance: int, seats: int, perimeter: bool):
+def get_datasheet(distance: int, seats: int):
     """
     Restituisce i dati sotto forma di file Excel scaricabile.
     """
-    if perimeter == "true":
-        route_data = data.filter(pl.col("Perimetro") == "Italia")
-    else:
-        route_data = data
-    filtered_data = route_data.filter(
-        [pl.col("GCD") <= distance, pl.col("Seats") <= seats]
-    )
+    filtered_data = data.filter([pl.col("GCD") <= distance, pl.col("Seats") <= seats])
 
     result = filtered_data.group_by(pl.col("Dep_apt", "Arr_apt")).agg(
         [
@@ -185,7 +166,7 @@ def get_datasheet(distance: int, seats: int, perimeter: bool):
     excel_buffer.seek(0)
 
     # Create filename with timestamp
-    filename = f"dataset-{distance}km-{seats}seats-italy={perimeter}.xlsx"
+    filename = f"dataset-{distance}km-{seats}seats.xlsx"
 
     # Return as streaming response
     return StreamingResponse(

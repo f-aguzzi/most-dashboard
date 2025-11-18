@@ -8,7 +8,6 @@ import ElectricMap, {
 } from "@/components/ElectricMap";
 import { useEffect, useState } from "react";
 
-import Perimetro from "@/components/Perimetro";
 import { Armchair, Eye, FileKey2, Map, RulerDimensionLine } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import KpiTable, { type Kpi } from "@/components/KpiTable";
@@ -53,9 +52,7 @@ function ElectricDashboard() {
           "/routes_by?seats=" +
           committedPassengers +
           "&distance=" +
-          committedDistance +
-          "&perimeter=" +
-          perimetro,
+          committedDistance,
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
@@ -74,9 +71,7 @@ function ElectricDashboard() {
           "/routes_by/airports?seats=" +
           committedPassengers +
           "&distance=" +
-          committedDistance +
-          "&perimeter=" +
-          perimetro,
+          committedDistance,
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
@@ -95,9 +90,7 @@ function ElectricDashboard() {
           "/kpi?seats=" +
           committedPassengers +
           "&distance=" +
-          committedDistance +
-          "&perimeter=" +
-          perimetro,
+          committedDistance,
       );
       if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
@@ -105,13 +98,6 @@ function ElectricDashboard() {
     } catch {
       setKpi(null);
     }
-  };
-
-  const [perimetro, setPerimetro] = useState(false);
-
-  const handlePerimetro = async (value: string) => {
-    const perimeter = value === "Italia" ? true : false;
-    setPerimetro(perimeter);
   };
 
   const [display, setDisplay] = useState("Frequenza");
@@ -124,14 +110,13 @@ function ElectricDashboard() {
     fetchData();
     fetchAirports();
     fetchKpi();
-  }, [perimetro, committedDistance, committedPassengers, display]);
+  }, [committedDistance, committedPassengers, display]);
 
   const fetchTable = async () => {
     try {
       const params = new URLSearchParams({
         distance: committedDistance.toString(),
         seats: committedPassengers.toString(),
-        perimeter: perimetro.toString(),
         _t: Date.now().toString(),
       });
 
@@ -152,7 +137,7 @@ function ElectricDashboard() {
       const contentDisposition = response.headers.get("Content-Disposition");
       const filename = contentDisposition
         ? contentDisposition.split("filename=")[1]?.replace(/"/g, "")
-        : `dataset-${distance}km-${passengers}seats-italy=${perimetro}.xlsx`;
+        : `dataset-${distance}km-${passengers}seats.xlsx`;
 
       // Convert response to blob
       const blob = await response.blob();
@@ -253,21 +238,7 @@ function ElectricDashboard() {
             <i>SGEA = Second Generation Electric Aircraft</i>
           </Typography>
           {/* Riga di controllo */}
-          <div className="flex flex-row items-center gap-2">
-            {/* Perimetro */}
-            <div className="flex flex-col items-center gap-2">
-              <div className="flex flex-row gap-2">
-                <Map className="h-6 w-6 text-primary" />
-                <Typography version="h4">
-                  {t("electric.perimeter.title")}
-                </Typography>
-              </div>
-              <Perimetro handler={handlePerimetro} className="p-2 m-2" />
-            </div>
-            {/* Scarica i dati */}
-            <Button className="mx-4" onClick={fetchTable}>
-              {t("electric.download")}
-            </Button>
+          <div className="flex flex-row items-center gap-4">
             {/* Display */}
             <div className="flex flex-col items-center gap-2">
               <div className="flex flex-row gap-2">
@@ -278,6 +249,10 @@ function ElectricDashboard() {
               </div>
               <DisplaySelector handler={handleDisplay} className="p-2 m-2" />
             </div>
+            {/* Scarica i dati */}
+            <Button className="mx-auto" onClick={fetchTable}>
+              {t("electric.download")}
+            </Button>
           </div>
           <Separator />
           <div className="p-4">
