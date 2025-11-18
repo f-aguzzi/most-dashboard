@@ -95,7 +95,7 @@ export default function ElectricMap(props: LeafletMapProps) {
                   <br />
                   <b>{t("electric.map.number")}: </b> {positions.count}
                   <br />
-                  <b>{t("electric.map.distance")}: </b> {positions.distance} km
+                  <b>{t("electric.map.length")}: </b> {positions.distance} km
                   <br />
                   <b>{t("electric.map.seats")}: </b> {positions.seats}
                   <br />
