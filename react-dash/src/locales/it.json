@@ -97,9 +97,10 @@
     "mc": "Variazione costo marginale (%)",
     "graph": {
       "title": "Impatto economico-sociale",
-      "profit": "Profitto",
-      "cs": "CS",
-      "welfare": "Welfare"
+      "profit": "ΔProfitto Aerolinee",
+      "cs": "ΔSurplus consumatore",
+      "welfare": "ΔWelfare",
+      "caption": "Welfare = Profitto Aerolinee + Surplus Consumatore"
     }
   },
   "demand": {

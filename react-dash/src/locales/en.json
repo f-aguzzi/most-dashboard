@@ -97,9 +97,10 @@
     "mc": "Marginal cost variation (%)",
     "graph": {
       "title": "Socio-economic impact",
-      "profit": "Profit",
-      "cs": "CS",
-      "welfare": "Welfare"
+      "profit": "ΔAirline Profit",
+      "cs": "ΔConsumer Surplus",
+      "welfare": "ΔWelfare",
+      "caption": "Welfare = Airline Profit + Consumer Surplus"
     }
   },
   "demand": {

@@ -7,7 +7,13 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 
 interface SocialGraphProps {
@@ -57,21 +63,24 @@ function SocialGraph(props: SocialGraphProps) {
   };
 
   return (
-    <Card className="w-full mx-auto max-w-2xl bg-background text-foreground">
+    <Card className="w-full mx-auto bg-background text-foreground">
       <CardHeader>
         <CardTitle>{t("social.graph.title")}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={400}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis width={80} />
+            <YAxis width={140} tickFormatter={formatNumber} />
             <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="value" fill="#ff6b35" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
+      <CardFooter>
+        <CardContent>{t("social.graph.caption")}</CardContent>
+      </CardFooter>
     </Card>
   );
 }
