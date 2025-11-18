@@ -147,12 +147,11 @@ def get_datasheet(distance: int, seats: int):
             pl.col("Dep_apt_region").first(),
             pl.col("Arr_apt_region").first(),
             pl.col("GCD").first(),
-            pl.col("Frequency").sum().alias("Flights_number"),
+            pl.col("Frequency").sum().alias("Number_of_flights"),
             pl.col("Flown_km").sum(),
             pl.col("co2_tot").sum(),
-            (pl.col("delta_co2_tot").sum() / pl.col("co2_tot").sum()).alias(
-                "delta_co2_tot_%"
-            ),
+            pl.col("delta_co2_tot").sum()
+            / pl.col("co2_tot").sum().alias("delta_co2_tot_%"),
         ]
     )
 
@@ -160,7 +159,7 @@ def get_datasheet(distance: int, seats: int):
     excel_buffer = io.BytesIO()
 
     # Write DataFrame to Excel buffer using xlsxwriter engine
-    result.collect().write_excel(excel_buffer)
+    result.collect().write_excel(excel_buffer, conditional_formats=None)
 
     # Reset buffer position to the beginning
     excel_buffer.seek(0)
