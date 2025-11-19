@@ -108,7 +108,7 @@ function SocialDashboard() {
             </div>
             <div className="flex flex-row">
               <Slider
-                className="m-8 w-lg mx-8 px-2"
+                className="m-8 w-auto lg:w-lg mx-8 px-2"
                 value={distance}
                 onValueChange={handleDistanceChange}
                 onValueCommit={commitDistance}
@@ -128,7 +128,7 @@ function SocialDashboard() {
             </div>
             <div className="flex flex-row">
               <Slider
-                className="m-8 w-lg mx-8 px-2"
+                className="m-8 w-auto lg:w-lg mx-8 px-2"
                 value={passengers}
                 onValueChange={handlePassengerChange}
                 onValueCommit={commitPassengers}
@@ -148,7 +148,7 @@ function SocialDashboard() {
             </div>
             <div className="flex flex-row">
               <Slider
-                className="m-8 w-lg mx-8 px-2"
+                className="m-8 w-auto lg:w-lg mx-8 px-2"
                 value={mc}
                 onValueChange={handleMcChange}
                 onValueCommit={commitMc}

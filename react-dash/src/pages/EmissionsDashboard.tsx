@@ -219,7 +219,7 @@ function EmissionsDashboard() {
           </div>
           <div className="flex flex-row">
             <Slider
-              className="m-8 w-lg mx-8 px-2"
+              className="m-8 w-auto lg:w-lg mx-8 px-2"
               value={distance}
               onValueChange={handleDistanceChange}
               onValueCommit={commitDistance}
@@ -256,7 +256,7 @@ function EmissionsDashboard() {
           </div>
           <div className="flex flex-row">
             <Slider
-              className="m-8 w-lg mx-8 px-2"
+              className="m-8 w-auto lg:w-lg mx-8 px-2"
               value={passengers}
               onValueChange={handlePassengersChange}
               onValueCommit={handleCommittedPassengers}
