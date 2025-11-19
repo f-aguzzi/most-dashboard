@@ -16,7 +16,6 @@ import EmissionsEuroTable, {
   type EuroKpi,
 } from "@/components/EmissionsEuroTable";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import EmissionsDialog from "@/components/EmissionsDialog";
 
 const url = import.meta.env.VITE_URL;

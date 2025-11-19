@@ -21,10 +21,8 @@ const dummyYearlyData: YearlyData = {
   date: "",
   data: 0,
   forecasted: 0,
-  eighty_upper: 0,
-  eighty_lower: 0,
-  ninetyfive_upper: 0,
-  ninetyfive_lower: 0,
+  upper_bound: 0,
+  lower_bound: 0,
 };
 
 interface DemandDashboardProps {

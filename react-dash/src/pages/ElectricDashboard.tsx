@@ -9,7 +9,6 @@ import ElectricMap, {
 import { useEffect, useState } from "react";
 
 import { Armchair, Eye, FileKey2, RulerDimensionLine } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import KpiTable, { type Kpi } from "@/components/KpiTable";
 import { Button } from "@/components/ui/button";
 import DisplaySelector from "@/components/DisplaySelector";
