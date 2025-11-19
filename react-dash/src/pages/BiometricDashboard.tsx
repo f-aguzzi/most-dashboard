@@ -6,6 +6,7 @@ import BiometricGraph from "@/components/BiometricGraph";
 import { useTranslation } from "react-i18next";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 function BiometricDashboard() {
   const { t } = useTranslation();
@@ -49,12 +50,12 @@ function BiometricDashboard() {
         <Label className="mx-8">{t("captions.biometric")}</Label>
       </Card>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
-        <div className="flex flex-col space-y-6 h-auto mx-8">
+        <Card className="flex flex-col space-y-2 h-auto p-8">
           {/* Sezione parametri */}
           <Typography version="h2">{t("biometric.parameters")}</Typography>
           {/* Tradizionale */}
           <Typography version="h3">{t("biometric.traditional")}</Typography>
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-1">
             <LabeledSlider
               title={t("biometric.price")}
               value={price}
@@ -80,9 +81,13 @@ function BiometricDashboard() {
               max={20}
             />
           </div>
+          <Separator />
           <Typography version="h3">{t("biometric.biometric")}</Typography>
-          <div className="flex flex-col space-y-4">
-            <BiometricIdentitySelector handler={handleIdentity} />
+          <div className="flex flex-col space-y-2">
+            <BiometricIdentitySelector
+              className="py-2"
+              handler={handleIdentity}
+            />
             <LabeledSlider
               title={t("biometric.bioparameters.security")}
               value={bioSecurity}
@@ -100,7 +105,7 @@ function BiometricDashboard() {
               max={20}
             />
           </div>
-        </div>
+        </Card>
         {/* Mappa */}
         <BiometricGraph
           price={price}

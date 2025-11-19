@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "./ui/table";
 import { useTranslation } from "react-i18next";
+import { Card } from "./ui/card";
 
 // Type definitions
 interface Coefficients {
@@ -285,7 +286,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
 
   return (
     <div className="w-full space-y-4 mr-8">
-      <div className="bg-background text-foreground rounded-lg p-4">
+      <Card className="bg-background text-foreground rounded-lg p-8">
         <ResponsiveContainer width="100%" height={350}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -350,9 +351,9 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
             />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </Card>
 
-      <div className="bg-background text-foreground rounded-lg border overflow-hidden">
+      <Card className="bg-background text-foreground overflow-hidden p-4">
         <h3 className="text-lg font-semibold p-3 border-b">
           {t("biometric.table.title")}
           {t("biometric.table.price")}
@@ -377,7 +378,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
             ))}
           </TableBody>
         </Table>
-      </div>
+      </Card>
     </div>
   );
 };

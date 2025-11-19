@@ -16,11 +16,11 @@ const BiometricIdentitySelector = (props: DisplaySelectorProps) => {
       onValueChange={props.handler}
       className={props.className}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <RadioGroupItem value="Casa" />
         <Label className="font-normal">{t("biometric.biotype.home")}</Label>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <RadioGroupItem value="Aeroporto" />
         <Label className="font-normal">{t("biometric.biotype.airport")}</Label>
       </div>
