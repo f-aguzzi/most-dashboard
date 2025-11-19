@@ -112,7 +112,7 @@
         "passenger": "Traffico passeggeri annuale effettivo (in milioni) fino al 2024 e volumi previsti fino al 2035",
         "freight": "Volume traffico merci (in milioni di tonnellate) fino al 2022 e volumi previsti dal 2025 fino al 2035"
       },
-      "legend": "Stime in blu, Intervallo di confidenza all'80% in rosa, Intervallo di confidenza al 95% in grigio",
+      "legend": "Dati storici in nero, stime in blu, intervallo di confidenza sulle stime in rosa",
       "axis": {
         "passenger": "Numero di passeggeri",
         "freight": "Traffico merci"

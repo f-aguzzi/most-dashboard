@@ -108,7 +108,7 @@
     "yearly": {
       "passenger": "Yearly number of passengers",
       "freight": "Yearly freight load",
-      "legend": "Point estimate in Blue, 80% Confidence Interval in pink, 95% Confidence Interval in grey",
+      "legend": "Historical trend in black, forecasts in blue, confidence interval on forecasts in pink",
       "description": {
         "passenger": "Effective yearly passenger traffic (in millions) until 2024 and estimated volumes until 2035",
         "freight": "Freight traffic volume (in millions of metric tons) until 2022 and estimated volumes from 2025 until 2035"

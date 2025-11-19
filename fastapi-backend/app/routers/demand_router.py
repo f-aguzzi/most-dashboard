@@ -4,17 +4,13 @@ from fastapi import APIRouter
 demand_router = APIRouter()
 
 # Caricamento dati
-passenger_yearly = pl.LazyFrame(pl.read_excel("evolution.xlsx"))
-freight_yearly = pl.LazyFrame(pl.read_excel("freight_yearly 2035.xlsx"))
+passenger_yearly = pl.LazyFrame(pl.read_excel("evolution_passenger.xlsx"))
+freight_yearly = pl.LazyFrame(pl.read_excel("evolution_freight.xlsx"))
 
 freight_names = {
-    "Freight": "data",
+    "Trend": "data",
     "Year": "date",
-    "Forecasted": "forecasted",
-    "80%_lower": "eighty_lower",
-    "80%_upper": "eighty_upper",
-    "95%_lower": "ninetyfive_lower",
-    "95%_upper": "ninetyfive_upper",
+    "Forecasts": "forecasted",
 }
 
 passenger_names = {"Year": "date", "Historical": "data", "Forecasts": "forecasted"}

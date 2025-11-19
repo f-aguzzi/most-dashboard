@@ -25,8 +25,7 @@ interface Colors {
   foreground: string;
   accent: string;
   muted: string;
-  eighty: string;
-  ninetyfive: string;
+  confidence: string;
   predicted: string;
 }
 
@@ -34,8 +33,7 @@ const defaultColors: Colors = {
   foreground: "#222222",
   accent: "#000000",
   muted: "#C2C2C2",
-  eighty: "#FF64F7",
-  ninetyfive: "#818181",
+  confidence: "#FF64F7",
   predicted: "#3B6CCD",
 };
 
@@ -49,8 +47,7 @@ const FreightGraph = (props: FreightGraphProps) => {
         foreground: "#dddddd",
         accent: "#ffffff",
         muted: "#545454FF",
-        eighty: "#FF64F7",
-        ninetyfive: "#D8D8D8",
+        confidence: "#FF64F7",
         predicted: "#44BEFA",
       };
       setColor(cols);
@@ -62,13 +59,9 @@ const FreightGraph = (props: FreightGraphProps) => {
   // Transform data to include ranges for confidence intervals
   const chartData = props.data.map((d) => ({
     ...d,
-    ci95_range:
-      d.ninetyfive_lower !== null && d.ninetyfive_upper !== null
-        ? [d.ninetyfive_lower, d.ninetyfive_upper]
-        : null,
-    ci80_range:
-      d.eighty_lower !== null && d.eighty_upper !== null
-        ? [d.eighty_lower, d.eighty_upper]
+    ci_range:
+      d.lower_bound !== null && d.upper_bound !== null
+        ? [d.lower_bound, d.upper_bound]
         : null,
   }));
 
@@ -100,25 +93,15 @@ const FreightGraph = (props: FreightGraphProps) => {
                   {Number(data.forecasted).toFixed(1)}
                 </span>
               </p>
-              {data.eighty_lower !== null && data.eighty_upper !== null && (
+              {data.lower_bound !== null && data.upper_bound !== null && (
                 <p className="text-sm">
                   <span className="text-pink-400">80% CI: </span>
                   <span className="font-medium">
-                    [{Number(data.eighty_lower).toFixed(1)},{" "}
-                    {Number(data.eighty_upper).toFixed(1)}]
+                    [{Number(data.lower_bound).toFixed(1)},{" "}
+                    {Number(data.upper_bound).toFixed(1)}]
                   </span>
                 </p>
               )}
-              {data.ninetyfive_lower !== null &&
-                data.ninetyfive_upper !== null && (
-                  <p className="text-sm">
-                    <span className="text-gray-400">95% CI: </span>
-                    <span className="font-medium">
-                      [{Number(data.ninetyfive_lower).toFixed(1)},{" "}
-                      {Number(data.ninetyfive_upper).toFixed(1)}]
-                    </span>
-                  </p>
-                )}
             </>
           )}
         </div>
@@ -156,21 +139,12 @@ const FreightGraph = (props: FreightGraphProps) => {
             />
             <Tooltip content={<CustomTooltip />} />
 
-            {/* 95% Confidence Interval */}
+            {/* Confidence Interval */}
             <Area
               type="monotone"
-              dataKey="ci95_range"
+              dataKey="ci_range"
               stroke="none"
-              fill={color.ninetyfive}
-              fillOpacity={0.5}
-            />
-
-            {/* 80% Confidence Interval */}
-            <Area
-              type="monotone"
-              dataKey="ci80_range"
-              stroke="none"
-              fill={color.eighty}
+              fill={color.confidence}
               fillOpacity={0.5}
             />
 

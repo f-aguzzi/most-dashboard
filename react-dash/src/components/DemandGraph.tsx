@@ -6,10 +6,8 @@ interface YearlyData {
   date: string;
   data: number | null;
   forecasted: number | null;
-  eighty_lower: number | null;
-  eighty_upper: number | null;
-  ninetyfive_lower: number | null;
-  ninetyfive_upper: number | null;
+  lower_bound: number | null;
+  upper_bound: number | null;
 }
 
 interface DemandGraphProps {
