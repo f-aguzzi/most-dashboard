@@ -83,7 +83,7 @@ function Slider({
 
                 {/* Label */}
                 <div
-                  className="absolute -translate-y-1 text-xs font-semibold pointer-events-none whitespace-nowrap"
+                  className="absolute -translate-y-12 sm:-translate-y-1 text-xs font-semibold pointer-events-none whitespace-nowrap -rotate-45 sm:rotate-0"
                   style={{
                     left: `${position}%`,
                     color: line.labelColor || line.color || "#ff6b35",
