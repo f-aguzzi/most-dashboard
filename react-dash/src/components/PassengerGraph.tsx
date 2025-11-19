@@ -64,11 +64,11 @@ const PassengerGraph = (props: FreightGraphProps) => {
       if (!data) return null;
 
       return (
-        <div className="bg-white p-3 border border-gray-300 rounded shadow-lg">
+        <div className="bg-background p-3 border border-muted-foreground rounded shadow-lg text-foreground">
           <p className="font-semibold">{data.date}</p>
           {data.data !== null && data.data !== undefined && (
             <p className="text-sm">
-              <span className="text-black">{props.axisLabel}: </span>
+              <span>{props.axisLabel}: </span>
               <span className="font-medium">
                 {Number(data.data).toFixed(1)}
               </span>
@@ -77,7 +77,7 @@ const PassengerGraph = (props: FreightGraphProps) => {
           {data.forecasted !== null && data.forecasted !== undefined && (
             <>
               <p className="text-sm">
-                <span className="text-blue-600">
+                <span className="text-blue-600 dark:text-blue-400">
                   {props.axisLabel} ({t("demand.forecast")}):{" "}
                 </span>
                 <span className="font-medium">

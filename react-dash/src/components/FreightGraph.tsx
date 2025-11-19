@@ -78,11 +78,11 @@ const FreightGraph = (props: FreightGraphProps) => {
       if (!data) return null;
 
       return (
-        <div className="bg-white p-3 border border-gray-300 rounded shadow-lg">
+        <div className="bg-background p-3 border border-muted-foreground text-foreground rounded shadow-lg">
           <p className="font-semibold">{data.date}</p>
           {data.data !== null && data.data !== undefined && (
             <p className="text-sm">
-              <span className="text-black">{props.axisLabel}: </span>
+              <span>{props.axisLabel}: </span>
               <span className="font-medium">
                 {Number(data.data).toFixed(1)}
               </span>
@@ -91,7 +91,7 @@ const FreightGraph = (props: FreightGraphProps) => {
           {data.forecasted !== null && data.forecasted !== undefined && (
             <>
               <p className="text-sm">
-                <span className="text-blue-600">
+                <span className="text-blue-600 dark:text-blue-400">
                   {props.axisLabel} ({t("demand.forecast")}):{" "}
                 </span>
                 <span className="font-medium">
@@ -100,7 +100,9 @@ const FreightGraph = (props: FreightGraphProps) => {
               </p>
               {data.lower_bound !== null && data.upper_bound !== null && (
                 <p className="text-sm">
-                  <span className="text-pink-400">{t("demand.CI")}: </span>
+                  <span className="text-pink-400 dark:text-pink-300">
+                    {t("demand.CI")}:{" "}
+                  </span>
                   <span className="font-medium">
                     [{Number(data.lower_bound).toFixed(1)},{" "}
                     {Number(data.upper_bound).toFixed(1)}]
