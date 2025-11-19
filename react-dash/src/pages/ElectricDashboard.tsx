@@ -167,7 +167,7 @@ function ElectricDashboard() {
         <Label className="mx-8">{t("captions.electric")}</Label>
       </Card>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-6 mt-6 h-auto w-auto">
-        <div className="flex flex-col space-y-6 h-auto">
+        <div className="flex flex-col space-y-6 h-auto min-h-full">
           <Card className="p-8">
             {/* Autonomia */}
             <div>
@@ -260,7 +260,7 @@ function ElectricDashboard() {
               </Button>
             </div>
           </Card>
-          <Card className="p-8">
+          <Card className="hidden md:block p-8">
             <div className="p-4">
               <div className="flex items-center gap-2">
                 <FileKey2 className="h-6 w-6 text-primary" />
@@ -283,6 +283,15 @@ function ElectricDashboard() {
           </Card>
         </div>
       </div>
+      <Card className="p-8 mt-6 md:hidden">
+        <div className="p-4">
+          <div className="flex items-center gap-2">
+            <FileKey2 className="h-6 w-6 text-primary" />
+            <Typography version="h3">{t("electric.kpi.title")}</Typography>
+          </div>
+          <KpiTable caption={t("electric.kpi.desc")} kpis={kpi} />
+        </div>
+      </Card>
     </div>
   );
 }
