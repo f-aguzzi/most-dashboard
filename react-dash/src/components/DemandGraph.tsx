@@ -23,7 +23,7 @@ const DemandGraph = (props: DemandGraphProps) => {
   return (
     <div
       className={
-        "grid grid-cols-2 gap-x-8" +
+        "grid grid-cols-1 md:grid-cols-2 gap-8" +
         (props.className ? " " + props.className : "")
       }
     >
