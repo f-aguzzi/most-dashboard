@@ -140,7 +140,9 @@
     "table": {
       "passengers": "Passenger",
       "freight": "Freight"
-    }
+    },
+    "forecast": "forecast",
+    "CI": "Confidence interval"
   },
   "drone": {
     "title": "Introduction of cargo drones",

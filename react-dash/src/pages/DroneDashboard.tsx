@@ -136,10 +136,10 @@ function DroneDashboard() {
       <Typography version="h1" className="m-8 p-8">
         {t("drone.title")}
       </Typography>
-      <Card className="p-4 mx-4">
-        <Label>{t("captions.drone")}</Label>
+      <Card>
+        <Label className="mx-8">{t("captions.drone")}</Label>
       </Card>
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 mt-6">
         <Card className="col-span-1 h-auto space-y-8 px-6">
           {/* Scelta modello */}
           <ModelPicker handler={handleModel} value={model} />

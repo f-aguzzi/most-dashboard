@@ -140,7 +140,9 @@
     "table": {
       "passengers": "Passeggeri",
       "freight": "Merci"
-    }
+    },
+    "forecast": "previsione",
+    "CI": "Intervallo di confidenza"
   },
   "drone": {
     "title": "Utilizzo di droni cargo",

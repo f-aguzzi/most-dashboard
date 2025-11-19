@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type YearlyData } from "./DemandGraph";
+import { useTranslation } from "react-i18next";
 
 interface FreightGraphProps {
   mode: boolean;
@@ -34,6 +35,8 @@ const defaultColors: Colors = {
 };
 
 const PassengerGraph = (props: FreightGraphProps) => {
+  const { t } = useTranslation();
+
   const [color, setColor] = useState(defaultColors);
 
   useEffect(() => {
@@ -65,7 +68,7 @@ const PassengerGraph = (props: FreightGraphProps) => {
           <p className="font-semibold">{data.date}</p>
           {data.data !== null && data.data !== undefined && (
             <p className="text-sm">
-              <span className="text-black">Data: </span>
+              <span className="text-black">{props.axisLabel}: </span>
               <span className="font-medium">
                 {Number(data.data).toFixed(1)}
               </span>
@@ -74,7 +77,9 @@ const PassengerGraph = (props: FreightGraphProps) => {
           {data.forecasted !== null && data.forecasted !== undefined && (
             <>
               <p className="text-sm">
-                <span className="text-blue-600">Forecast: </span>
+                <span className="text-blue-600">
+                  {props.axisLabel} ({t("demand.forecast")}):{" "}
+                </span>
                 <span className="font-medium">
                   {Number(data.forecasted).toFixed(1)}
                 </span>
