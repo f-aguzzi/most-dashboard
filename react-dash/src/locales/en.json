@@ -50,6 +50,25 @@
       "title": "Economic KPI Table",
       "header": "Monetary savings",
       "caption": "KPIs relative to the monetary savings from the introduction of electric aircraft in Italy."
+    },
+    "info": {
+      "button": "Info about the CO₂ estimates",
+      "s1": {
+        "description": "The four estimates are derived from the combination of two key parameters (emissions for energy generation and electric aircraft power consumption).",
+        "first": {
+          "description": "The first code (IT/EU) is about the energy production emission estimates:",
+          "IT": "IT: Italy power generation emissions according to ISPRA (259,3 g CO₂ / kWh)",
+          "EU": "EU: average European Union power generation emissions (334 g CO₂ / kWh)"
+        },
+        "second": "The second code (ES-19 / LF) is about electric aircraft power consumption estimates:",
+        "seat": "seat"
+      },
+      "s2s3": {
+        "description": "Both estimates (EU 2030 and EU Fully Renewable) are based on an estimated energy consumption of 0,167 kWh / (seat × km) for electric aircraft.",
+        "code": "The two estimates differ in the considered level of power generation emissions:",
+        "EU30": "EU 2030: European Union target for power generation emissions in 2030 (114 g CO₂ / kWh)s",
+        "EUFR": "EU Fully Renewable: European Union net zero target for power generation emissions (0 g CO₂ / kWh)"
+      }
     }
   },
   "biometric": {

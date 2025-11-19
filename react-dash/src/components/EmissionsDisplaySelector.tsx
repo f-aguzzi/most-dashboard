@@ -27,25 +27,25 @@ const EmissionsDisplaySelector = (props: EmissionsDisplaySelectorProps) => {
           <div className="flex items-center gap-3">
             <RadioGroupItem value="IT_19" />
             <Label className="font-normal">
-              {t("emissions.savings")} (IT 2019)
+              {t("emissions.savings")} (IT, ES-19)
             </Label>
           </div>
           <div className="flex items-center gap-3">
             <RadioGroupItem value="IT_LF" />
             <Label className="font-normal">
-              {t("emissions.savings")} (IT LF)
+              {t("emissions.savings")} (IT, LF)
             </Label>
           </div>
           <div className="flex items-center gap-3">
             <RadioGroupItem value="EU_19" />
             <Label className="font-normal">
-              {t("emissions.savings")} (EU 2019)
+              {t("emissions.savings")} (EU, ES-19)
             </Label>
           </div>
           <div className="flex items-center gap-3">
             <RadioGroupItem value="EU_LF" />
             <Label className="font-normal">
-              {t("emissions.savings")} (EU LF)
+              {t("emissions.savings")} (EU, LF)
             </Label>
           </div>
         </>
@@ -54,7 +54,7 @@ const EmissionsDisplaySelector = (props: EmissionsDisplaySelectorProps) => {
           <div className="flex items-center gap-3">
             <RadioGroupItem value="EU_35" />
             <Label className="font-normal">
-              {t("emissions.savings")} (EU 2035)
+              {t("emissions.savings")} (EU 2030)
             </Label>
           </div>
           <div className="flex items-center gap-3">

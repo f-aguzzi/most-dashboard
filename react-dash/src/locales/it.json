@@ -50,6 +50,25 @@
       "title": "Tabella dei KPI economici",
       "header": "Risparmio economico",
       "caption": "KPI relativi al risparmio economico derivante dall'introduzione di aeromobili elettrici in Italia."
+    },
+    "info": {
+      "button": "Info sulle stime CO₂ mostrate",
+      "s1": {
+        "description": "Le quattro stime derivano dalla combinazione di due parametri chiave (emissioni per la generazione dell'energia e consumo degli aeromobili elettrici).",
+        "first": {
+          "description": "Il primo codice (IT/EU) riguarda le stime sulla produzione di elettricità:",
+          "IT": "IT: emissioni da generazione di elettricità in Italia secondo ISPRA (259,3 g CO₂ / kWh)",
+          "EU": "EU: emissioni medie da generazione di elettricità nell'Unione Europea (334 g CO₂ / kWh)"
+        },
+        "second": "Il secondo codice (ES-19 / LF) riguarda le stime di potenza impiegata dagli aeromobili elettrici:",
+        "seat": "posto"
+      },
+      "s2s3": {
+        "description": "Entrambe le stime (EU 2030 ed EU Fully Renewable) sono basate su un consumo previsto di 0,167 kWh / (posto × km) per gli aeromobili elettrici.",
+        "code": "Le due stime differiscono nel livello considerato di emissioni legate alla generazione di elettricità:",
+        "EU30": "EU 2030: obiettivo dell'Unione Europea per le emissioni causate da generazione dell'elettricità nel 2030 (114 g CO₂ / kWh)",
+        "EUFR": "EU Fully Renewable: obiettivo net zero dell'Unione Europea per le emissioni dirette legate alla produzione di elettricità (0 g CO₂ / kWh)"
+      }
     }
   },
   "biometric": {

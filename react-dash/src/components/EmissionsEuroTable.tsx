@@ -53,7 +53,7 @@ const EmissionsEuroTable = (props: EmissionsEuroTableProps) => {
           <TableHead>{t("electric.kpi.metric")}</TableHead>
           <TableHead>ICAP (2024)</TableHead>
           <TableHead>EPA (2023)</TableHead>
-          <TableHead> National Bureau of Economic Research </TableHead>
+          <TableHead> Bilal and Känzig (2024) </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

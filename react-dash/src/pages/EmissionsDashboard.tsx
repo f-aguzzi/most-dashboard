@@ -16,6 +16,8 @@ import EmissionsEuroTable, {
   type EuroKpi,
 } from "@/components/EmissionsEuroTable";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import EmissionsDialog from "@/components/EmissionsDialog";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/emissions";
@@ -206,7 +208,7 @@ function EmissionsDashboard() {
         <Label className="mx-8">{t("captions.emissions")}</Label>
       </Card>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[2fr_3fr] gap-6 mt-6 h-auto w-auto">
-        <div className="flex flex-col space-y-6 h-auto mx-4">
+        <Card className="flex flex-col space-y-3 h-auto p-8">
           {/* Scenario Picker */}
           <ScenarioPicker handler={scenarioHandler} value={scenario} />
           <Separator />
@@ -286,22 +288,25 @@ function EmissionsDashboard() {
           </div>
           <Separator />
           {/* Display mode */}
-          <div className="flex flex-col gap-y-2">
-            <div className="flex items-center gap-2">
-              <Eye className="h-6 w-6 text-primary" />
-              <Typography version="h4">
-                {t("electric.display.title")}
-              </Typography>
+          <div className="flex flex-row gap-x-2">
+            <div className="flex flex-col gap-y-2">
+              <div className="flex items-center gap-2">
+                <Eye className="h-6 w-6 text-primary" />
+                <Typography version="h4">
+                  {t("electric.display.title")}
+                </Typography>
+              </div>
+              <EmissionsDisplaySelector
+                handler={handleDisplay}
+                scenario={scenario}
+                value={display}
+              />
             </div>
-            <EmissionsDisplaySelector
-              handler={handleDisplay}
-              scenario={scenario}
-              value={display}
-            />
+            <EmissionsDialog scenario={scenario} />
           </div>
-        </div>
+        </Card>
         {/* Mappa */}
-        <div className="flex flex-col space-y-9">
+        <Card className="p-8">
           <EmissionsMap
             center={[42.0, 14.0]}
             zoom={6}
@@ -310,35 +315,41 @@ function EmissionsDashboard() {
             display={display}
             scenario={scenario}
           />
-        </div>
+        </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-12 mt-6 h-auto w-auto">
-        <div className="flex flex-col space-y-4">
-          {/* Tabella KPI */}
-          <div className="flex items-center gap-2">
-            <FileKey2 className="h-6 w-6 text-primary" />
-            <Typography version="h4">{t("electric.kpi.title")}</Typography>
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] gap-4 mt-6 h-auto w-auto">
+        <Card className="p-4">
+          <div className="flex flex-col space-y-4">
+            {/* Tabella KPI */}
+            <div className="flex items-center gap-2">
+              <FileKey2 className="h-6 w-6 text-primary" />
+              <Typography version="h4">{t("electric.kpi.title")}</Typography>
+            </div>
+            <EmissionsKpiTable
+              scenario={scenario}
+              kpi={kpi}
+              caption={t("emissions.kpi")}
+            />
           </div>
-          <EmissionsKpiTable
-            scenario={scenario}
-            kpi={kpi}
-            caption={t("emissions.kpi")}
-          />
-        </div>
+        </Card>
 
-        <div className="flex flex-col space-y-4">
-          {/* KPI economici */}
-          <div className="flex items-center gap-2">
-            <Euro className="h-6 w-6 text-primary" />
-            <Typography version="h4">{t("emissions.eurokpi.title")}</Typography>
+        <Card className="p-8">
+          <div className="flex flex-col space-y-4">
+            {/* KPI economici */}
+            <div className="flex items-center gap-2">
+              <Euro className="h-6 w-6 text-primary" />
+              <Typography version="h4">
+                {t("emissions.eurokpi.title")}
+              </Typography>
+            </div>
+            <EmissionsEuroTable
+              kpi={euroKpi}
+              scenario={scenario}
+              caption={t("emissions.eurokpi.caption")}
+            />
           </div>
-          <EmissionsEuroTable
-            kpi={euroKpi}
-            scenario={scenario}
-            caption={t("emissions.eurokpi.caption")}
-          />
-        </div>
+        </Card>
       </div>
     </div>
   );
