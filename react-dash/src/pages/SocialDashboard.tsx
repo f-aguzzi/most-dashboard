@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Typography } from "@/components/ui/typography";
-import { Armchair, Euro, RulerDimensionLine } from "lucide-react";
+import { Armchair, DollarSign, RulerDimensionLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -143,7 +143,7 @@ function SocialDashboard() {
             </div>
             {/* Marginal Cost */}
             <div className="flex items-center gap-2">
-              <Euro className="h-6 w-6 text-primary" />
+              <DollarSign className="h-6 w-6 text-primary" />
               <Typography version="h4">{t("social.mc")}</Typography>
             </div>
             <div className="flex flex-row">
