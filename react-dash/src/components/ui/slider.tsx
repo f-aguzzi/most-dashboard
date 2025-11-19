@@ -39,7 +39,7 @@ function Slider({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full mt-8 md:mt-0">
       <SliderPrimitive.Root
         data-slot="slider"
         defaultValue={defaultValue}
