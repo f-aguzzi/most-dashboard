@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import DisplaySelector from "@/components/DisplaySelector";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const url = import.meta.env.VITE_URL;
 const apiUrl = url + "/electric";
@@ -238,7 +239,7 @@ function ElectricDashboard() {
               <i>SGEA = Second Generation Electric Aircraft</i>
             </Typography>
             {/* Riga di controllo */}
-            <div className="flex flex-row items-center gap-4">
+            <div className="flex flex-col md:flex-row items-center gap-4">
               {/* Display */}
               <div className="flex flex-col items-center gap-2">
                 <div className="flex flex-row gap-2">
@@ -249,8 +250,12 @@ function ElectricDashboard() {
                 </div>
                 <DisplaySelector handler={handleDisplay} className="p-2 m-2" />
               </div>
+              <Separator className="md:hidden" />
               {/* Scarica i dati */}
-              <Button className="mx-auto" onClick={fetchTable}>
+              <Button
+                className="mx-auto mt-4 md:mt-0 m-auto"
+                onClick={fetchTable}
+              >
                 {t("electric.download")}
               </Button>
             </div>

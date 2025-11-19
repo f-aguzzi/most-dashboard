@@ -287,7 +287,7 @@ function EmissionsDashboard() {
           </div>
           <Separator />
           {/* Display mode */}
-          <div className="flex flex-row gap-x-2">
+          <div className="flex flex-col md:flex-row gap-x-2">
             <div className="flex flex-col gap-y-2">
               <div className="flex items-center gap-2">
                 <Eye className="h-6 w-6 text-primary" />
@@ -301,7 +301,7 @@ function EmissionsDashboard() {
                 value={display}
               />
             </div>
-            <EmissionsDialog scenario={scenario} />
+            <EmissionsDialog className="mt-4 md:mt-0" scenario={scenario} />
           </div>
         </Card>
         {/* Mappa */}

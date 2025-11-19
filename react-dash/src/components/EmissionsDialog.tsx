@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 interface EmissionsDialogProps {
   scenario: string;
+  className: string;
 }
 
 const EmissionsDialog = (props: EmissionsDialogProps) => {
@@ -50,7 +51,7 @@ const EmissionsDialog = (props: EmissionsDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="m-auto">{t("emissions.info.button")}</Button>
+        <Button className="mt-6 md:m-auto">{t("emissions.info.button")}</Button>
       </DialogTrigger>
       <DialogContent>
         <InnerDialog />
