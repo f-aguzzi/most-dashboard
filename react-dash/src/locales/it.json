@@ -56,7 +56,7 @@
       "s1": {
         "description": "Le quattro stime derivano dalla combinazione di due parametri chiave (emissioni per la generazione dell'energia e consumo degli aeromobili elettrici).",
         "first": {
-          "description": "Il primo codice (IT/EU) riguarda le stime sulla produzione di elettricità:",
+          "description": "Il primo codice (IT / EU) riguarda le stime sulla produzione di elettricità:",
           "IT": "IT: emissioni da generazione di elettricità in Italia secondo ISPRA (259,3 g CO₂ / kWh)",
           "EU": "EU: emissioni medie da generazione di elettricità nell'Unione Europea (334 g CO₂ / kWh)"
         },

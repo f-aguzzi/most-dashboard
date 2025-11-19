@@ -56,7 +56,7 @@
       "s1": {
         "description": "The four estimates are derived from the combination of two key parameters (emissions for energy generation and electric aircraft power consumption).",
         "first": {
-          "description": "The first code (IT/EU) is about the energy production emission estimates:",
+          "description": "The first code (IT / EU) is about the energy production emission estimates:",
           "IT": "IT: Italy power generation emissions according to ISPRA (259,3 g CO₂ / kWh)",
           "EU": "EU: average European Union power generation emissions (334 g CO₂ / kWh)"
         },

@@ -286,7 +286,7 @@ const BiometricGraph: React.FC<BiometricGraphProps> = ({
 
   return (
     <div className="w-full space-y-4 mr-8">
-      <Card className="bg-background text-foreground md:pr-8 md:pb-4 pb-14 overflow-x-scroll">
+      <Card className="bg-background text-foreground pr-2 md:pr-8 md:pb-4 pb-14 overflow-x-scroll">
         <ResponsiveContainer width="100%" height={350}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />

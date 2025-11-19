@@ -140,7 +140,7 @@ function DroneDashboard() {
         <Label className="mx-8">{t("captions.drone")}</Label>
       </Card>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 mt-6">
-        <Card className="col-span-1 h-auto space-y-8 px-6">
+        <Card className="col-span-1 h-auto space-y-4 md:space-y-8 px-6">
           {/* Scelta modello */}
           <ModelPicker handler={handleModel} value={model} />
           {/* Visualizzazione */}
@@ -175,7 +175,7 @@ function DroneDashboard() {
           </div>
         </Card>
         <div className="flex flex-col space-y-4">
-          <Card className="px-4">
+          <Card className="p-4 md:p-8">
             <DroneMap
               polylines={routes}
               locations={locations}

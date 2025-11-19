@@ -38,7 +38,7 @@ function App() {
   return (
     <div
       className={`
-        h-full min-h-screen w-full min-w-screen bg-background text-foreground p-8 transition-all duration-500 ease-in-out
+        h-full min-h-screen w-full min-w-screen bg-background text-foreground p-4 md:p-8 transition-all duration-500 ease-in-out
         ${nightMode ? "dark" : ""}
       `}
       style={{ colorScheme: nightMode ? "dark" : "light" }}

@@ -305,7 +305,7 @@ function EmissionsDashboard() {
           </div>
         </Card>
         {/* Mappa */}
-        <Card className="p-8">
+        <Card className="p-4 md:p-8">
           <EmissionsMap
             center={[42.0, 14.0]}
             zoom={6}

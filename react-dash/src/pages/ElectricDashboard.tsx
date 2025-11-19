@@ -272,7 +272,7 @@ function ElectricDashboard() {
         </div>
         {/* Mappa */}
         <div className="flex flex-col space-y-4">
-          <Card className="p-8 h-auto">
+          <Card className="p-4 md:p-8 h-auto">
             <ElectricMap
               center={[55.505, 13.0]}
               zoom={4}
