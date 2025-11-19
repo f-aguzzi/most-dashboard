@@ -184,7 +184,7 @@ function DroneDashboard() {
               zoom={8}
             />
           </Card>
-          <Card>
+          <Card className="p-4">
             <div className="flex items-center gap-2 mx-auto">
               <Key className="h-6 w-6 text-primary" />
               <Typography version="h4">{t("drone.table.title")}:</Typography>
