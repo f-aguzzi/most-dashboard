@@ -3,22 +3,29 @@
 
 Write-Host "Starting services..." -ForegroundColor Cyan
 
+# Get current directory to pass to jobs
+$currentDir = (Get-Location).Path
+
 # Create script blocks for each service
 $fastApiJob = {
+    param($baseDir)
+    Set-Location $baseDir
     Set-Location "fastapi-backend"
     Write-Host "[FastAPI] Starting uvicorn server..." -ForegroundColor Green
     uv run uvicorn app.main:app
 }
 
 $reactJob = {
+    param($baseDir)
+    Set-Location $baseDir
     Set-Location "react-dash"
     Write-Host "[React] Starting preview server..." -ForegroundColor Blue
     npm run preview
 }
 
-# Start both jobs
-$job1 = Start-Job -ScriptBlock $fastApiJob
-$job2 = Start-Job -ScriptBlock $reactJob
+# Start both jobs with current directory as argument
+$job1 = Start-Job -ScriptBlock $fastApiJob -ArgumentList $currentDir
+$job2 = Start-Job -ScriptBlock $reactJob -ArgumentList $currentDir
 
 Write-Host "`nServices launched in background jobs" -ForegroundColor Yellow
 Write-Host "Job IDs: FastAPI=$($job1.Id), React=$($job2.Id)" -ForegroundColor Yellow
