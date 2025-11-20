@@ -8,8 +8,8 @@ Write-Host "Avvio l'installazione del progetto" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Step 1: Sync FastAPI backend dependencies
-Write-Host "[1/3] Sincronizzazione delle dipendenze del backend FastAPI..." -ForegroundColor Green
+# Step 1: Sincronizzazione delle dipendenze di FastAPI
+Write-Host "[1/4] Sincronizzazione delle dipendenze del backend FastAPI..." -ForegroundColor Green
 try {
     Push-Location "fastapi-backend"
     uv sync
@@ -29,7 +29,7 @@ finally {
 }
 
 # Step 2: Installa i pacchetti di React
-Write-Host "[2/3] Installazione delle dipendenze della dashboard React..." -ForegroundColor Blue
+Write-Host "[2/4] Installazione delle dipendenze della dashboard React..." -ForegroundColor Blue
 try {
     Push-Location "react-dash"
     npm i
@@ -91,6 +91,6 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Installazione completa!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Tutte le dipendenze sono sincronizzate e il progetto è compilato." -ForegroundColor Green
-Write-Host "È ora possibile utilizzare lo script per l'esecuzione della dashboard." -ForegroundColor Yellow
+Write-Host "Tutte le dipendenze sono sincronizzate e il progetto e' compilato." -ForegroundColor Green
+Write-Host "E' ora possibile utilizzare lo script per l'esecuzione della dashboard." -ForegroundColor Yellow
 Write-Host ""
