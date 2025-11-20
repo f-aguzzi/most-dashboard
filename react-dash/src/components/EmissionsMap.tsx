@@ -120,22 +120,22 @@ export default function EmissionsMap(props: LeafletMapProps) {
                   <br />
                   {props.scenario === "s1" ? (
                     <>
-                      <b>{t("emissions.savings")} (IT 2019): </b>
+                      <b>{t("emissions.savings")} (IT, ES-19): </b>
                       {fmtco2(positions.IT_19)} ton
                       <br />
-                      <b>{t("emissions.savings")} (IT LF): </b>
+                      <b>{t("emissions.savings")} (IT, LF=0,62): </b>
                       {fmtco2(positions.IT_LF)} ton
                       <br />
-                      <b>{t("emissions.savings")} (EU 2019): </b>
+                      <b>{t("emissions.savings")} (EU, ES-19): </b>
                       {fmtco2(positions.EU_19)} ton
                       <br />
-                      <b>{t("emissions.savings")} (EU LF): </b>
+                      <b>{t("emissions.savings")} (EU, LF=0,62): </b>
                       {fmtco2(positions.EU_LF)} ton
                       <br />
                     </>
                   ) : (
                     <>
-                      <b>{t("emissions.savings")} (EU 2035): </b>
+                      <b>{t("emissions.savings")} (EU 2030): </b>
                       {fmtco2(positions.EU_35)} ton
                       <br />
                       <b>{t("emissions.savings")} (EU Fully Renewable): </b>
