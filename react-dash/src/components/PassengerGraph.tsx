@@ -70,7 +70,7 @@ const PassengerGraph = (props: FreightGraphProps) => {
             <p className="text-sm">
               <span>{props.axisLabel}: </span>
               <span className="font-medium">
-                {Number(data.data).toFixed(1)}
+                {Number(data.data).toFixed(1)} mln
               </span>
             </p>
           )}
@@ -81,7 +81,7 @@ const PassengerGraph = (props: FreightGraphProps) => {
                   {props.axisLabel} ({t("demand.forecast")}):{" "}
                 </span>
                 <span className="font-medium">
-                  {Number(data.forecasted).toFixed(1)}
+                  {Number(data.forecasted).toFixed(1)} mln
                 </span>
               </p>
             </>

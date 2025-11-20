@@ -84,7 +84,7 @@ const FreightGraph = (props: FreightGraphProps) => {
             <p className="text-sm">
               <span>{props.axisLabel}: </span>
               <span className="font-medium">
-                {Number(data.data).toFixed(1)}
+                {Number(data.data).toFixed(1)} mln ton
               </span>
             </p>
           )}
@@ -95,7 +95,7 @@ const FreightGraph = (props: FreightGraphProps) => {
                   {props.axisLabel} ({t("demand.forecast")}):{" "}
                 </span>
                 <span className="font-medium">
-                  {Number(data.forecasted).toFixed(1)}
+                  {Number(data.forecasted).toFixed(1)} k ton
                 </span>
               </p>
               {data.lower_bound !== null && data.upper_bound !== null && (
@@ -105,7 +105,7 @@ const FreightGraph = (props: FreightGraphProps) => {
                   </span>
                   <span className="font-medium">
                     [{Number(data.lower_bound).toFixed(1)},{" "}
-                    {Number(data.upper_bound).toFixed(1)}]
+                    {Number(data.upper_bound).toFixed(1)}] k ton
                   </span>
                 </p>
               )}
