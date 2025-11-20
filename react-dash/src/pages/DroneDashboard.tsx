@@ -180,7 +180,7 @@ function DroneDashboard() {
               polylines={routes}
               locations={locations}
               display={display}
-              center={[44.132, 11.05]}
+              center={[43.532, 11.55]}
               zoom={8}
             />
           </Card>

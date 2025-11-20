@@ -11,23 +11,64 @@ def get_data(number: int, model: str):
     result = data.filter([pl.col("droni") == number, pl.col("modello") == model])
     result = result.collect().to_dicts()
 
-    results = []
+    route_map = {}
 
     for row in result:
-        route = [
-            [row["lat_origin"], row["lon_origin"]],
-            [row["lat_dest"], row["lon_dest"]],
-        ]
-        results.append(
-            {
-                "route": route,
-                "label": f"{row['Origin_name']} ({row['Origin']}) - {row['Destination_name']} ({row['Destination']})",
+        origin = row["Origin"]
+        destination = row["Destination"]
+
+        route_key = tuple(sorted([origin, destination]))
+
+        if route_key not in route_map:
+            route_map[route_key] = {
+                "route": [
+                    [row["lat_origin"], row["lon_origin"]],
+                    [row["lat_dest"], row["lon_dest"]],
+                ],
+                "label": f"{row['Origin_name']} ({origin}) - {row['Destination_name']} ({destination})",
                 "count": row["nr_flights"],
                 "replaced": row["nr_movs_replaced"],
                 "weight": row["peso_trasport"],
                 "co2": row["CO2_reduction"],
+                "airports": {
+                    origin: {
+                        "name": row["Origin_name"],
+                        "lat": row["lat_origin"],
+                        "lon": row["lon_origin"],
+                    },
+                    destination: {
+                        "name": row["Destination_name"],
+                        "lat": row["lat_dest"],
+                        "lon": row["lon_dest"],
+                    },
+                },
             }
-        )
+        else:
+            route_map[route_key]["count"] += row["nr_flights"]
+            route_map[route_key]["replaced"] += row["nr_movs_replaced"]
+            route_map[route_key]["weight"] += row["peso_trasport"]
+            route_map[route_key]["co2"] += row["CO2_reduction"]
+
+            if origin != destination:
+                airports = route_map[route_key]["airports"]
+                if destination not in airports:
+                    airports[destination] = {
+                        "name": row["Destination_name"],
+                        "lat": row["lat_dest"],
+                        "lon": row["lon_dest"],
+                    }
+                if origin not in airports:
+                    airports[origin] = {
+                        "name": row["Origin_name"],
+                        "lat": row["lat_origin"],
+                        "lon": row["lon_origin"],
+                    }
+
+    results = []
+    for route_data in route_map.values():
+        route_data.pop("airports", None)
+        results.append(route_data)
+
     return results
 
 

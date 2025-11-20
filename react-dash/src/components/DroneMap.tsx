@@ -48,6 +48,10 @@ export default function DroneMap(props: DroneMapProps) {
     else return Math.round(Math.max(5, Math.min(positions.co2 * 0.02, 20)));
   };
 
+  const formatNumber = (value: number) => {
+    return (Math.round(value * 100.0) / 100.0).toLocaleString("it-IT");
+  };
+
   return (
     <div className="relative">
       <div id="map">
@@ -75,10 +79,10 @@ export default function DroneMap(props: DroneMapProps) {
                   <br />
                   <b>{t("drone.map.replaced")}: </b> {positions.replaced}
                   <br />
-                  <b>{t("drone.map.weight")}: </b> {positions.weight} kg
+                  <b>{t("drone.map.weight")}: </b>{" "}
+                  {formatNumber(positions.weight)} kg
                   <br />
-                  <b>{t("drone.map.co2")}: </b>{" "}
-                  {Math.round(positions.co2).toLocaleString("it-IT")} kg
+                  <b>{t("drone.map.co2")}: </b> {formatNumber(positions.co2)} kg
                   <br />
                 </Popup>
               </Polyline>
