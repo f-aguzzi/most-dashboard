@@ -1,17 +1,17 @@
 # Parallel Service Launcher
-# Launches FastAPI backend and React dashboard simultaneously
+# Lancia FastAPI e React in parallelo
 
-Write-Host "Starting services..." -ForegroundColor Cyan
+Write-Host "Avvio dei servizi..." -ForegroundColor Cyan
 
-# Get current directory to pass to jobs
+# Leggi la cartella locale
 $currentDir = (Get-Location).Path
 
-# Create script blocks for each service
+# Crea blocchi script per entrambi i servizi
 $fastApiJob = {
     param($baseDir)
     Set-Location $baseDir
     Set-Location "fastapi-backend"
-    Write-Host "[FastAPI] Starting uvicorn server..." -ForegroundColor Green
+    Write-Host "[FastAPI] Avvio del server uvicorn..." -ForegroundColor Green
     uv run uvicorn app.main:app
 }
 
@@ -19,19 +19,19 @@ $reactJob = {
     param($baseDir)
     Set-Location $baseDir
     Set-Location "react-dash"
-    Write-Host "[React] Starting preview server..." -ForegroundColor Blue
+    Write-Host "[React] Avvio della dashboard..." -ForegroundColor Blue
     npm run preview
 }
 
-# Start both jobs with current directory as argument
+# Avvia entrambi i servizi con la cartella corrente come argomento
 $job1 = Start-Job -ScriptBlock $fastApiJob -ArgumentList $currentDir
 $job2 = Start-Job -ScriptBlock $reactJob -ArgumentList $currentDir
 
-Write-Host "`nServices launched in background jobs" -ForegroundColor Yellow
+Write-Host "`nServizi lanciati in background" -ForegroundColor Yellow
 Write-Host "Job IDs: FastAPI=$($job1.Id), React=$($job2.Id)" -ForegroundColor Yellow
-Write-Host "`nPress Ctrl+C to stop all services and exit`n" -ForegroundColor Cyan
+Write-Host "`nPremi Ctrl+C per fermare tutti i servizi e uscire`n" -ForegroundColor Cyan
 
-# Function to display job output
+# Funzione per mostrare l'output dei servizi
 function Show-JobOutput {
     param($job, $prefix)
     $output = Receive-Job -Job $job
@@ -42,30 +42,30 @@ function Show-JobOutput {
     }
 }
 
-# Monitor jobs and display output
+# Controlla i servizi e mostra l'output
 try {
     while ($true) {
-        # Check if jobs are still running
+        # Controlla se i servizi sono ancora attivi
         $job1State = (Get-Job -Id $job1.Id).State
         $job2State = (Get-Job -Id $job2.Id).State
 
-        # Display output from both jobs
+        # Mostra l'output di entrambi i servizi
         Show-JobOutput -job $job1 -prefix "FastAPI"
         Show-JobOutput -job $job2 -prefix "React"
 
-        # Check if any job has failed
+        # Controlla se uno qualsiasi dei servizi è fallito
         if ($job1State -eq "Failed") {
-            Write-Host "`n[ERROR] FastAPI job failed!" -ForegroundColor Red
+            Write-Host "`n[ERROR] FastAPI è crashato!" -ForegroundColor Red
             Show-JobOutput -job $job1 -prefix "FastAPI-Error"
         }
         if ($job2State -eq "Failed") {
-            Write-Host "`n[ERROR] React job failed!" -ForegroundColor Red
+            Write-Host "`n[ERROR] La pagina React è crashata!" -ForegroundColor Red
             Show-JobOutput -job $job2 -prefix "React-Error"
         }
 
-        # Exit if both jobs have stopped
+        # Esci se entrambi i servizi si sono fermati
         if ($job1State -ne "Running" -and $job2State -ne "Running") {
-            Write-Host "`nBoth services have stopped." -ForegroundColor Red
+            Write-Host "`nEntrambi i servizi sono stati fermati." -ForegroundColor Red
             break
         }
 
@@ -73,9 +73,9 @@ try {
     }
 }
 finally {
-    # Cleanup: Stop all jobs when script exits
-    Write-Host "`n`nStopping services..." -ForegroundColor Yellow
+    # Cleanup: ferma tutti i lavori quando lo script si interrompe
+    Write-Host "`n`nFermo i servizi..." -ForegroundColor Yellow
     Stop-Job -Job $job1, $job2 -ErrorAction SilentlyContinue
     Remove-Job -Job $job1, $job2 -Force -ErrorAction SilentlyContinue
-    Write-Host "Services stopped. Goodbye!" -ForegroundColor Green
+    Write-Host "Servizi fermati. Arrivederci!" -ForegroundColor Green
 }
