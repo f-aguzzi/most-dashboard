@@ -18,13 +18,6 @@ import {
 
 export const description = "A line chart";
 
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
-
 interface KpiData {
   value: number;
   data: number;
@@ -39,6 +32,17 @@ interface DrokeKpiGraphProps {
 }
 
 export function DroneKpiGraph(props: DrokeKpiGraphProps) {
+  const chartConfig = {
+    desktop: {
+      label: "Desktop",
+      color: "var(--chart-1)",
+    },
+    data: {
+      label: " ",
+      color: "var(--chart-1)",
+    },
+  } satisfies ChartConfig;
+
   return (
     <Card>
       <CardHeader>
@@ -84,7 +88,9 @@ export function DroneKpiGraph(props: DrokeKpiGraphProps) {
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={
+                <ChartTooltipContent labelFormatter={() => props.title} />
+              }
             />
             <Line
               dataKey="data"
