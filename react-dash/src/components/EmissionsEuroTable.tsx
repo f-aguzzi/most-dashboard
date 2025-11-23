@@ -53,26 +53,26 @@ const EmissionsEuroTable = (props: EmissionsEuroTableProps) => {
           <TableHead>{t("electric.kpi.metric")}</TableHead>
           <TableHead>ICAP (2024)</TableHead>
           <TableHead>EPA (2023)</TableHead>
-          <TableHead> Bilal and Känzig (2024) </TableHead>
+          <TableHead> Bilal & Känzig (2024) </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {props.scenario === "s1" ? (
           <>
             <TableRow>
-              <TableCell>{t("emissions.eurokpi.header")} (IT 2019)</TableCell>
+              <TableCell>{t("emissions.eurokpi.header")} (IT, ES-19)</TableCell>
               {fmteur(props.kpi.IT_19)}
             </TableRow>
             <TableRow>
-              <TableCell>{t("emissions.eurokpi.header")} (IT LF)</TableCell>
+              <TableCell>{t("emissions.eurokpi.header")} (IT, LF)</TableCell>
               {fmteur(props.kpi.IT_LF)}
             </TableRow>
             <TableRow>
-              <TableCell>{t("emissions.eurokpi.header")} (EU 2019)</TableCell>
+              <TableCell>{t("emissions.eurokpi.header")} (EU, ES-19)</TableCell>
               {fmteur(props.kpi.EU_19)}
             </TableRow>
             <TableRow>
-              <TableCell>{t("emissions.eurokpi.header")} (EU LF)</TableCell>
+              <TableCell>{t("emissions.eurokpi.header")} (EU, LF)</TableCell>
               {fmteur(props.kpi.EU_LF)}
             </TableRow>
           </>

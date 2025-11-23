@@ -42,7 +42,7 @@ function SocialGraph(props: SocialGraphProps) {
 
   const formatNumber = (num: number) => {
     const parts = num.toFixed(2).split(".");
-    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "˙");
+    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return `${integerPart},${parts[1]} USD`;
   };
 

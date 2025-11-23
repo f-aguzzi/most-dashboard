@@ -56,22 +56,22 @@ const EmissionsKpiTable = (props: EmissionsKpiTableProps) => {
         {props.scenario === "s1" ? (
           <>
             <TableRow>
-              <TableCell>{t("emissions.savings")} (IT 2019)</TableCell>
+              <TableCell>{t("emissions.savings")} (IT, ES-19)</TableCell>
               <TableCell>{props.kpi.IT_19} ton</TableCell>
               <TableCell> </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>{t("emissions.savings")} (IT LF)</TableCell>
+              <TableCell>{t("emissions.savings")} (IT, LF)</TableCell>
               <TableCell>{props.kpi.IT_LF} ton</TableCell>
               <TableCell> </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>{t("emissions.savings")} (EU 2019)</TableCell>
+              <TableCell>{t("emissions.savings")} (EU, ES-19)</TableCell>
               <TableCell>{props.kpi.EU_19} ton</TableCell>
               <TableCell> </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>{t("emissions.savings")} (EU LF)</TableCell>
+              <TableCell>{t("emissions.savings")} (EU, LF)</TableCell>
               <TableCell>{props.kpi.EU_LF} ton</TableCell>
               <TableCell> </TableCell>
             </TableRow>

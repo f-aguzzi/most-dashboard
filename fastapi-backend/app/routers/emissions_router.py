@@ -2,7 +2,7 @@ import polars as pl
 from fastapi import APIRouter
 from xlsxwriter.workbook import Dict
 
-from app.service import price, fmt, pfmt
+from app.service import fmt, ifmt, pfmt, price
 
 emissions_router = APIRouter()
 
@@ -174,7 +174,7 @@ def get_kpi(distance: int, passengers: int):
 
     if is_scenario1:
         return {
-            "number": fmt(data_filtered["number"]),
+            "number": ifmt(data_filtered["number"]),
             "number_percentage": pfmt(data_filtered["number"] / data["number"]),
             "flown": fmt(data_filtered["flown"]),
             "flown_percentage": pfmt(data_filtered["flown"] / data["flown"]),
@@ -187,7 +187,7 @@ def get_kpi(distance: int, passengers: int):
         }
     else:
         return {
-            "number": fmt(data_filtered["number"]),
+            "number": ifmt(data_filtered["number"]),
             "number_percentage": pfmt(data_filtered["number"] / data["number"]),
             "flown": fmt(data_filtered["flown"]),
             "flown_percentage": pfmt(data_filtered["flown"] / data["flown"]),

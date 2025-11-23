@@ -1,8 +1,10 @@
+import io
+
+import polars as pl
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-import io
-import polars as pl
-from app.service import get_all_flights, filter_routes, fmt, pfmt
+
+from app.service import filter_routes, fmt, get_all_flights, ifmt, pfmt
 
 electric_router = APIRouter()
 
@@ -92,7 +94,7 @@ def get_kpi(distance: int, seats: int):
     result = [
         {
             "metric": "number",
-            "value": fmt(kpi_part["flight_number"]),
+            "value": ifmt(kpi_part["flight_number"]),
             "percentage": pfmt(kpi_part["flight_number"] / kpi_tot["flight_number"]),
         },
         {
